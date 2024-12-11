@@ -8,5 +8,4 @@ export namespace LocalTheme {
   export const dark = "dark";
   export const commonV2 = "commonV2";
   export const ThemeMode = "theme.mode";
-  export const ThemeShape = "theme.shape";
 }

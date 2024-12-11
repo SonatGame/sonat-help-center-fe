@@ -30,7 +30,7 @@ export default function LoginSection() {
         justifyContent="center"
       >
         <Typography variant="h2" paddingBottom={4}>
-          Welcome to Sonat BI System
+          Welcome to Sonat Help Center
         </Typography>
 
         <Typography variant="h4" paddingBottom={4}>

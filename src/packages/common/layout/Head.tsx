@@ -8,8 +8,8 @@ interface HeadProps {
 export default function Head(props: HeadProps) {
   return (
     <NextHead>
-      <title>{props.title} | Sonat BI System</title>
-      <meta name="description" content="Welcome to Sonat BI System" />
+      <title>{props.title} | Sonat Help Center</title>
+      <meta name="description" content="Welcome to Sonat Help Center" />
       <link rel="icon" href={Assets.LOGO} />
     </NextHead>
   );

@@ -1,6 +1,6 @@
-export namespace CustomDate {
-  export const FORMAT = "YYYY-MM-DD";
-}
+export const CustomDate = {
+  FORMAT: "YYYY-MM-DD",
+};
 
 export const dayMapping: any = {
   0: "Sun",

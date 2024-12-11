@@ -1,4 +1,5 @@
 import { User } from "firebase/auth";
+import isEmpty from "lodash/isEmpty";
 
 export namespace LocalStorageUtils {
   const key = {
@@ -28,6 +29,11 @@ export namespace LocalStorageUtils {
     localStorage.setItem(key.email, JSON.stringify(email));
   }
 
+  export function getEmail() {
+    const email = localStorage.getItem(key.email);
+    return isEmpty(email) ? "" : JSON.parse(email as string);
+  }
+
   export function setDisplayName(displayName: string | null) {
     localStorage.setItem(key.displayName, JSON.stringify(displayName));
   }
@@ -42,9 +48,7 @@ export namespace LocalStorageUtils {
 
   export function getPhotoUrl() {
     const photoURL = localStorage.getItem(key.photoURL);
-    return TypeUtils.isNullOrEmpty(photoURL)
-      ? ""
-      : JSON.parse(photoURL as string);
+    return isEmpty(photoURL) ? "" : JSON.parse(photoURL as string);
   }
 
   export function clearUserData() {

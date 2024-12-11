@@ -1,10 +1,8 @@
 "use client";
 
-import { AppRoutes } from "@/lib/constants/routesAndPermissions";
 import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import { usePathname } from "next/navigation";
 import * as React from "react";
 import PageHeader from "../page-header";
 import PageSidebar, { drawerWidth, smallDrawerWidth } from "../page-sidebar";
@@ -15,7 +13,6 @@ interface PageWithLayoutProps {
 }
 
 export default function PageWithLayout(props: PageWithLayoutProps) {
-  const pathname = usePathname();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -51,11 +48,9 @@ export default function PageWithLayout(props: PageWithLayoutProps) {
           <Box width={1} sx={{ flexGrow: 1, mt: { xs: 7, sm: 8 } }}>
             {props.children}
           </Box>
-          {!pathname.includes(AppRoutes.TICKET_MANAGEMENT) && (
-            <Typography variant="body2" pb={2} textAlign="center">
-              © 2024 Sonat With Love
-            </Typography>
-          )}
+          <Typography variant="body2" pb={2} textAlign="center">
+            © 2024 Sonat With Love
+          </Typography>
         </Box>
       </Stack>
     </Box>

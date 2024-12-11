@@ -4,7 +4,7 @@ export const isAuth = (
   permissions: any[] = [],
   requiredPermissions: { permission: string; value: AccessMode }[]
 ) => {
-  for (var requiredPermission of requiredPermissions) {
+  for (const requiredPermission of requiredPermissions) {
     let hasPermission = false;
     let key = requiredPermission.permission;
     do {

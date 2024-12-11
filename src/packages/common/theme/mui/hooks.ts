@@ -47,9 +47,7 @@ export default function useAppThemeHook() {
       parseTheme(initDarkPalette, palette.dark)
     : palette.dark;
 
-  const initShape =
-    (useReadLocalStorage(LocalTheme.ThemeShape) as string) ?? "8";
-  const shape = parseInt(initShape);
+  const shape = 8;
 
   const themeOptions = useMemo(
     () => ({
@@ -99,10 +97,7 @@ export default function useAppThemeHook() {
             }),
         mode: mode as PaletteMode,
       },
-      typography: {
-        ...typography,
-        fontFamily: typography?.fontFamily,
-      } as TypographyOptions,
+      typography: typography as TypographyOptions,
       breakpoints,
       shape: { borderRadius: shape },
       shadows: isLight ? shadows.light : shadows.dark,
@@ -113,7 +108,7 @@ export default function useAppThemeHook() {
         : customShadows(darkPalette.primary?.main || palette.dark.primary.main)
             .dark,
     }),
-    [isLight, lightPalette, darkPalette, mode, typography?.fontFamily, shape]
+    [isLight, lightPalette, darkPalette, mode, typography, shape]
   );
 
   const theme = createTheme(themeOptions as unknown as ThemeOptions);

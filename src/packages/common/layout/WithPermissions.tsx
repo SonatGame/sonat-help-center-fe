@@ -1,11 +1,7 @@
 "use client";
 
 import FullPageLoader from "@/components/FullPageLoader";
-import {
-  PermissionProps,
-  useAuthorization,
-} from "@/contexts/authorizationContext";
-import { canView, isAuth } from "@/lib/utils/auth.helper";
+import { PermissionProps } from "@/contexts/authorizationContext";
 import { ArrowBack } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -20,33 +16,33 @@ interface WithPermissionsProps {
 
 export default function WithPermissions(props: WithPermissionsProps) {
   const router = useRouter();
-  const { permissions, isLoading } = useAuthorization();
+  // const { permissions, isLoading } = useAuthorization();
 
   const onGoBack = () => {
     router.back();
   };
 
   const checkPermissions = () => {
-    if (!props.checkView) {
-      if (props.requiredPermissions && props.requiredPermissions.length > 0) {
-        return isAuth(permissions, props.requiredPermissions);
-      }
-      return true;
-    }
+    // if (!props.checkView) {
+    //   if (props.requiredPermissions && props.requiredPermissions.length > 0) {
+    //     return isAuth(permissions, props.requiredPermissions);
+    //   }
+    //   return true;
+    // }
 
-    if (props.requiredPermissions && props.requiredPermissions.length > 0) {
-      for (const requiredPermission of props.requiredPermissions) {
-        if (!canView(permissions, requiredPermission.permission)) {
-          return false;
-        }
-      }
-      return true;
-    }
+    // if (props.requiredPermissions && props.requiredPermissions.length > 0) {
+    //   for (const requiredPermission of props.requiredPermissions) {
+    //     if (!canView(permissions, requiredPermission.permission)) {
+    //       return false;
+    //     }
+    //   }
+    //   return true;
+    // }
 
     return true;
   };
 
-  if (isLoading) return <FullPageLoader />;
+  // if (isLoading) return <FullPageLoader />;
 
   if (checkPermissions()) return <Fragment>{props.children}</Fragment>;
 

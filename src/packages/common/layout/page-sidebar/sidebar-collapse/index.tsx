@@ -12,7 +12,6 @@ import PopupState, { bindHover, bindPopover } from "material-ui-popup-state";
 import HoverPopover from "material-ui-popup-state/HoverPopover";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { ChildItems } from "./ChildItem";
 
 interface Item {
   key: string;
@@ -112,14 +111,14 @@ const SidebarCollapse: React.FC<IProps> = ({ item, isSidebarOpen }) => {
                 >
                   {item.title}
                 </Typography>
-                <ChildItems pathname={pathname} item={item.child} />
+                {/* <ChildItems pathname={pathname} item={item.child} /> */}
               </List>
             </HoverPopover>
           )}
           {isSidebarOpen && (
             <Collapse in={true} timeout="auto">
               <List sx={{ pl: 6 }}>
-                <ChildItems pathname={pathname} item={item.child} />
+                {/* <ChildItems pathname={pathname} item={item.child} /> */}
               </List>
             </Collapse>
           )}

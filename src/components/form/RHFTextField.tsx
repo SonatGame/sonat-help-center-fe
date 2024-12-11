@@ -55,7 +55,7 @@ export default function RHFTextField({
             helperText={error?.message}
             {...rest}
             onChange={(e) => {
-              let reg = /^[+-]?((\d+(\.\d*)?)|(\.\d+))$/;
+              const reg = /^[+-]?((\d+(\.\d*)?)|(\.\d+))$/;
               if (
                 onlyNumber &&
                 !reg.test(e.target.value) &&

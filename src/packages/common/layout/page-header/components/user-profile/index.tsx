@@ -1,11 +1,5 @@
 import { useAuthentication } from "@/contexts/authenticationContext";
-import { AppRoutes } from "@/lib/constants/routesAndPermissions";
-import {
-  AdminPanelSettings,
-  AppRegistrationOutlined,
-  DisplaySettings,
-  Logout,
-} from "@mui/icons-material";
+import { Logout } from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -20,7 +14,7 @@ import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 
 import { menuItemStyles } from "@/components/dropdown/new/constants";
-import usePermission from "@/lib/hooks/usePermission";
+// import usePermission from "@/lib/hooks/usePermission";
 import { LocalStorageUtils } from "@/lib/utils/localStorageUtils";
 
 function getItem(
@@ -40,11 +34,6 @@ function getItem(
 export const UserProfileButton = () => {
   const router = useRouter();
   const { logout } = useAuthentication();
-  const {
-    hasUsersManagementPermission,
-    hasViewAppsManagementPermission,
-    hasSystemManagementPermission,
-  } = usePermission();
 
   const [photoURL, setPhotoURL] = useState("");
   const [email, setEmail] = useState("");
@@ -64,49 +53,49 @@ export const UserProfileButton = () => {
     enqueueSnackbar("Sign out successfully", { variant: "success" });
   };
 
-  const handleManageUser = () => {
-    router.push(AppRoutes.USER_MANAGEMENT);
-  };
+  // const handleManageUser = () => {
+  //   router.push(AppRoutes.USER_MANAGEMENT);
+  // };
 
-  const handleManageAppCategories = () => {
-    router.push(AppRoutes.APP_MANAGEMENT);
-  };
+  // const handleManageAppCategories = () => {
+  //   router.push(AppRoutes.APP_MANAGEMENT);
+  // };
 
-  const handleManageSystem = () => {
-    router.push(AppRoutes.SYSTEM_MANAGEMENT);
-  };
+  // const handleManageSystem = () => {
+  //   router.push(AppRoutes.SYSTEM_MANAGEMENT);
+  // };
 
   const menuItems = [
-    ...(hasUsersManagementPermission
-      ? [
-          getItem(
-            "Manage users",
-            "Manage users",
-            <AdminPanelSettings />,
-            handleManageUser
-          ),
-        ]
-      : []),
-    ...(hasViewAppsManagementPermission
-      ? [
-          getItem(
-            "Manage apps",
-            "Manage apps",
-            <AppRegistrationOutlined />,
-            handleManageAppCategories
-          ),
-        ]
-      : []),
-    ...(hasSystemManagementPermission
-      ? [
-          getItem(
-            "Manage system",
-            "Manage system",
-            <DisplaySettings />,
-            handleManageSystem
-          ),
-        ]
-      : []),
+    // ...(hasUsersManagementPermission
+    //   ? [
+    //       getItem(
+    //         "Manage users",
+    //         "Manage users",
+    //         <AdminPanelSettings />,
+    //         handleManageUser
+    //       ),
+    //     ]
+    //   : []),
+    // ...(hasViewAppsManagementPermission
+    //   ? [
+    //       getItem(
+    //         "Manage apps",
+    //         "Manage apps",
+    //         <AppRegistrationOutlined />,
+    //         handleManageAppCategories
+    //       ),
+    //     ]
+    //   : []),
+    // ...(hasSystemManagementPermission
+    //   ? [
+    //       getItem(
+    //         "Manage system",
+    //         "Manage system",
+    //         <DisplaySettings />,
+    //         handleManageSystem
+    //       ),
+    //     ]
+    //   : []),
     getItem("Sign out", "Sign out", <Logout />, handleSignOut),
   ].filter(Boolean);
 
