@@ -2,7 +2,6 @@
 
 import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
 import * as React from "react";
 import PageHeader from "../page-header";
 import PageSidebar, { drawerWidth, smallDrawerWidth } from "../page-sidebar";
@@ -26,12 +25,12 @@ export default function PageWithLayout(props: PageWithLayoutProps) {
       height="100vh"
       width={1}
       sx={{
-        background: (theme) => theme.palette.background.default,
+        background: theme.palette.background.default,
       }}
     >
-      <CssBaseline enableColorScheme />
       <Stack flex={1} width={1} height={1} flexDirection="row">
         <PageSidebar isSidebarOpen={open} />
+
         <Box
           component="main"
           sx={{

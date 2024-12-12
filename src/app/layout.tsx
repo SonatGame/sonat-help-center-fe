@@ -10,7 +10,8 @@ import { Inter } from "next/font/google";
 import { SWRConfig } from "swr";
 import "../../styles/global.css";
 
-const inter = Inter({
+export const inter = Inter({
+  preload: true,
   subsets: ["latin"],
   display: "swap",
 });

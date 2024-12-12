@@ -3,8 +3,8 @@ export default function Card(theme: any) {
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: theme.shape.borderRadius * 1.5,
-          border: `1px solid ${theme.palette.divider}`,
+          borderRadius: theme.shape.borderRadius * 2,
+          boxShadow: "0px 4px 8px -2px rgba(16, 24, 40, 0.1)",
         },
       },
     },

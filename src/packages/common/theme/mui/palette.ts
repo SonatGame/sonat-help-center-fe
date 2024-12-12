@@ -199,7 +199,7 @@ const BRING_PINK = {
 
 const GREY = {
   0: "#FFFFFF",
-  50: "#F9FAFB",
+  50: "#F9F9FF",
   100: "#F3F4F6",
   200: "#EAECF0",
   300: "#D2D6DB",
@@ -268,7 +268,7 @@ const palette = {
       secondary: GREY[500],
       disabled: GREY[400],
     },
-    background: { paper: "#ffffff", default: GREY[50], neutral: GREY[100] },
+    background: { paper: "#ffffff", default: "#F9F9FF", neutral: GREY[100] },
     action: { active: GREY[600], ...COMMON.action },
   },
   dark: {

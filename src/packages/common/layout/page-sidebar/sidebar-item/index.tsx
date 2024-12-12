@@ -1,4 +1,3 @@
-import { LocalTheme, ThemeMode } from "@/lib/constants/defaultTheme";
 import {
   ListItem,
   ListItemButton,
@@ -6,11 +5,11 @@ import {
   ListItemText,
   Stack,
   Tooltip,
+  useTheme,
 } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { useLocalStorage } from "usehooks-ts";
 
 interface IProps {
   item: {
@@ -21,8 +20,8 @@ interface IProps {
   isSidebarOpen: boolean;
 }
 const SideBarItem: React.FC<IProps> = ({ item, isSidebarOpen }) => {
+  const theme = useTheme();
   const pathname = usePathname();
-  const [modeColor] = useLocalStorage(LocalTheme.ThemeMode, ThemeMode.LIGHT);
 
   return (
     <ListItem key={item.key} disablePadding sx={{ display: "block" }}>
@@ -31,7 +30,7 @@ const SideBarItem: React.FC<IProps> = ({ item, isSidebarOpen }) => {
           <ListItemButton
             sx={{
               justifyContent: "flex-start",
-              borderRadius: (theme) => theme.shape.borderRadius / 6,
+              borderRadius: theme.shape.borderRadius / 6,
             }}
             selected={pathname === item.key}
           >
@@ -40,10 +39,7 @@ const SideBarItem: React.FC<IProps> = ({ item, isSidebarOpen }) => {
                 sx={{
                   minWidth: 0,
                   justifyContent: "center",
-                  color: (theme) =>
-                    modeColor === "dark"
-                      ? "white"
-                      : theme.palette.text.secondary,
+                  color: theme.palette.text.secondary,
                 }}
               >
                 {item?.icon}
@@ -53,10 +49,7 @@ const SideBarItem: React.FC<IProps> = ({ item, isSidebarOpen }) => {
                 sx={{
                   opacity: isSidebarOpen ? 1 : 0,
                   fontWeight: 700,
-                  color: (theme) =>
-                    modeColor === "dark"
-                      ? "white"
-                      : theme.palette.text.secondary,
+                  color: theme.palette.text.secondary,
                 }}
               />
             </Stack>

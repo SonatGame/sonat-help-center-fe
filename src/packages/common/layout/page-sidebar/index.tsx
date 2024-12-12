@@ -80,7 +80,7 @@ export function convertItemsWithPermissions(
   return menuItems;
 }
 
-export const drawerWidth = "20rem";
+export const drawerWidth = "16rem";
 export const smallDrawerWidth = "5rem";
 
 const openedMixin = (theme: Theme, mediaQuery: boolean): CSSObject => ({
@@ -142,7 +142,7 @@ export default function PageSidebar(props: PageSidebarProps) {
   return (
     <>
       <Drawer variant="permanent" open={props.isSidebarOpen}>
-        <Box sx={{ px: 1.5, py: 3.5, width: "100%" }}>
+        <Box sx={{ p: 1.5, width: "100%" }}>
           <Stack
             spacing={2}
             alignItems="center"
@@ -159,7 +159,7 @@ export default function PageSidebar(props: PageSidebarProps) {
             {props.isSidebarOpen && (
               <Box sx={{ height: "100%" }}>
                 <Typography fontWeight={600} sx={{ fontSize: "1.25rem" }}>
-                  BI System
+                  Help Center
                 </Typography>
               </Box>
             )}

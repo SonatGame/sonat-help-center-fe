@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: "Error | Sonat BI Center",
+  title: "Error",
 };
 
 const ErrorPage: NextPage<Props> = ({ statusCode }) => {

@@ -1,3 +1,4 @@
+import { ThemeOptions } from "@mui/material";
 import Accordion from "./Accordion";
 import Button from "./Button";
 import ButtonGroup from "./ButtonGroup";
@@ -17,7 +18,7 @@ import SvgIcon from "./SvgIcon";
 import ToggleButton from "./ToggleButton";
 import Tooltip from "./Tooltip";
 
-export default function ComponentsOverrides(theme: any) {
+export default function ComponentsOverrides(theme: ThemeOptions) {
   return Object.assign(
     Card(theme),
     Menu(theme),

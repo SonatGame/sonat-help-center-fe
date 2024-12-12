@@ -1,9 +1,8 @@
+import { inter } from "@/app/layout";
 import { pxToRem, responsiveFontSizes } from "@/lib/utils/getFontValue";
 
-const FONT_PRIMARY = "Inter,sans-serif";
-
 const typography = {
-  fontFamily: FONT_PRIMARY,
+  fontFamily: inter.style.fontFamily,
   fontWeightRegular: 400,
   fontWeightMedium: 500,
   fontWeightBold: 600,
