@@ -1,4 +1,3 @@
-import { ArrowForward } from "@mui/icons-material";
 import { Box, Card, Stack, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
 
@@ -42,15 +41,25 @@ export default function BookCard(props: IBookCardProps) {
   }
 
   return (
-    <Card sx={{ height: 178, display: "flex" }}>
+    <Card
+      sx={{
+        height: 178,
+        display: "flex",
+        cursor: "pointer",
+        transition: "transform .2s",
+        ":hover": {
+          transform: "scale(1.05)",
+        },
+      }}
+    >
       <Image src={thumbnail} alt="book-thumbnail" width={120} height={178} />
-      <Stack justifyContent="center" spacing={1} sx={{ p: 1 }}>
+      <Stack justifyContent="center" spacing={1} sx={{ p: 2 }}>
         {renderStatus()}
         <Typography variant="body1" fontWeight="bold" sx={{ mt: 1.5 }}>
           {title}
         </Typography>
         <Typography variant="caption">{author}</Typography>
-        <Stack
+        {/* <Stack
           direction="row"
           alignItems="center"
           spacing={1}
@@ -64,7 +73,7 @@ export default function BookCard(props: IBookCardProps) {
             Tham gia
           </Typography>
           <ArrowForward />
-        </Stack>
+        </Stack> */}
       </Stack>
     </Card>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Stack, useMediaQuery, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import * as React from "react";
 import PageHeader from "../page-header";
@@ -47,9 +47,9 @@ export default function PageWithLayout(props: PageWithLayoutProps) {
           <Box width={1} sx={{ flexGrow: 1, mt: { xs: 7, sm: 8 } }}>
             {props.children}
           </Box>
-          <Typography variant="body2" pb={2} textAlign="center">
+          {/* <Typography variant="body2" pb={2} textAlign="center">
             © 2024 Sonat With Love
-          </Typography>
+          </Typography> */}
         </Box>
       </Stack>
     </Box>

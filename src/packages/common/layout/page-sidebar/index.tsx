@@ -2,7 +2,7 @@ import { PermissionProps } from "@/contexts/authorizationContext";
 import { Assets } from "@/lib/constants/assets";
 import { AppRoutes } from "@/lib/constants/routesAndPermissions";
 import { canView, isAuth } from "@/lib/utils/auth.helper";
-import { HomeRounded } from "@mui/icons-material";
+import { FolderOutlined, HomeOutlined } from "@mui/icons-material";
 import {
   Box,
   CSSObject,
@@ -132,8 +132,16 @@ export default function PageSidebar(props: PageSidebarProps) {
       //   { permission: Permission.SYSTEM_OVERVIEW, checkView: true },
       // ],
       key: AppRoutes.HOME,
-      icon: <HomeRounded />,
+      icon: <HomeOutlined />,
       title: "Home",
+    },
+    {
+      // requirePermissions: [
+      //   { permission: Permission.SYSTEM_OVERVIEW, checkView: true },
+      // ],
+      key: AppRoutes.COURSE,
+      icon: <FolderOutlined />,
+      title: "Course",
     },
   ];
   // const menuItems: MenuItem[] = convertItemsWithPermissions(permissions, items);

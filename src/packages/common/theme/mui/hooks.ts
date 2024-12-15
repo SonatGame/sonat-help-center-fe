@@ -37,7 +37,7 @@ export default function useAppThemeHook() {
         palette.light.primary?.main || palette.light.primary.main
       ).light,
     }),
-    [palette.light, typography, shape]
+    [shape]
   );
 
   const theme = createTheme(themeOptions as unknown as ThemeOptions);

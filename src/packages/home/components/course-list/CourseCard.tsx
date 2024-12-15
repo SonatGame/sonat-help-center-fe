@@ -1,9 +1,8 @@
-import { ArrowForward } from "@mui/icons-material";
+import Tag from "@/components/Tag";
 import {
   Avatar,
   AvatarGroup,
   Box,
-  Button,
   Card,
   Stack,
   Typography,
@@ -26,7 +25,17 @@ export default function CourseCard(props: ICourseCardProps) {
 
   return (
     <Card
-      sx={{ p: 2, height: "100%", display: "flex", flexDirection: "column" }}
+      sx={{
+        p: 2,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        cursor: "pointer",
+        transition: "transform .2s",
+        ":hover": {
+          transform: "scale(1.05)",
+        },
+      }}
     >
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2" color="primary" fontWeight="medium">
@@ -50,30 +59,16 @@ export default function CourseCard(props: ICourseCardProps) {
         />
       </Box>
       <Stack direction="row" spacing={1} sx={{ mt: 1.5 }}>
-        <Box
-          sx={{
-            px: 1.5,
-            py: 0.5,
-            backgroundColor: theme.palette.primary[50],
-            borderRadius: 1,
-          }}
-        >
+        <Tag>
           <Typography variant="body2" color="primary" fontWeight="medium">
             {courseCount} bài học
           </Typography>
-        </Box>
-        <Box
-          sx={{
-            px: 1.5,
-            py: 0.5,
-            backgroundColor: theme.palette.primary[50],
-            borderRadius: 1,
-          }}
-        >
+        </Tag>
+        <Tag>
           <Typography variant="body2" color="primary" fontWeight="medium">
             {ksa}
           </Typography>
-        </Box>
+        </Tag>
       </Stack>
       <Typography
         variant="h6"
@@ -102,21 +97,16 @@ export default function CourseCard(props: ICourseCardProps) {
       </Typography>
       <Stack direction="row" alignItems="center" gap={0.5} sx={{ mt: 1.5 }}>
         <AvatarGroup spacing={8}>
-          {["A", "B", "C"].map((user) => (
-            <Avatar sx={{ width: 24, height: 24 }}>{user}</Avatar>
+          {["A", "B", "C"].map((user, index) => (
+            <Avatar key={index} sx={{ width: 24, height: 24 }}>
+              {user}
+            </Avatar>
           ))}
         </AvatarGroup>
         <Typography variant="body2" color="primary" fontWeight="medium">
           +{15} người tham gia
         </Typography>
       </Stack>
-      <Button
-        variant="contained"
-        endIcon={<ArrowForward />}
-        sx={{ mt: 3, width: "fit-content" }}
-      >
-        Tham gia
-      </Button>
     </Card>
   );
 }

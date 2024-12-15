@@ -8,7 +8,7 @@ export default function Button(theme: any) {
             boxShadow: "none",
           },
           padding: theme.spacing(0.75, 2),
-          borderRadius: theme.shape.borderRadius * 1.5,
+          borderRadius: theme.shape.borderRadius,
         },
         sizeLarge: {
           minHeight: 48,
