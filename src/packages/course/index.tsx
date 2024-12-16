@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { SyntheticEvent, useState } from "react";
+import CourseOverview from "./components/course-overview";
 
 export default function CourseSection() {
   const theme = useTheme();
@@ -24,7 +25,7 @@ export default function CourseSection() {
     {
       label: "Thông tin chung",
       value: "overview",
-      component: "",
+      component: <CourseOverview />,
     },
     {
       label: "Nội dung khoá học",
@@ -45,7 +46,10 @@ export default function CourseSection() {
 
   return (
     <Box
-      sx={{ backgroundColor: theme.palette.background.paper, height: "100%" }}
+      sx={{
+        backgroundColor: theme.palette.background.paper,
+        minHeight: "100vh",
+      }}
     >
       <Stack
         direction="row"
@@ -90,14 +94,11 @@ export default function CourseSection() {
             </Stack>
           </Stack>
         </Stack>
-        <Stack direction="row" gap={1.5}>
-          <Button variant="outlined">Chỉnh sửa</Button>
-          <Button variant="outlined" sx={{ minWidth: "fit-content", px: 1 }}>
-            <MoreVert fontSize="small" />
-          </Button>
-        </Stack>
+        <Button variant="outlined" sx={{ minWidth: "fit-content", px: 1 }}>
+          <MoreVert fontSize="small" />
+        </Button>
       </Stack>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider", px: 4 }}>
         <Tabs value={value} onChange={handleChange}>
           {tabList.map((tab, index) => (
             <Tab key={`tab-${index}`} value={tab.value} label={tab.label} />

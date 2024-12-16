@@ -22,10 +22,11 @@ export default function PageWithLayout(props: PageWithLayoutProps) {
 
   return (
     <Box
-      height="100vh"
+      minHeight="100vh"
       width={1}
       sx={{
         background: theme.palette.background.default,
+        backgroundImage: "url(/assets/img/grid.png)",
       }}
     >
       <Stack flex={1} width={1} height={1} flexDirection="row">

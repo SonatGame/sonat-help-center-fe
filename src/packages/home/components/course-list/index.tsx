@@ -1,4 +1,6 @@
+import { AppRoutes } from "@/lib/constants/routesAndPermissions";
 import { Grid2, Stack, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
 import CourseCard from "./CourseCard";
 
 export interface ICourseListProps {
@@ -6,6 +8,8 @@ export interface ICourseListProps {
 }
 
 export default function CourseList() {
+  const router = useRouter();
+
   return (
     <Stack spacing={1.5}>
       <Stack direction="row" justifyContent="space-between">
@@ -18,6 +22,7 @@ export default function CourseList() {
             cursor: "pointer",
             userSelect: "none",
           }}
+          onClick={() => router.push(AppRoutes.COURSE)}
         >
           Xem thêm
         </Typography>

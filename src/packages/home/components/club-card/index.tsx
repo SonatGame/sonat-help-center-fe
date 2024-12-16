@@ -1,15 +1,17 @@
-import { Box, Card, Stack, Typography, useTheme } from "@mui/material";
+import { Card, Divider, Stack, Typography, useTheme } from "@mui/material";
+import ClubItem from "./ClubItem";
 
 export default function ClubCard() {
   const theme = useTheme();
 
   return (
-    <Card sx={{ p: 2 }}>
+    <Card>
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="center"
         spacing={1}
+        sx={{ p: 2 }}
       >
         <Typography variant="h6">Câu lạc bộ</Typography>
         <Typography
@@ -21,11 +23,10 @@ export default function ClubCard() {
           Tìm hiểu ngay
         </Typography>
       </Stack>
-      <Box sx={{ backgroundColor: theme.palette.primary[100] }}>
-        <Stack justifyContent="center" alignItems="center" spacing={3}>
-          <Stack direction="row"></Stack>
-        </Stack>
-      </Box>
+      <Divider />
+      <ClubItem name="Câu lạc bộ cầu lông" time="19h30 - 21h00" />
+      <ClubItem name="Câu lạc bộ bóng đá" time="19h30 - 21h00" />
+      <ClubItem name="Câu lạc bộ yoga" time="19h30 - 21h00" />
     </Card>
   );
 }
