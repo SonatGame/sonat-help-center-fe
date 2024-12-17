@@ -1,4 +1,6 @@
 import Tag from "@/components/Tag";
+import TextMaxLine from "@/components/TextMaxLine";
+import { AppRoutes } from "@/lib/constants/routesAndPermissions";
 import {
   Avatar,
   AvatarGroup,
@@ -6,9 +8,9 @@ import {
   Card,
   Stack,
   Typography,
-  useTheme,
 } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export interface ICourseCardProps {
   team: string;
@@ -21,7 +23,7 @@ export interface ICourseCardProps {
 
 export default function CourseCard(props: ICourseCardProps) {
   const { team, thumbnail, courseCount, ksa, title, description } = props;
-  const theme = useTheme();
+  const router = useRouter();
 
   return (
     <Card
@@ -31,11 +33,12 @@ export default function CourseCard(props: ICourseCardProps) {
         display: "flex",
         flexDirection: "column",
         cursor: "pointer",
-        transition: "transform .2s",
-        ":hover": {
-          transform: "scale(1.05)",
-        },
+        // transition: "transform .2s",
+        // ":hover": {
+        //   transform: "scale(1.05)",
+        // },
       }}
+      onClick={() => router.push(`${AppRoutes.COURSE}123`)}
     >
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2" color="primary" fontWeight="medium">
@@ -70,31 +73,27 @@ export default function CourseCard(props: ICourseCardProps) {
           </Typography>
         </Tag>
       </Stack>
-      <Typography
-        variant="h6"
+      <TextMaxLine
+        TypographyProps={{
+          variant: "h6",
+        }}
         sx={{
           mt: 1.5,
-          display: "-webkit-box",
-          WebkitBoxOrient: "vertical",
-          overflow: "hidden",
-          WebkitLineClamp: 2,
         }}
       >
         {title}
-      </Typography>
-      <Typography
-        variant="body2"
+      </TextMaxLine>
+      <TextMaxLine
+        TypographyProps={{
+          variant: "body2",
+        }}
         sx={{
           mt: 1.5,
-          display: "-webkit-box",
-          WebkitBoxOrient: "vertical",
-          overflow: "hidden",
-          WebkitLineClamp: 2,
           flexGrow: 1,
         }}
       >
         {description}
-      </Typography>
+      </TextMaxLine>
       <Stack direction="row" alignItems="center" gap={0.5} sx={{ mt: 1.5 }}>
         <AvatarGroup spacing={8}>
           {["A", "B", "C"].map((user, index) => (

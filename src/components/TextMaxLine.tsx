@@ -1,42 +1,32 @@
-import { Link, LinkProps, Typography, TypographyProps } from "@mui/material";
-import { forwardRef } from "react";
+import { SxProps, Typography, TypographyProps } from "@mui/material";
+import { ReactNode } from "react";
 interface ITextMaxLineProps {
-  asLink?: boolean;
-  children?: React.ReactNode;
-  line: number;
-  sx?: any;
-  TextMaxLineProps?: LinkProps & TypographyProps;
+  children?: ReactNode;
+  line?: number;
+  sx?: SxProps;
+  TypographyProps?: TypographyProps;
+  // show
 }
-const TextMaxLine = forwardRef(
-  (
-    { asLink, line = 2, children, sx, TextMaxLineProps }: ITextMaxLineProps,
-    ref: any
-  ) => {
-    const style = {
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      display: "-webkit-box",
-      WebkitLineClamp: line,
-      WebkitBoxOrient: "vertical",
-      wordBreak: "break-word",
-      ...sx,
-    };
+const TextMaxLine = ({
+  line = 2,
+  children,
+  sx,
+  TypographyProps,
+}: ITextMaxLineProps) => {
+  return (
+    <Typography
+      sx={{
+        display: "-webkit-box",
+        WebkitBoxOrient: "vertical",
+        overflow: "hidden",
+        WebkitLineClamp: line,
+        ...sx,
+      }}
+      {...TypographyProps}
+    >
+      {children}
+    </Typography>
+  );
+};
 
-    if (asLink) {
-      return (
-        <Link ref={ref} color="inherit" sx={{ ...style }} {...TextMaxLineProps}>
-          {children}
-        </Link>
-      );
-    }
-
-    return (
-      <Typography ref={ref} sx={{ ...style }} {...TextMaxLineProps}>
-        {children}
-      </Typography>
-    );
-  }
-);
-
-TextMaxLine.displayName = "TextMaxLine";
 export default TextMaxLine;

@@ -1,121 +1,77 @@
-import Tag from "@/components/Tag";
-import { MoreVert } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import Image from "next/image";
-import { SyntheticEvent, useState } from "react";
-import CourseOverview from "./components/course-overview";
+import ModalWrapper from "@/components/modal";
+import { Add } from "@mui/icons-material";
+import { Box, Stack, Tabs, useTheme } from "@mui/material";
+import CourseCard from "../home/components/course-list/CourseCard";
 
 export default function CourseSection() {
   const theme = useTheme();
-  const [value, setValue] = useState("overview");
-
-  const handleChange = (event: SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
-
-  const tabList = [
-    {
-      label: "Thông tin chung",
-      value: "overview",
-      component: <CourseOverview />,
-    },
-    {
-      label: "Nội dung khoá học",
-      value: "detail",
-      component: "",
-    },
-    {
-      label: "Đánh giá của học viên",
-      value: "rating",
-      component: "",
-    },
-    {
-      label: "Làm test",
-      value: "test",
-      component: "",
-    },
-  ];
 
   return (
-    <Box
+    <Stack
       sx={{
-        backgroundColor: theme.palette.background.paper,
-        minHeight: "100vh",
+        px: 4,
+        py: 3,
       }}
+      gap={4}
     >
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
+      <Stack direction="row" justifyContent="space-between">
+        <div></div>
+        <ModalWrapper
+          buttonTitle="Khóa học mới"
+          buttonProps={{
+            variant: "contained",
+            startIcon: <Add />,
+          }}
+        >
+          <></>
+        </ModalWrapper>
+      </Stack>
+      <Tabs
+        variant="scrollable"
         sx={{
-          px: 4,
-          py: 3,
+          position: "relative",
+          "& .MuiTabs-flexContainer": {
+            gap: 3,
+          },
+          "& .MuiTabScrollButton-root": {
+            width: 56,
+            height: 56,
+            borderRadius: "50%",
+            zIndex: 1,
+            backgroundColor: theme.palette.grey[700],
+            color: theme.palette.grey[400],
+            position: "absolute",
+            top: "50%",
+            transform: "translateY(-50%)",
+            border: 1,
+            borderColor: theme.palette.grey[400],
+            opacity: 1,
+          },
+          ".MuiTabs-scrollButtons.Mui-disabled": { display: "none" },
+          "& .MuiTabScrollButton-root:first-child": {
+            left: 32,
+          },
+          "& .MuiTabScrollButton-root:last-child": {
+            right: 32,
+          },
+          "& .MuiTabs-scroller": {
+            scrollBehavior: "smooth",
+          },
         }}
       >
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          gap={3}
-        >
-          <Image
-            src={"/assets/img/sample_course.png"}
-            alt="course-thumbnail"
-            width={300}
-            height={300}
-            style={{
-              objectFit: "cover",
-              width: 96,
-              height: 96,
-              borderRadius: 16,
-            }}
-          />
-          <Stack gap={1.5}>
-            <Typography variant="h5">Nhập môn Excel cùng Sonat</Typography>
-            <Stack direction="row" gap={1}>
-              <Tag>
-                <Typography variant="body2" color="primary" fontWeight="medium">
-                  12 bài học
-                </Typography>
-              </Tag>
-              <Tag>
-                <Typography variant="body2" color="primary" fontWeight="medium">
-                  Skill
-                </Typography>
-              </Tag>
-            </Stack>
-          </Stack>
-        </Stack>
-        <Button variant="outlined" sx={{ minWidth: "fit-content", px: 1 }}>
-          <MoreVert fontSize="small" />
-        </Button>
-      </Stack>
-      <Box sx={{ borderBottom: 1, borderColor: "divider", px: 4 }}>
-        <Tabs value={value} onChange={handleChange}>
-          {tabList.map((tab, index) => (
-            <Tab key={`tab-${index}`} value={tab.value} label={tab.label} />
-          ))}
-        </Tabs>
-      </Box>
-      {tabList.map((tab, index) => (
-        <Box
-          key={`tab-panel-${index}`}
-          role="tabpanel"
-          hidden={value !== tab.value}
-          id={`simple-tabpanel-${index}`}
-          aria-labelledby={`simple-tab-${index}`}
-        >
-          {value === tab.value && <Box sx={{ p: 3 }}>{tab.component}</Box>}
-        </Box>
-      ))}
-    </Box>
+        {Array.from({ length: 10 }, (_, i) => i + 1).map((i) => (
+          <Box key={i} sx={{ width: 400 }}>
+            <CourseCard
+              team="Business Intelligence"
+              description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum"
+              courseCount={18}
+              ksa="Skill"
+              thumbnail="/assets/img/sample_course.png"
+              title="THÀNH THẠO XỬ LÝ DỮ LIỆU VỚI PYTHON TỪ SỐ 0 - 2024"
+            />
+          </Box>
+        ))}
+      </Tabs>
+    </Stack>
   );
 }

@@ -199,7 +199,7 @@ const BRING_PINK = {
 
 const GREY = {
   0: "#FFFFFF",
-  50: "#F9F9FF",
+  50: "#F9FAFB",
   100: "#F3F4F6",
   200: "#EAECF0",
   300: "#D2D6DB",

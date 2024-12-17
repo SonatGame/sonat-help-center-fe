@@ -35,6 +35,7 @@ export default function PageWithLayout(props: PageWithLayoutProps) {
         <Box
           component="main"
           sx={{
+            height: "100vh",
             width: matchesMd
               ? `100%`
               : open
@@ -45,12 +46,9 @@ export default function PageWithLayout(props: PageWithLayoutProps) {
           }}
         >
           <PageHeader handleDrawer={handleDrawer} isSidebarOpen={open} />
-          <Box width={1} sx={{ flexGrow: 1, mt: { xs: 7, sm: 8 } }}>
+          <Box width={1} sx={{ flexGrow: 1, pt: { xs: 7, sm: 8 } }}>
             {props.children}
           </Box>
-          {/* <Typography variant="body2" pb={2} textAlign="center">
-            © 2024 Sonat With Love
-          </Typography> */}
         </Box>
       </Stack>
     </Box>

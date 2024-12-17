@@ -58,8 +58,8 @@ export default function MoodCard() {
           Hôm nay bạn cảm thấy thế nào
         </Typography>
         <Stack direction="row" justifyContent="center" spacing={2}>
-          {moodList.map((item) => (
-            <Stack alignItems="center" spacing={1}>
+          {moodList.map((item, index) => (
+            <Stack key={index} alignItems="center" spacing={1}>
               {item.icon}
               <Typography variant="body2" textAlign="center">
                 {item.text}

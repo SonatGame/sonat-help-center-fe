@@ -10,8 +10,6 @@ import shadows, { customShadows } from "./shadow";
 import typography from "./typography";
 
 export default function useAppThemeHook() {
-  const shape = 8;
-
   const themeOptions = useMemo(
     () => ({
       palette: {
@@ -31,13 +29,13 @@ export default function useAppThemeHook() {
       },
       typography: typography as TypographyOptions,
       breakpoints,
-      shape: { borderRadius: shape },
+      shape: { borderRadius: 8 },
       shadows: shadows.light,
       customShadows: customShadows(
         palette.light.primary?.main || palette.light.primary.main
       ).light,
     }),
-    [shape]
+    []
   );
 
   const theme = createTheme(themeOptions as unknown as ThemeOptions);

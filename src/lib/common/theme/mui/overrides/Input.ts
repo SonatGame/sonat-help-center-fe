@@ -1,3 +1,5 @@
+import { Components, Theme } from "@mui/material";
+
 export default function Input(theme: any) {
   return {
     MuiInputBase: {
@@ -9,9 +11,11 @@ export default function Input(theme: any) {
           minHeight: 37,
         },
         input: {
+          fontSize: theme.typography.body2.fontSize,
           "&::placeholder": {
             opacity: 1,
             color: theme.palette.text.disabled,
+            fontSize: theme.typography.body2.fontSize,
           },
         },
       },
@@ -72,5 +76,5 @@ export default function Input(theme: any) {
         },
       },
     },
-  };
+  } as Components<Omit<Theme, "components">>;
 }
