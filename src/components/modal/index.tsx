@@ -26,19 +26,19 @@ interface ExtraButton {
 }
 
 interface ModalWrapperProps {
-  handleOpen?: () => any;
-  isUsingIconButton?: boolean;
-  isUsingCustomButton?: boolean;
+  onOpen?: () => any;
+  usingIconButton?: boolean;
+  usingCustomButton?: boolean;
   buttonTitle?: ReactNode;
   title?: ReactNode;
   children: ReactNode;
-  handleCancel?: () => void;
-  handleApply?: any;
+  onCancel?: () => void;
+  onApply?: () => any;
   dialogProps?: DialogProp;
   buttonProps?: ButtonProps;
-  isUsingActions?: boolean;
+  usingActions?: boolean;
   isOpen?: boolean;
-  handleClose?: () => void;
+  onClose?: () => void;
   disableApplyButton?: boolean;
   startExtraButton?: ExtraButton[];
   extraButton?: ExtraButton[];
@@ -52,18 +52,18 @@ export default function ModalWrapper(props: ModalWrapperProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClickOpen = () => {
-    if (typeof props.isOpen !== "boolean" || !props.handleClose) {
+    if (typeof props.isOpen !== "boolean" || !props.onClose) {
       setOpen(true);
     }
-    props?.handleOpen?.();
+    props?.onOpen?.();
   };
 
   const handleClose = () => {
-    if (typeof props.isOpen !== "boolean" || !props.handleClose) {
+    if (typeof props.isOpen !== "boolean" || !props.onClose) {
       setOpen(false);
-      if (props.handleCancel) props.handleCancel();
+      if (props.onCancel) props.onCancel();
     } else {
-      props.handleClose();
+      props.onClose();
     }
   };
 
@@ -71,11 +71,11 @@ export default function ModalWrapper(props: ModalWrapperProps) {
     <>
       {(() => {
         if (props.buttonTitle) {
-          if (props.isUsingCustomButton) {
+          if (props.usingCustomButton) {
             return <Box onClick={handleClickOpen}>{props.buttonTitle}</Box>;
           }
 
-          if (props.isUsingIconButton) {
+          if (props.usingIconButton) {
             return (
               <IconButton onClick={handleClickOpen} {...props.buttonProps}>
                 {props.buttonTitle}
@@ -120,7 +120,7 @@ export default function ModalWrapper(props: ModalWrapperProps) {
         <DialogContent {...props.dialogContentProps}>
           {props.children}
         </DialogContent>
-        {props.isUsingActions && (
+        {props.usingActions && (
           <DialogActions sx={{ px: 2.5, pb: 2 }}>
             {props?.startExtraButton?.map((item, index) => {
               return (
@@ -156,9 +156,9 @@ export default function ModalWrapper(props: ModalWrapperProps) {
               variant="contained"
               onClick={async () => {
                 setIsLoading(true);
-                if (props.handleApply) {
+                if (props.onApply) {
                   try {
-                    await props.handleApply();
+                    await props.onApply();
                   } catch (error) {
                     console.log(error);
                   }

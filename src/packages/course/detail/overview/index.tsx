@@ -120,11 +120,47 @@ export default function CourseOverview() {
                     color: theme.palette.primary.main,
                   }}
                 >
-                  4 bài học
+                  5 bài học
                 </Typography>
               </Stack>
             }
-            detail={<></>}
+            detail={
+              <>
+                {Array.from({ length: 5 }, (_, i) => i + 1).map((i) => (
+                  <Stack
+                    key={i}
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    sx={{
+                      px: 1.5,
+                      py: 3,
+                      borderBottom:
+                        i < 5
+                          ? `1px solid ${theme.palette.divider}`
+                          : undefined,
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: theme.palette.grey[700],
+                      }}
+                    >
+                      {i}. Giới thiệu chung về giao diện Excel
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      fontWeight="bold"
+                      color="primary"
+                      sx={{ cursor: "pointer", userSelect: "none" }}
+                    >
+                      Học ngay
+                    </Typography>
+                  </Stack>
+                ))}
+              </>
+            }
           />
           <StyledAccordion
             summary={
@@ -136,7 +172,7 @@ export default function CourseOverview() {
                     color: theme.palette.grey[700],
                   }}
                 >
-                  Tổng quan về dữ liệu và định dạng dữ liệu Excel
+                  Tổng quan về phần mềm Excel
                 </Typography>
                 <Typography
                   variant="body2"
@@ -145,11 +181,47 @@ export default function CourseOverview() {
                     color: theme.palette.primary.main,
                   }}
                 >
-                  10 bài học
+                  3 bài học
                 </Typography>
               </Stack>
             }
-            detail={<></>}
+            detail={
+              <>
+                {Array.from({ length: 3 }, (_, i) => i + 1).map((i) => (
+                  <Stack
+                    key={i}
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    sx={{
+                      px: 1.5,
+                      py: 3,
+                      borderBottom:
+                        i < 3
+                          ? `1px solid ${theme.palette.divider}`
+                          : undefined,
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: theme.palette.grey[700],
+                      }}
+                    >
+                      {i}. Giới thiệu chung về giao diện Excel
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      fontWeight="bold"
+                      color="primary"
+                      sx={{ cursor: "pointer", userSelect: "none" }}
+                    >
+                      Học ngay
+                    </Typography>
+                  </Stack>
+                ))}
+              </>
+            }
           />
           <Button
             variant="outlined"

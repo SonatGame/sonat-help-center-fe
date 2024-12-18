@@ -1,5 +1,6 @@
+import TextMaxLine from "@/components/TextMaxLine";
 import { AddRounded, ArrowForwardRounded } from "@mui/icons-material";
-import { Card, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Card, Stack, Typography, useTheme } from "@mui/material";
 
 interface IProps {
   title?: string;
@@ -45,31 +46,35 @@ export default function LessonCard(props: IProps) {
         p: 2,
       }}
     >
-      {/* <TextMaxLine
-        TypographyProps={{ fontWeight: "bold" }}
-        sx={{
-          color: theme.palette.grey[700],
-        }}
-      >
-        {title}
-      </TextMaxLine>
-      <TextMaxLine
-        TypographyProps={{ variant: "body2" }}
-        sx={{
-          color: theme.palette.grey[500],
-          wordBreak: "break-word",
-        }}
-      >
-        {content}
-      </TextMaxLine> */}
-      <Stack
-        direction="row"
-        alignItems="center"
-        gap={1}
-        sx={{ color: theme.palette.primary.main }}
-      >
-        <Typography variant="body2">Học ngay</Typography>
-        <ArrowForwardRounded fontSize="small" />
+      <Stack justifyContent="space-between" sx={{ height: "100%" }}>
+        <Box>
+          <TextMaxLine
+            TypographyProps={{ fontWeight: "bold" }}
+            sx={{
+              color: theme.palette.grey[700],
+            }}
+          >
+            {title}
+          </TextMaxLine>
+          <TextMaxLine
+            TypographyProps={{ variant: "body2" }}
+            sx={{
+              color: theme.palette.grey[500],
+              wordBreak: "break-word",
+            }}
+          >
+            {content}
+          </TextMaxLine>
+        </Box>
+        <Stack
+          direction="row"
+          alignItems="center"
+          gap={1}
+          sx={{ color: theme.palette.primary.main }}
+        >
+          <Typography variant="body2">Học ngay</Typography>
+          <ArrowForwardRounded fontSize="small" />
+        </Stack>
       </Stack>
     </Card>
   );

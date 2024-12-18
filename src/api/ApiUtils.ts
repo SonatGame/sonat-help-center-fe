@@ -99,8 +99,8 @@ async function fetchOne<T>({
   functionName: string;
   url: string;
   method: string;
-  hasSuccessfulMsg: boolean;
-  hasErrorMsg: boolean;
+  hasSuccessfulMsg?: boolean;
+  hasErrorMsg?: boolean;
   body?: Record<string, any>;
   params?: Record<string, any>;
   isEmpty?: boolean;
@@ -149,8 +149,8 @@ async function fetchList<T>({
   functionName: string;
   url: string;
   method: string;
-  hasSuccessfulMsg: boolean;
-  hasErrorMsg: boolean;
+  hasSuccessfulMsg?: boolean;
+  hasErrorMsg?: boolean;
   body?: Record<string, any>;
   params?: Record<string, any>;
   showError?: boolean;
@@ -248,8 +248,8 @@ async function fetchListFormData<T>({
   functionName: string;
   url: string;
   method: string;
-  hasSuccessfulMsg: boolean;
-  hasErrorMsg: boolean;
+  hasSuccessfulMsg?: boolean;
+  hasErrorMsg?: boolean;
   body?: Record<string, any>;
   params?: Record<string, any>;
   showError?: boolean;
@@ -289,8 +289,8 @@ async function fetchOneFormData<T>(
   functionName: string,
   url: string,
   method: string,
-  hasSuccessfulMsg: boolean,
-  hasErrorMsg: boolean,
+  hasSuccessfulMsg?: boolean,
+  hasErrorMsg?: boolean,
   body?: Record<string, any>,
   params?: Record<string, any>,
   showError?: boolean

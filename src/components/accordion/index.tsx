@@ -34,7 +34,10 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 }));
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-  padding: theme.spacing(2),
+  paddingTop: 0,
+  paddingBottom: 0,
+  paddingRight: theme.spacing(3),
+  paddingLeft: theme.spacing(3),
   borderTop: `1px solid ${theme.palette.divider}`,
   backgroundColor: theme.palette.background.paper,
 }));

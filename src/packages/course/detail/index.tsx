@@ -58,7 +58,8 @@ export default function CourseDetail() {
         alignItems="center"
         sx={{
           px: 4,
-          py: 3,
+          pt: 3,
+          pb: 1.5,
         }}
       >
         <Stack
@@ -95,6 +96,7 @@ export default function CourseDetail() {
             </Stack>
           </Stack>
         </Stack>
+        <Button variant="outlined">Chỉnh sửa</Button>
         <Button variant="outlined" sx={{ minWidth: "fit-content", px: 1 }}>
           <MoreVert fontSize="small" />
         </Button>

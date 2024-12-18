@@ -1,4 +1,4 @@
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
 
 import { pxToRem } from "@/lib/utils/getFontValue";
 import {
@@ -9,21 +9,22 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import { Dayjs } from "dayjs";
 import { ReactNode } from "react";
 import Asterisk from "./Asterisk";
 
-interface RHFDatePickerProps {
-  name: string;
+interface RHFDatePickerProps<T extends FieldValues> {
+  name: FieldPath<T>;
   rules?: any;
-  control: Control<any>;
+  control: Control<T, any>;
   label?: string | ReactNode;
   required?: boolean;
   sx?: SxProps;
   disabled?: boolean;
-  onChangeCallback?: (value: Date) => void;
+  onChangeCallback?: (value: Dayjs) => void;
 }
 
-export default function RHFDatePicker({
+export default function RHFDatePicker<T extends FieldValues>({
   name,
   control,
   rules,
@@ -32,7 +33,7 @@ export default function RHFDatePicker({
   sx,
   disabled = false,
   onChangeCallback,
-}: RHFDatePickerProps) {
+}: RHFDatePickerProps<T>) {
   return (
     <Stack spacing={0.5} width="100%" sx={{ ...sx }}>
       {typeof label === "string" ? (
@@ -52,7 +53,7 @@ export default function RHFDatePicker({
             <DatePicker
               {...field}
               format="DD/MM/YYYY"
-              onChange={(newValue: Date | null) => {
+              onChange={(newValue: Dayjs | null) => {
                 field.onChange(newValue);
                 if (newValue) onChangeCallback?.(newValue);
               }}
