@@ -10,9 +10,9 @@ import {
   DialogContentProps,
   DialogProps,
   DialogTitle,
-  Divider,
   IconButton,
   Stack,
+  Typography,
 } from "@mui/material";
 import { Fragment, ReactNode, useState } from "react";
 
@@ -43,7 +43,7 @@ interface ModalWrapperProps {
   startExtraButton?: ExtraButton[];
   extraButton?: ExtraButton[];
   dialogContentProps?: DialogContentProps;
-  disableCloseOnConfirm?: boolean;
+  disableCloseOnApply?: boolean;
   isRawApply?: boolean;
 }
 
@@ -108,20 +108,18 @@ export default function ModalWrapper(props: ModalWrapperProps) {
               justifyContent={"space-between"}
               alignItems={"center"}
             >
-              {props.title}
-              <IconButton onClick={handleClose}>
-                <Close color="primary" />
+              <Typography fontWeight="bold">{props.title}</Typography>
+              <IconButton size="small" onClick={handleClose}>
+                <Close fontSize="small" />
               </IconButton>
             </Stack>
           </DialogTitle>
         )}
-
-        <Divider />
-        <DialogContent {...props.dialogContentProps}>
+        <DialogContent {...props.dialogContentProps} dividers>
           {props.children}
         </DialogContent>
         {props.usingActions && (
-          <DialogActions sx={{ px: 2.5, pb: 2 }}>
+          <DialogActions>
             {props?.startExtraButton?.map((item, index) => {
               return (
                 <Fragment key={index}>
@@ -150,7 +148,7 @@ export default function ModalWrapper(props: ModalWrapperProps) {
             })}
 
             <Button variant="outlined" onClick={handleClose}>
-              Discard
+              Hủy
             </Button>
             <Button
               variant="contained"
@@ -164,14 +162,14 @@ export default function ModalWrapper(props: ModalWrapperProps) {
                   }
                 }
                 setIsLoading(false);
-                if (!props.disableCloseOnConfirm) {
+                if (!props.disableCloseOnApply) {
                   if (props.isRawApply) setOpen(false);
                   else handleClose();
                 }
               }}
               disabled={isLoading || props.disableApplyButton}
             >
-              {isLoading ? <CircularProgress size={24} /> : "Confirm"}
+              {isLoading ? <CircularProgress size={24} /> : "Áp dụng"}
             </Button>
             {props?.extraButton?.map((item, index) => {
               return (
@@ -185,12 +183,11 @@ export default function ModalWrapper(props: ModalWrapperProps) {
                         setIsLoading(true);
                         try {
                           await item?.onClick();
-                        } catch (error) {
-                          console.log(error);
+                        } catch (e) {
+                          console.error(e);
                         }
                         setIsLoading(false);
                         setOpen(false);
-                        //handleClose();
                       }}
                     >
                       {item.title}

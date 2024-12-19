@@ -10,17 +10,26 @@ import {
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
-import { SyntheticEvent, useState } from "react";
-import CourseContent from "./content";
-import CourseOverview from "./overview";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+import CourseContent from "./content-tab";
+import { useCourseDetail } from "./context";
+import CreateCourseModal from "./create-course-modal";
+import CourseOverview from "./overview-tab";
 
 export default function CourseDetail() {
   const theme = useTheme();
-  const [value, setValue] = useState("overview");
+  const params = useParams<{ courseId: string }>();
 
-  const handleChange = (event: SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
+  const { handleChange, value } = useCourseDetail();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  function handleOpen() {
+    setIsModalOpen(true);
+  }
+  function handleClose() {
+    setIsModalOpen(false);
+  }
 
   const tabList = [
     {
@@ -96,10 +105,17 @@ export default function CourseDetail() {
             </Stack>
           </Stack>
         </Stack>
-        <Button variant="outlined">Chỉnh sửa</Button>
-        <Button variant="outlined" sx={{ minWidth: "fit-content", px: 1 }}>
-          <MoreVert fontSize="small" />
-        </Button>
+        <Stack direction="row" gap={1.5}>
+          <CreateCourseModal
+            isModalOpen={isModalOpen}
+            handleOpen={handleOpen}
+            handleClose={handleClose}
+            isEditing
+          />
+          <Button variant="outlined" sx={{ minWidth: "fit-content", px: 1 }}>
+            <MoreVert fontSize="small" />
+          </Button>
+        </Stack>
       </Stack>
       <Box sx={{ borderBottom: 1, borderColor: "divider", px: 4 }}>
         <Tabs value={value} onChange={handleChange}>

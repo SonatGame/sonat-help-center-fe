@@ -62,7 +62,6 @@ export default function RHFTextField<T extends FieldValues>({
                 e.target.value.length !== 0
               )
                 return;
-
               onChange?.(e);
               field.onChange(e);
             }}

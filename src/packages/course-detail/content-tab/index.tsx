@@ -1,6 +1,6 @@
 import StyledAccordion from "@/components/accordion";
+import { EditIcon } from "@/packages/course/icons";
 import { Grid2, Stack, Typography, useTheme } from "@mui/material";
-import { EditIcon } from "../../icons";
 import LessonCard from "./LessonCard";
 
 export default function CourseContent() {

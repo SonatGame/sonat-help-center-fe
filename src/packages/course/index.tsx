@@ -1,21 +1,11 @@
-import RHFSelect from "@/components/form/RHFSelect";
-import RHFTextField from "@/components/form/RHFTextField";
-import ModalWrapper from "@/components/modal";
-import { Add } from "@mui/icons-material";
 import { Box, Stack, Tabs, useTheme } from "@mui/material";
 import CourseCard from "../home/components/course-list/CourseCard";
+import CreateCourseModal from "./detail/create-course-modal";
 import useCourseSection from "./hook";
 
 export default function CourseSection() {
   const theme = useTheme();
-  const {
-    isModalOpen,
-    handleOpen,
-    handleClose,
-    control,
-    handleSubmit,
-    onSubmit,
-  } = useCourseSection();
+  const { isModalOpen, handleOpen, handleClose } = useCourseSection();
 
   return (
     <Stack
@@ -27,27 +17,11 @@ export default function CourseSection() {
     >
       <Stack direction="row" justifyContent="space-between">
         <div></div>
-        <ModalWrapper
-          title="Tạo khóa học mới"
-          buttonTitle="Khóa học mới"
-          buttonProps={{
-            variant: "contained",
-            startIcon: <Add />,
-          }}
-          dialogProps={{
-            maxWidth: "sm",
-            fullWidth: true,
-          }}
-          usingActions
-          onOpen={handleOpen}
-          onClose={handleClose}
-        >
-          <Stack>
-            <RHFTextField name="name" control={control} />
-            <RHFSelect name="team" control={control} options={[]} />
-            <RHFSelect name="ksa" control={control} options={[]} />
-          </Stack>
-        </ModalWrapper>
+        <CreateCourseModal
+          isModalOpen={isModalOpen}
+          handleOpen={handleOpen}
+          handleClose={handleClose}
+        />
       </Stack>
       <Tabs
         variant="scrollable"

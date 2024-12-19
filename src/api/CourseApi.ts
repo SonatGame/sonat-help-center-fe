@@ -1,28 +1,33 @@
+import { Course } from "@/lib/types/course";
 import { ApiUtils } from "./ApiUtils";
-
-const PATH = "users/";
-const suffix = {
-  role: PATH + "role/",
-};
 
 const { HOST, METHOD, fetchList, fetchOne } = ApiUtils;
 
 async function getCourses() {
-  return fetchOne({
+  return await fetchList<Course>({
     functionName: "Get courses",
     url: HOST + "",
-    method: METHOD.POST,
+    method: METHOD.GET,
   });
 }
 
-// export async function getCurrentRolePermission() {
-//   return fetchOne(
-//     "Get current role permission",
-//     HOST + suffix.role,
-//     METHOD.GET,
-//     false,
-//     false
-//   );
-// }
+async function getCourse(courseId: string) {
+  return await fetchOne<Course>({
+    functionName: "Get course detail",
+    url: HOST + "course/" + courseId,
+    method: METHOD.GET,
+  });
+}
 
-export const CourseApi = { getCourses };
+async function createCourse(data: any) {
+  return fetchOne({
+    functionName: "Create course",
+    url: HOST + "course",
+    method: METHOD.POST,
+    hasErrorMsg: true,
+    hasSuccessfulMsg: true,
+    body: data,
+  });
+}
+
+export const CourseApi = { getCourses, getCourse, createCourse };

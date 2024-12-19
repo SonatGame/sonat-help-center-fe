@@ -1,4 +1,4 @@
-import { ArrowDownward, ArrowUpward } from "@mui/icons-material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import {
   Box,
   Stack,
@@ -23,10 +23,7 @@ const TextMaxLine = ({
   withExpand,
 }: ITextMaxLineProps) => {
   const theme = useTheme();
-  const [expanded, setExpanded] = useState(false);
-  const [maxLine, setMaxLine] = useState<number | undefined>(
-    withExpand ? line : undefined
-  );
+  const [maxLine, setMaxLine] = useState<number | undefined>(line);
 
   return (
     <Box>
@@ -46,14 +43,21 @@ const TextMaxLine = ({
         <Stack
           direction="row"
           alignItems="center"
-          gap={1}
-          sx={{ color: theme.palette.primary.main }}
-          onClick={() => setExpanded(!expanded)}
+          gap={0.5}
+          sx={{
+            mt: 1,
+            color: theme.palette.primary.main,
+            cursor: "pointer",
+            userSelect: "none",
+          }}
+          onClick={() => {
+            setMaxLine(!!maxLine ? undefined : line);
+          }}
         >
           <Typography variant="body2">
-            {!expanded ? "Xem tất cả" : "Thu gọn"}
+            {!!maxLine ? "Xem tất cả" : "Thu gọn"}
           </Typography>
-          {!expanded ? <ArrowDownward /> : <ArrowUpward />}
+          {!!maxLine ? <ExpandMore /> : <ExpandLess />}
         </Stack>
       )}
     </Box>
