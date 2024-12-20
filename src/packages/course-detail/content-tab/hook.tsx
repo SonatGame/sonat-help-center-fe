@@ -1,10 +1,23 @@
 import { useCourseDetailContext } from "../context";
 
 export default function useContentTab() {
-  const { setValue: setTabValue, courseData } = useCourseDetailContext();
+  const { courseData, setIsAddingLesson, isAddingLesson } =
+    useCourseDetailContext();
+
+  function handleAddLesson() {
+    setIsAddingLesson(true);
+  }
+
+  function handleCancel() {
+    setIsAddingLesson(false);
+  }
+
+  function handleUploadDocs() {}
 
   return {
-    setTabValue,
     courseData,
+    handleAddLesson,
+    isAddingLesson,
+    handleCancel,
   };
 }

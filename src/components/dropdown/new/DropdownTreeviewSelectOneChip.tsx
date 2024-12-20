@@ -1,5 +1,5 @@
 import BaseChip from "@/components/BaseChip";
-import ModalWrapper from "@/components/modal";
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import {
   Add,
   Check,
@@ -378,9 +378,8 @@ export default function DropdownTreeviewSelectOneChip({
         </Stack>
       </Popover>
 
-      <ModalWrapper
+      <ConfirmDeleteModal
         isOpen={isConfirm}
-        usingActions
         onApply={async () => {
           await onDeleteNode?.(parentId!);
           setIsConfirm(false);
@@ -390,12 +389,7 @@ export default function DropdownTreeviewSelectOneChip({
           setIsConfirm(false);
           setParentId(null);
         }}
-      >
-        <Typography>
-          Are you sure you want to delete&nbsp;
-          <b>{findItemPathById(options, parentId!, [])?.pop()}</b>?
-        </Typography>
-      </ModalWrapper>
+      />
     </>
   );
 }

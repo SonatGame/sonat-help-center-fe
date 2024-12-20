@@ -6,11 +6,12 @@ interface IProps {
   title?: string;
   content?: string;
   isEmpty?: boolean;
+  onClick?: () => any;
 }
 
 export default function LessonCard(props: IProps) {
   const theme = useTheme();
-  const { isEmpty = false, title, content } = props;
+  const { isEmpty = false, title, content, onClick } = props;
 
   if (isEmpty)
     return (
@@ -28,6 +29,7 @@ export default function LessonCard(props: IProps) {
           border: 1,
           borderColor: theme.palette.divider,
         }}
+        onClick={onClick}
       >
         <AddRounded fontSize="small" />
         <Typography variant="body2">Thêm bài học mới</Typography>
@@ -45,6 +47,7 @@ export default function LessonCard(props: IProps) {
         borderColor: theme.palette.divider,
         p: 2,
       }}
+      onClick={onClick}
     >
       <Stack justifyContent="space-between" sx={{ height: "100%" }}>
         <Box>

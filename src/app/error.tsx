@@ -29,8 +29,11 @@ const ErrorPage: NextPage<Props> = ({ statusCode }) => {
             ? `An error ${statusCode} occurred on server.`
             : "An error occurred on client."}
         </p>
-        <Button variant="contained" onClick={onGoBack}>
-          <ArrowBackOutlined />
+        <Button
+          variant="contained"
+          onClick={onGoBack}
+          startIcon={<ArrowBackOutlined fontSize="small" />}
+        >
           Go back
         </Button>
       </main>

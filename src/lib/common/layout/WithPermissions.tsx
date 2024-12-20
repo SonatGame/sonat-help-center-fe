@@ -2,7 +2,7 @@
 
 import FullPageLoader from "@/components/FullPageLoader";
 import { PermissionProps } from "@/contexts/authorizationContext";
-import { ArrowBack } from "@mui/icons-material";
+import { ArrowBackOutlined } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Fragment } from "react";
@@ -69,7 +69,11 @@ export default function WithPermissions(props: WithPermissionsProps) {
         </Typography>
       </Stack>
 
-      <Button variant="contained" startIcon={<ArrowBack />} onClick={onGoBack}>
+      <Button
+        variant="contained"
+        startIcon={<ArrowBackOutlined fontSize="small" />}
+        onClick={onGoBack}
+      >
         Go back
       </Button>
     </Stack>

@@ -1,6 +1,7 @@
 export type Lesson = {
   _id: string;
   title: string;
+  description: string;
 };
 
 export type Chapter = {

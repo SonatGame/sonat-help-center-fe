@@ -21,7 +21,7 @@ export default function CourseDetail() {
   const theme = useTheme();
   const params = useParams<{ courseId: string }>();
 
-  const { handleChange, value } = useCourseDetailContext();
+  const { handleChange, value, isAddingLesson } = useCourseDetailContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   function handleOpen() {
@@ -61,69 +61,85 @@ export default function CourseDetail() {
         backgroundColor: theme.palette.background.paper,
       }}
     >
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{
-          px: 4,
-          pt: 3,
-          pb: 1.5,
-        }}
-      >
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          gap={3}
-        >
-          <Image
-            src={"/assets/img/sample_course.png"}
-            alt="course-thumbnail"
-            width={300}
-            height={300}
-            style={{
-              objectFit: "cover",
-              width: 96,
-              height: 96,
-              borderRadius: 16,
+      {!isAddingLesson && (
+        <>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{
+              px: 4,
+              pt: 3,
+              pb: 1.5,
             }}
-          />
-          <Stack gap={1.5}>
-            <Typography variant="h5">Nhập môn Excel cùng Sonat</Typography>
-            <Stack direction="row" gap={1}>
-              <Tag>
-                <Typography variant="body2" color="primary" fontWeight="medium">
-                  12 bài học
-                </Typography>
-              </Tag>
-              <Tag>
-                <Typography variant="body2" color="primary" fontWeight="medium">
-                  Skill
-                </Typography>
-              </Tag>
+          >
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              gap={3}
+            >
+              <Image
+                src={"/assets/img/sample_course.png"}
+                alt="course-thumbnail"
+                width={300}
+                height={300}
+                style={{
+                  objectFit: "cover",
+                  width: 96,
+                  height: 96,
+                  borderRadius: 16,
+                }}
+              />
+              <Stack gap={1.5}>
+                <Typography variant="h5">Nhập môn Excel cùng Sonat</Typography>
+                <Stack direction="row" gap={1}>
+                  <Tag>
+                    <Typography
+                      variant="body2"
+                      color="primary"
+                      fontWeight="medium"
+                    >
+                      12 bài học
+                    </Typography>
+                  </Tag>
+                  <Tag>
+                    <Typography
+                      variant="body2"
+                      color="primary"
+                      fontWeight="medium"
+                    >
+                      Skill
+                    </Typography>
+                  </Tag>
+                </Stack>
+              </Stack>
+            </Stack>
+            <Stack direction="row" gap={1.5}>
+              <CreateCourseModal
+                isModalOpen={isModalOpen}
+                handleOpen={handleOpen}
+                handleClose={handleClose}
+                isEditing
+              />
+              <Button
+                variant="outlined"
+                sx={{ minWidth: "fit-content", px: 1 }}
+              >
+                <MoreVert fontSize="small" />
+              </Button>
             </Stack>
           </Stack>
-        </Stack>
-        <Stack direction="row" gap={1.5}>
-          <CreateCourseModal
-            isModalOpen={isModalOpen}
-            handleOpen={handleOpen}
-            handleClose={handleClose}
-            isEditing
-          />
-          <Button variant="outlined" sx={{ minWidth: "fit-content", px: 1 }}>
-            <MoreVert fontSize="small" />
-          </Button>
-        </Stack>
-      </Stack>
-      <Box sx={{ borderBottom: 1, borderColor: "divider", px: 4 }}>
-        <Tabs value={value} onChange={handleChange}>
-          {tabList.map((tab, index) => (
-            <Tab key={`tab-${index}`} value={tab.value} label={tab.label} />
-          ))}
-        </Tabs>
-      </Box>
+          <Box sx={{ borderBottom: 1, borderColor: "divider", px: 4 }}>
+            <Tabs value={value} onChange={handleChange}>
+              {tabList.map((tab, index) => (
+                <Tab key={`tab-${index}`} value={tab.value} label={tab.label} />
+              ))}
+            </Tabs>
+          </Box>
+        </>
+      )}
+
       {tabList.map((tab, index) => (
         <Box
           key={`tab-panel-${index}`}

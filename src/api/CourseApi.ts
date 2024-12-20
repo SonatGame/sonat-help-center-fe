@@ -3,11 +3,17 @@ import { ApiUtils } from "./ApiUtils";
 
 const { HOST, METHOD, fetchList, fetchOne } = ApiUtils;
 
-async function getCourses() {
+async function getCourseList(params?: {
+  order?: "ASC" | "DESC";
+  page?: number;
+  take?: number;
+  title?: string;
+}) {
   return await fetchList<Course>({
     functionName: "Get courses",
-    url: HOST + "",
+    url: HOST + "course",
     method: METHOD.GET,
+    params,
   });
 }
 
@@ -19,7 +25,13 @@ async function getCourse(courseId: string) {
   });
 }
 
-async function createCourse(data: any) {
+async function createCourse(data: {
+  title: string;
+  team: string;
+  KSA: string;
+  thumbnail: File;
+  coverImage: File;
+}) {
   return fetchOne({
     functionName: "Create course",
     url: HOST + "course",
@@ -30,4 +42,4 @@ async function createCourse(data: any) {
   });
 }
 
-export const CourseApi = { getCourses, getCourse, createCourse };
+export const CourseApi = { getCourseList, getCourse, createCourse };

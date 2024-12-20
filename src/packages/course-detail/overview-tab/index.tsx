@@ -72,6 +72,7 @@ export default function CourseOverview() {
             />
           )}
         </Stack>
+
         <Stack gap={3}>
           <Typography variant="h4">Mục tiêu khóa học</Typography>
           <Stack gap={1.5}>
@@ -97,7 +98,6 @@ export default function CourseOverview() {
               </Stack>
             )}
           </Stack>
-
           <Button
             variant="outlined"
             sx={{ width: "fit-content" }}
@@ -106,6 +106,7 @@ export default function CourseOverview() {
             Thêm thông tin
           </Button>
         </Stack>
+
         <Stack gap={3}>
           <Stack gap={1.5}>
             <Typography variant="h4">Nội dung khóa học</Typography>
@@ -162,7 +163,7 @@ export default function CourseOverview() {
                           px: 1.5,
                           py: 3,
                           borderBottom:
-                            i < 5
+                            i < chapter.lessons.length - 1
                               ? `1px solid ${theme.palette.divider}`
                               : undefined,
                         }}

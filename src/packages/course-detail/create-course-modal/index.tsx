@@ -1,3 +1,4 @@
+import { CourseApi } from "@/api/CourseApi";
 import { RHFImagePicker } from "@/components/form/RHFImagePicker";
 import RHFSelect from "@/components/form/RHFSelect";
 import RHFTextField from "@/components/form/RHFTextField";
@@ -17,9 +18,9 @@ export interface ICreateCourseModalProps {
 }
 
 interface IForm {
-  name: string;
+  title: string;
   team: string;
-  ksa: string;
+  KSA: string;
   thumbnail: File;
   coverImage: File;
 }
@@ -29,13 +30,16 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
     props;
   const { control, setValue, watch, handleSubmit, reset } = useForm<IForm>({
     defaultValues: {
-      name: "",
+      title: "",
       team: "",
-      ksa: "",
+      KSA: "",
     },
   });
 
-  function onSubmit(data: IForm) {}
+  async function onSubmit(data: IForm) {
+    const { title, team, KSA, thumbnail, coverImage } = data;
+    await CourseApi.createCourse({ title, team, KSA, thumbnail, coverImage });
+  }
 
   useEffect(() => {
     if (!editingCourse) reset();
@@ -69,7 +73,7 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
       <Stack gap={3}>
         <RHFTextField
           label="Tên khóa học"
-          name="name"
+          name="title"
           control={control}
           required
           rules={{
@@ -88,12 +92,12 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
         />
         <RHFSelect
           label="KSA"
-          name="ksa"
+          name="KSA"
           control={control}
           options={ksaOptions}
           required
           rules={{
-            required: "Vui lòng chọn ksa",
+            required: "Vui lòng chọn KSA",
           }}
         />
         <Grid2 container spacing={2}>

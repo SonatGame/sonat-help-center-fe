@@ -1,12 +1,20 @@
 import StyledAccordion from "@/components/accordion";
 import { EditIcon } from "@/packages/course/icons";
-import { Grid2, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Grid2,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import LessonCard from "./LessonCard";
 import useContentTab from "./hook";
 
 export default function CourseContent() {
   const theme = useTheme();
-  const { courseData } = useContentTab();
+  const { courseData, handleAddLesson, isAddingLesson, handleCancel } =
+    useContentTab();
 
   return (
     <Stack direction="row" sx={{ height: "100%" }}>
@@ -19,6 +27,22 @@ export default function CourseContent() {
         }}
       >
         <Stack gap={1.5} sx={{ p: 3 }}>
+          {isAddingLesson && (
+            <Stack
+              direction="row"
+              gap={0.5}
+              sx={{
+                cursor: "pointer",
+                userSelect: "none",
+                color: theme.palette.primary.main,
+              }}
+              onClick={handleCancel}
+            >
+              <Typography variant="body2" fontWeight="bold">
+                Quay lại
+              </Typography>
+            </Stack>
+          )}
           <Typography variant="h6">Nội dung khóa học</Typography>
           <Typography
             variant="body2"
@@ -72,7 +96,7 @@ export default function CourseContent() {
                           px: 1.5,
                           py: 3,
                           borderBottom:
-                            i < 5
+                            i < chapter.lessons.length - 1
                               ? `1px solid ${theme.palette.divider}`
                               : undefined,
                         }}
@@ -85,14 +109,6 @@ export default function CourseContent() {
                         >
                           {lesson.title}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          fontWeight="bold"
-                          color="primary"
-                          sx={{ cursor: "pointer", userSelect: "none" }}
-                        >
-                          Học ngay
-                        </Typography>
                       </Stack>
                     ))}
                   </>
@@ -102,46 +118,77 @@ export default function CourseContent() {
           })}
         </Stack>
       </Stack>
-      <Stack
-        gap={5}
-        sx={{
-          backgroundColor: theme.palette.grey[50],
-          flexGrow: 1,
-          p: 4,
-        }}
-      >
-        <Stack gap={2}>
-          <Stack direction="row" alignItems="center" gap={1.5}>
-            <Typography variant="h5">Chương 1</Typography>
-            <EditIcon fontSize="small" sx={{ cursor: "pointer" }} />
-          </Stack>
-          <Grid2 container spacing={3}>
-            {Array.from({ length: 10 }, (_, i) => i + 1).map((i) => (
-              <Grid2 key={i} size={{ md: 6, lg: 4, xl: 3 }}>
-                <LessonCard
-                  title={`${i}. Giới thiệu chung về giao diện Excel`}
-                  content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum"
-                />
+      {!isAddingLesson ? (
+        <Stack
+          gap={5}
+          sx={{
+            backgroundColor: theme.palette.grey[50],
+            flexGrow: 1,
+            p: 4,
+          }}
+        >
+          {courseData?.modules.map((chapter) => (
+            <Stack key={chapter._id} gap={2}>
+              <Stack direction="row" alignItems="center" gap={1.5}>
+                <Typography variant="h5">{chapter.title}</Typography>
+                <EditIcon fontSize="small" sx={{ cursor: "pointer" }} />
+              </Stack>
+              <Grid2 container spacing={3}>
+                <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
+                  <LessonCard isEmpty onClick={handleAddLesson} />
+                </Grid2>
+                {chapter.lessons.map((lesson) => (
+                  <Grid2 key={lesson._id} size={{ md: 6, lg: 4, xl: 3 }}>
+                    <LessonCard
+                      title={lesson.title}
+                      content={lesson.description}
+                    />
+                  </Grid2>
+                ))}
               </Grid2>
-            ))}
-            <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
-              <LessonCard isEmpty />
-            </Grid2>
-          </Grid2>
+            </Stack>
+          ))}
         </Stack>
-
-        <Stack gap={2}>
-          <Stack direction="row" alignItems="center" gap={1.5}>
-            <Typography variant="h5">Chương 2</Typography>
-            <EditIcon fontSize="small" sx={{ cursor: "pointer" }} />
+      ) : (
+        <Stack sx={{ flexGrow: 1 }}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}
+          >
+            <Stack direction="row" gap={1.5}>
+              <Button
+                variant="outlined"
+                onClick={handleCancel}
+                sx={{ width: 96 }}
+              >
+                Hủy
+              </Button>
+              <Button variant="contained" sx={{ width: 96 }}>
+                Lưu
+              </Button>
+            </Stack>
           </Stack>
-          <Grid2 container spacing={3}>
-            <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
-              <LessonCard isEmpty />
-            </Grid2>
-          </Grid2>
+          <Stack
+            direction="row"
+            sx={{
+              p: 1.5,
+              border: 1,
+              borderColor: "divider",
+              color: theme.palette.primary.main,
+            }}
+          >
+            <Typography variant="body2" fontWeight="bold">
+              Đăng tải tài liệu Doc
+            </Typography>
+            <Divider orientation="vertical" flexItem />
+            <Typography variant="body2" fontWeight="bold">
+              Tạo mini test
+            </Typography>
+          </Stack>
         </Stack>
-      </Stack>
+      )}
     </Stack>
   );
 }

@@ -5,7 +5,8 @@ import useCourseSection from "./hook";
 
 export default function CourseSection() {
   const theme = useTheme();
-  const { isModalOpen, handleOpen, handleClose } = useCourseSection();
+  const { isModalOpen, handleOpen, handleClose, data, isLoading } =
+    useCourseSection();
 
   return (
     <Stack
@@ -53,15 +54,15 @@ export default function CourseSection() {
           },
         }}
       >
-        {Array.from({ length: 10 }, (_, i) => i + 1).map((i) => (
-          <Box key={i} sx={{ width: 400 }}>
+        {data?.map((course) => (
+          <Box key={course._id} sx={{ width: 400 }}>
             <CourseCard
-              team="Business Intelligence"
-              description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum"
+              team={course.team}
+              title={course.title}
+              description={course.description}
               courseCount={18}
-              ksa="Skill"
-              thumbnail="/assets/img/sample_course.png"
-              title="THÀNH THẠO XỬ LÝ DỮ LIỆU VỚI PYTHON TỪ SỐ 0 - 2024"
+              ksa={course.KSA}
+              thumbnail={course.thumbnailUrl}
             />
           </Box>
         ))}
