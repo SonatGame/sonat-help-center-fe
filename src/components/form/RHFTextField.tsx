@@ -1,21 +1,21 @@
 import { Stack, TextField, TextFieldProps, Typography } from "@mui/material";
 import { ReactNode } from "react";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
 import Asterisk from "./Asterisk";
 
-interface IRHFTextFieldProps {
-  name: string;
+interface IRHFTextFieldProps<T extends FieldValues> {
+  name: FieldPath<T>;
   label?: string | ReactNode;
   required?: boolean;
   rules?: any;
-  control: Control<any>;
+  control: Control<T, any>;
   onlyNumber?: boolean;
   defaultValue?: any;
   TextFieldProps?: TextFieldProps;
   sx?: any;
 }
 
-export default function RHFTextField({
+export default function RHFTextField<T extends FieldValues>({
   name,
   label,
   rules,
@@ -25,7 +25,7 @@ export default function RHFTextField({
   onlyNumber = false,
   TextFieldProps,
   sx = {},
-}: IRHFTextFieldProps) {
+}: IRHFTextFieldProps<T>) {
   const { label: textFieldLabel, onChange, ...rest } = TextFieldProps || {};
 
   const commonLabel = label || textFieldLabel;
@@ -62,7 +62,6 @@ export default function RHFTextField({
                 e.target.value.length !== 0
               )
                 return;
-
               onChange?.(e);
               field.onChange(e);
             }}

@@ -1,42 +1,67 @@
-import { Link, LinkProps, Typography, TypographyProps } from "@mui/material";
-import { forwardRef } from "react";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import {
+  Box,
+  Stack,
+  SxProps,
+  Typography,
+  TypographyProps,
+  useTheme,
+} from "@mui/material";
+import { ReactNode, useState } from "react";
 interface ITextMaxLineProps {
-  asLink?: boolean;
-  children?: React.ReactNode;
-  line: number;
-  sx?: any;
-  TextMaxLineProps?: LinkProps & TypographyProps;
+  children?: ReactNode;
+  line?: number;
+  sx?: SxProps;
+  TypographyProps?: TypographyProps;
+  withExpand?: boolean;
 }
-const TextMaxLine = forwardRef(
-  (
-    { asLink, line = 2, children, sx, TextMaxLineProps }: ITextMaxLineProps,
-    ref: any
-  ) => {
-    const style = {
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      display: "-webkit-box",
-      WebkitLineClamp: line,
-      WebkitBoxOrient: "vertical",
-      wordBreak: "break-word",
-      ...sx,
-    };
+const TextMaxLine = ({
+  line = 2,
+  children,
+  sx,
+  TypographyProps,
+  withExpand,
+}: ITextMaxLineProps) => {
+  const theme = useTheme();
+  const [maxLine, setMaxLine] = useState<number | undefined>(line);
 
-    if (asLink) {
-      return (
-        <Link ref={ref} color="inherit" sx={{ ...style }} {...TextMaxLineProps}>
-          {children}
-        </Link>
-      );
-    }
-
-    return (
-      <Typography ref={ref} sx={{ ...style }} {...TextMaxLineProps}>
+  return (
+    <Box>
+      <Typography
+        sx={{
+          display: "-webkit-box",
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+          WebkitLineClamp: maxLine,
+          ...sx,
+        }}
+        {...TypographyProps}
+      >
         {children}
       </Typography>
-    );
-  }
-);
+      {withExpand && (
+        <Stack
+          direction="row"
+          alignItems="center"
+          gap={0.5}
+          sx={{
+            mt: 1,
+            color: theme.palette.primary.main,
+            cursor: "pointer",
+            userSelect: "none",
+          }}
+          onClick={() => {
+            setMaxLine(maxLine ? undefined : line);
+          }}
+        >
+          <Typography variant="body2">
+            {maxLine ? "Xem tất cả" : "Thu gọn"}
+          </Typography>
+          {maxLine ? <ExpandMore /> : <ExpandLess />}
+        </Stack>
+      )}
+    </Box>
+  );
+};
 
-TextMaxLine.displayName = "TextMaxLine";
 export default TextMaxLine;

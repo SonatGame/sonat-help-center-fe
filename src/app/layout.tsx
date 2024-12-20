@@ -2,7 +2,7 @@
 
 import { AuthenticationProvider } from "@/contexts/authenticationContext";
 import { AuthorizationProvider } from "@/contexts/authorizationContext";
-import AppTheme from "@/packages/common/theme/mui";
+import AppTheme from "@/lib/common/theme/mui";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -10,7 +10,8 @@ import { Inter } from "next/font/google";
 import { SWRConfig } from "swr";
 import "../../styles/global.css";
 
-const inter = Inter({
+export const inter = Inter({
+  preload: true,
   subsets: ["latin"],
   display: "swap",
 });

@@ -10,9 +10,9 @@ import {
   DialogContentProps,
   DialogProps,
   DialogTitle,
-  Divider,
   IconButton,
   Stack,
+  Typography,
 } from "@mui/material";
 import { Fragment, ReactNode, useState } from "react";
 
@@ -26,24 +26,24 @@ interface ExtraButton {
 }
 
 interface ModalWrapperProps {
-  handleOpen?: () => any;
-  isUsingIconButton?: boolean;
-  isUsingCustomButton?: boolean;
+  onOpen?: () => any;
+  usingIconButton?: boolean;
+  usingCustomButton?: boolean;
   buttonTitle?: ReactNode;
   title?: ReactNode;
   children: ReactNode;
-  handleCancel?: () => void;
-  handleApply?: any;
+  onCancel?: () => void;
+  onApply?: () => any;
   dialogProps?: DialogProp;
   buttonProps?: ButtonProps;
-  isUsingActions?: boolean;
+  usingActions?: boolean;
   isOpen?: boolean;
-  handleClose?: () => void;
+  onClose?: () => void;
   disableApplyButton?: boolean;
   startExtraButton?: ExtraButton[];
   extraButton?: ExtraButton[];
   dialogContentProps?: DialogContentProps;
-  disableCloseOnConfirm?: boolean;
+  disableCloseOnApply?: boolean;
   isRawApply?: boolean;
 }
 
@@ -52,18 +52,18 @@ export default function ModalWrapper(props: ModalWrapperProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClickOpen = () => {
-    if (typeof props.isOpen !== "boolean" || !props.handleClose) {
+    if (typeof props.isOpen !== "boolean" || !props.onClose) {
       setOpen(true);
     }
-    props?.handleOpen?.();
+    props?.onOpen?.();
   };
 
   const handleClose = () => {
-    if (typeof props.isOpen !== "boolean" || !props.handleClose) {
+    if (typeof props.isOpen !== "boolean" || !props.onClose) {
       setOpen(false);
-      if (props.handleCancel) props.handleCancel();
+      if (props.onCancel) props.onCancel();
     } else {
-      props.handleClose();
+      props.onClose();
     }
   };
 
@@ -71,11 +71,11 @@ export default function ModalWrapper(props: ModalWrapperProps) {
     <>
       {(() => {
         if (props.buttonTitle) {
-          if (props.isUsingCustomButton) {
+          if (props.usingCustomButton) {
             return <Box onClick={handleClickOpen}>{props.buttonTitle}</Box>;
           }
 
-          if (props.isUsingIconButton) {
+          if (props.usingIconButton) {
             return (
               <IconButton onClick={handleClickOpen} {...props.buttonProps}>
                 {props.buttonTitle}
@@ -108,20 +108,18 @@ export default function ModalWrapper(props: ModalWrapperProps) {
               justifyContent={"space-between"}
               alignItems={"center"}
             >
-              {props.title}
-              <IconButton onClick={handleClose}>
-                <Close color="primary" />
+              <Typography fontWeight="bold">{props.title}</Typography>
+              <IconButton size="small" onClick={handleClose}>
+                <Close fontSize="small" />
               </IconButton>
             </Stack>
           </DialogTitle>
         )}
-
-        <Divider />
-        <DialogContent {...props.dialogContentProps}>
+        <DialogContent {...props.dialogContentProps} dividers>
           {props.children}
         </DialogContent>
-        {props.isUsingActions && (
-          <DialogActions sx={{ px: 2.5, pb: 2 }}>
+        {props.usingActions && (
+          <DialogActions>
             {props?.startExtraButton?.map((item, index) => {
               return (
                 <Fragment key={index}>
@@ -150,28 +148,28 @@ export default function ModalWrapper(props: ModalWrapperProps) {
             })}
 
             <Button variant="outlined" onClick={handleClose}>
-              Discard
+              Hủy
             </Button>
             <Button
               variant="contained"
               onClick={async () => {
                 setIsLoading(true);
-                if (props.handleApply) {
+                if (props.onApply) {
                   try {
-                    await props.handleApply();
+                    await props.onApply();
                   } catch (error) {
                     console.log(error);
                   }
                 }
                 setIsLoading(false);
-                if (!props.disableCloseOnConfirm) {
+                if (!props.disableCloseOnApply) {
                   if (props.isRawApply) setOpen(false);
                   else handleClose();
                 }
               }}
               disabled={isLoading || props.disableApplyButton}
             >
-              {isLoading ? <CircularProgress size={24} /> : "Confirm"}
+              {isLoading ? <CircularProgress size={24} /> : "Áp dụng"}
             </Button>
             {props?.extraButton?.map((item, index) => {
               return (
@@ -185,12 +183,11 @@ export default function ModalWrapper(props: ModalWrapperProps) {
                         setIsLoading(true);
                         try {
                           await item?.onClick();
-                        } catch (error) {
-                          console.log(error);
+                        } catch (e) {
+                          console.error(e);
                         }
                         setIsLoading(false);
                         setOpen(false);
-                        //handleClose();
                       }}
                     >
                       {item.title}

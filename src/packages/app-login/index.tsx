@@ -5,7 +5,7 @@ import { Box, Button, Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 import { useAuthentication } from "@/contexts/authenticationContext";
-import Head from "@/packages/common/layout/Head";
+import Head from "@/lib/common/layout/Head";
 import { enqueueSnackbar } from "notistack";
 
 export default function LoginSection() {

@@ -1,22 +1,15 @@
 "use client";
 
-import PageWithLayout from "@/packages/common/layout/page-with-layout";
-import WithLogin from "@/packages/common/layout/WithLogin";
-import WithPermissions from "@/packages/common/layout/WithPermissions";
+import PageWithLayout from "@/lib/common/layout/page-with-layout";
+import WithLogin from "@/lib/common/layout/WithLogin";
+import HomeSection from "@/packages/home";
 
 export default function HomePage() {
   return (
     <WithLogin>
-      <WithPermissions
-      // requiredPermissions={[
-      //   {
-      //     permission: Permission.APP_AB_TESTING,
-      //     value: AccessMode.Manage,
-      //   },
-      // ]}
-      >
-        <PageWithLayout></PageWithLayout>
-      </WithPermissions>
+      <PageWithLayout>
+        <HomeSection />
+      </PageWithLayout>
     </WithLogin>
   );
 }

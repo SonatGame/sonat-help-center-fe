@@ -1,20 +1,20 @@
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
 
 import { Checkbox, CheckboxProps, FormControlLabel } from "@mui/material";
 
-interface IRHFCheckboxProps {
-  name: string;
+interface IRHFCheckboxProps<T extends FieldValues> {
+  name: FieldPath<T>;
   label?: string;
-  control: Control<any>;
+  control: Control<T, any>;
   CheckboxProps?: CheckboxProps;
 }
 
-export function RHFCheckbox({
+export function RHFCheckbox<T extends FieldValues>({
   name,
   control,
   label,
   CheckboxProps,
-}: IRHFCheckboxProps) {
+}: IRHFCheckboxProps<T>) {
   return (
     <FormControlLabel
       label={label}

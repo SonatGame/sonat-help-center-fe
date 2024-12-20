@@ -9,7 +9,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
 import Asterisk from "./Asterisk";
 
 const styles = {
@@ -19,12 +19,12 @@ const styles = {
   typography: "body2",
 };
 
-interface IRHFSelect {
-  name: string;
+interface IRHFSelect<T extends FieldValues> {
+  name: FieldPath<T>;
   label?: string;
   required?: boolean;
   rules?: any;
-  control: Control<any>;
+  control: Control<T, any>;
   options: Array<
     | string
     | {
@@ -38,7 +38,7 @@ interface IRHFSelect {
   sx?: any;
 }
 
-export default function RHFSelect({
+export default function RHFSelect<T extends FieldValues>({
   name,
   label,
   required = false,
@@ -47,7 +47,7 @@ export default function RHFSelect({
   options = [],
   SelectProps = {},
   sx = {},
-}: IRHFSelect) {
+}: IRHFSelect<T>) {
   const { label: selectLabel = "", onChange, ...rest } = SelectProps || {};
 
   const commonLabel = label || selectLabel;

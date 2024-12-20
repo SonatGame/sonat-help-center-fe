@@ -28,22 +28,20 @@
     "nanoid": "^5.0.9",
     "next": "14.2.20",
     "notistack": "^3.0.1",
-    "npm": "^10.9.2",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.0",
-    "swr": "^2.2.5",
-    "usehooks-ts": "^3.1.0"
+    "swr": "^2.2.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.6.0",
     "@commitlint/config-conventional": "^19.6.0",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
+    "@types/node": "^20.17.10",
+    "@types/react": "^18.3.16",
+    "@types/react-dom": "^18.3.5",
+    "eslint": "^8.57.1",
     "eslint-config-next": "14.2.20",
     "husky": "^9.1.7",
-    "typescript": "^5"
+    "typescript": "^5.7.2"
   }
 }

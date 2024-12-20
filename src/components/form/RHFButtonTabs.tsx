@@ -1,23 +1,24 @@
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Stack, SxProps, Typography } from "@mui/material";
+import { FieldPath, FieldValues, SetFieldValue } from "react-hook-form";
 import { IOption } from "../dropdown/new/types";
 
-interface RHFButtonTabsProps {
+interface RHFButtonTabsProps<T extends FieldValues> {
   label: string | React.ReactNode;
   value: string | number;
-  valueName: string;
-  setValue: any;
+  valueName: FieldPath<T>;
+  setValue: SetFieldValue<T>;
   options: IOption[];
-  sx?: any;
+  sx?: SxProps;
 }
 
-export default function RHFButtonTabs({
+export default function RHFButtonTabs<T extends FieldValues>({
   label,
   setValue,
   value,
   valueName,
   options,
   sx = {},
-}: RHFButtonTabsProps) {
+}: RHFButtonTabsProps<T>) {
   return (
     <Stack direction="row" alignItems="center" spacing={1} sx={{ ...sx }}>
       {typeof label === "string" ? (
