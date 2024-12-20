@@ -51,13 +51,13 @@ const TextMaxLine = ({
             userSelect: "none",
           }}
           onClick={() => {
-            setMaxLine(!!maxLine ? undefined : line);
+            setMaxLine(maxLine ? undefined : line);
           }}
         >
           <Typography variant="body2">
-            {!!maxLine ? "Xem tất cả" : "Thu gọn"}
+            {maxLine ? "Xem tất cả" : "Thu gọn"}
           </Typography>
-          {!!maxLine ? <ExpandMore /> : <ExpandLess />}
+          {maxLine ? <ExpandMore /> : <ExpandLess />}
         </Stack>
       )}
     </Box>

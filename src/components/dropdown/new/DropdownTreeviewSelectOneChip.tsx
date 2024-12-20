@@ -380,13 +380,13 @@ export default function DropdownTreeviewSelectOneChip({
 
       <ModalWrapper
         isOpen={isConfirm}
-        isUsingActions
-        handleApply={async () => {
+        usingActions
+        onApply={async () => {
           await onDeleteNode?.(parentId!);
           setIsConfirm(false);
           setParentId(null);
         }}
-        handleClose={() => {
+        onClose={() => {
           setIsConfirm(false);
           setParentId(null);
         }}

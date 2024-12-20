@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import CourseContent from "./content-tab";
-import { useCourseDetail } from "./context";
+import { useCourseDetailContext } from "./context";
 import CreateCourseModal from "./create-course-modal";
 import CourseOverview from "./overview-tab";
 
@@ -21,7 +21,7 @@ export default function CourseDetail() {
   const theme = useTheme();
   const params = useParams<{ courseId: string }>();
 
-  const { handleChange, value } = useCourseDetail();
+  const { handleChange, value } = useCourseDetailContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   function handleOpen() {

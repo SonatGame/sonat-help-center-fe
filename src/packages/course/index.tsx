@@ -1,6 +1,6 @@
 import { Box, Stack, Tabs, useTheme } from "@mui/material";
+import CreateCourseModal from "../course-detail/create-course-modal";
 import CourseCard from "../home/components/course-list/CourseCard";
-import CreateCourseModal from "./detail/create-course-modal";
 import useCourseSection from "./hook";
 
 export default function CourseSection() {

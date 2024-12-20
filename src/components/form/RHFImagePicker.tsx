@@ -122,7 +122,7 @@ export function RHFImagePicker<T extends FieldValues>({
                 type="file"
                 accept="image/*"
                 onChange={(e) => {
-                  e.target.files?.[0] && field.onChange(e.target.files?.[0]);
+                  if (e.target.files) field.onChange(e.target.files?.[0]);
                   handleImageChange(e);
                 }}
               />

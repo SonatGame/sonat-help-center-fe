@@ -1,4 +1,5 @@
 import StyledAccordion from "@/components/accordion";
+import RHFTextField from "@/components/form/RHFTextField";
 import TextMaxLine from "@/components/TextMaxLine";
 import { ArrowForward, Verified } from "@mui/icons-material";
 import {
@@ -9,25 +10,23 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useState } from "react";
-import { useCourseDetail } from "../context";
+import useOverviewTab from "./hook";
 
 export default function CourseOverview() {
   const theme = useTheme();
-  const { setValue, value } = useCourseDetail();
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-
-  function handleEnableEdit() {
-    setIsEditing(true);
-  }
-
-  function handleCancelEdit() {
-    setIsEditing(false);
-  }
-
-  function handleAddChapter() {
-    setValue("content");
-  }
+  const {
+    isEdittingDescription,
+    isEdittingOutcomes,
+    handleEnableEditDescription,
+    handleCancelEditDescription,
+    handleCancelEditOutcome,
+    handleAddChapter,
+    control,
+    handleChangeDescription,
+    handleAddOutcome,
+    handleChangeOutcome,
+    courseData,
+  } = useOverviewTab();
 
   return (
     <Container maxWidth="md" sx={{ py: 9 }}>
@@ -40,67 +39,70 @@ export default function CourseOverview() {
             gap={2}
           >
             <Typography variant="h4">Mô tả khóa học</Typography>
-            {isEditing ? (
+            {isEdittingDescription ? (
               <Stack direction="row" gap={2}>
-                <Button variant="outlined" onClick={handleCancelEdit}>
+                <Button
+                  variant="outlined"
+                  onClick={handleCancelEditDescription}
+                >
                   Hủy
                 </Button>
-                <Button variant="contained" onClick={handleCancelEdit}>
+                <Button variant="contained" onClick={handleChangeDescription}>
                   Lưu
                 </Button>
               </Stack>
             ) : (
-              <Button variant="outlined" onClick={handleEnableEdit}>
+              <Button variant="outlined" onClick={handleEnableEditDescription}>
                 Chỉnh sửa
               </Button>
             )}
           </Stack>
-          {!isEditing ? (
+          {!isEdittingDescription ? (
             <TextMaxLine TypographyProps={{ variant: "body2" }} withExpand>
-              Become a Python Programm er and learn one of employer&apos;s most
-              requested skills of 2023! This is the most comprehensive, yet
-              straight-forward, course for the Python programming language on
-              Udemy! Whether you have never programmed before, already know
-              basic syntax, or want to learn about the advanced features of
-              Python, this course is for you! In this course we will teach you
-              Python 3. With over 100 lectures and more than 21 hours of video
-              this comprehensive course leaves no stone unturned! This course
-              includes quizzes, tests, coding exercises and homework assignments
-              as well as 3 major projects to create a Python project portfolio!
-              Learn how to use Python for real-world tasks, such as working with
-              PDF Files, sending emails, reading Excel files, Scraping websites
-              for informations, working with image files, and much more! This
-              course will teach you Python in a practical manner, with every
-              lecture comes a full coding screencast and a corresponding code
-              notebook! Learn in whatever manner is best for you! We will start
-              by helping you get Python i nstalled on your computer, regardless
-              of your operating system, whether its Linux, MacOS, or Windows,
-              we&apos;ve got you covered.
+              {courseData?.description}
             </TextMaxLine>
           ) : (
-            <TextField
-              value={`Become a Python Programm er and learn one of employer&apos;s most requested skills of 2023! This is the most comprehensive, yet straight-forward, course for the Python programming language on Udemy! Whether you have never programmed before, already know basic syntax, or want to learn about the advanced features of Python, this course is for you! In this course we will teach you Python 3. With over 100 lectures and more than 21 hours of video this comprehensive course leaves no stone unturned! This course includes quizzes, tests, coding exercises and homework assignments as well as 3 major projects to create a Python project portfolio! Learn how to use Python for real-world tasks, such as working with PDF Files, sending emails, reading Excel files, Scraping websites for informations, working with image files, and much more! This course will teach you Python in a practical manner, with every lecture comes a full coding screencast and a corresponding code notebook! Learn in whatever manner is best for you! We will start by helping you get Python i nstalled on your computer, regardless of your operating system, whether its Linux, MacOS, or Windows, we&apos;ve got you covered.`}
-              multiline
-              rows={6}
+            <RHFTextField
+              control={control}
+              name="description"
+              TextFieldProps={{
+                multiline: true,
+                rows: 10,
+              }}
             />
           )}
         </Stack>
         <Stack gap={3}>
           <Typography variant="h4">Mục tiêu khóa học</Typography>
-          <Stack direction="row" alignItems="center" gap={1}>
-            <Verified color="primary" fontSize="small" />
-            <Typography variant="body2" sx={{ flexGrow: 1 }}>
-              Nắm được hệ thống kiến thức cơ bản về video
-            </Typography>
-            <Stack direction="row" gap={1}></Stack>
+          <Stack gap={1.5}>
+            {courseData?.learningOutcomes.map((outcome, i) => (
+              <Stack key={i} direction="row" alignItems="center" gap={1}>
+                <Verified color="primary" fontSize="small" />
+                <Typography variant="body2" sx={{ flexGrow: 1 }}>
+                  {outcome}
+                </Typography>
+                <Stack direction="row" gap={1}></Stack>
+              </Stack>
+            ))}
+            {isEdittingOutcomes && (
+              <Stack direction="row" alignItems="center" gap={1}>
+                <Verified color="primary" fontSize="small" />
+                <TextField placeholder="Điền thông tin" sx={{ flexGrow: 1 }} />
+                <Button variant="outlined" onClick={handleCancelEditOutcome}>
+                  Hủy bỏ
+                </Button>
+                <Button variant="contained" onClick={handleChangeOutcome}>
+                  Lưu
+                </Button>
+              </Stack>
+            )}
           </Stack>
-          <Stack direction="row" alignItems="center" gap={1}>
-            <Verified color="primary" fontSize="small" />
-            <TextField placeholder="Điền thông tin" sx={{ flexGrow: 1 }} />
-            <Button variant="outlined">Hủy bỏ</Button>
-            <Button variant="contained">Lưu</Button>
-          </Stack>
-          <Button variant="outlined" sx={{ width: "fit-content" }}>
+
+          <Button
+            variant="outlined"
+            sx={{ width: "fit-content" }}
+            onClick={handleAddOutcome}
+          >
             Thêm thông tin
           </Button>
         </Stack>
@@ -114,131 +116,80 @@ export default function CourseOverview() {
                 color: theme.palette.grey[500],
               }}
             >
-              20 bài học
+              {courseData?.modules.reduce(
+                (accumulator, currentValue) =>
+                  accumulator + currentValue.lessons.length,
+                0
+              )}
+              &nbsp; bài học
             </Typography>
           </Stack>
-          <StyledAccordion
-            summary={
-              <Stack>
-                <Typography
-                  variant="body2"
-                  fontWeight="bold"
-                  sx={{
-                    color: theme.palette.grey[700],
-                  }}
-                >
-                  Tổng quan về phần mềm Excel
-                </Typography>
-                <Typography
-                  variant="body2"
-                  fontWeight="medium"
-                  sx={{
-                    color: theme.palette.primary.main,
-                  }}
-                >
-                  5 bài học
-                </Typography>
-              </Stack>
-            }
-            detail={
-              <>
-                {Array.from({ length: 5 }, (_, i) => i + 1).map((i) => (
-                  <Stack
-                    key={i}
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    sx={{
-                      px: 1.5,
-                      py: 3,
-                      borderBottom:
-                        i < 5
-                          ? `1px solid ${theme.palette.divider}`
-                          : undefined,
-                    }}
-                  >
+          {courseData?.modules.map((chapter) => {
+            return (
+              <StyledAccordion
+                key={chapter._id}
+                summary={
+                  <Stack>
                     <Typography
                       variant="body2"
+                      fontWeight="bold"
                       sx={{
                         color: theme.palette.grey[700],
                       }}
                     >
-                      {i}. Giới thiệu chung về giao diện Excel
+                      {chapter.title}
                     </Typography>
                     <Typography
                       variant="body2"
-                      fontWeight="bold"
-                      color="primary"
-                      sx={{ cursor: "pointer", userSelect: "none" }}
-                    >
-                      Học ngay
-                    </Typography>
-                  </Stack>
-                ))}
-              </>
-            }
-          />
-          <StyledAccordion
-            summary={
-              <Stack>
-                <Typography
-                  variant="body2"
-                  fontWeight="bold"
-                  sx={{
-                    color: theme.palette.grey[700],
-                  }}
-                >
-                  Tổng quan về phần mềm Excel
-                </Typography>
-                <Typography
-                  variant="body2"
-                  fontWeight="medium"
-                  sx={{
-                    color: theme.palette.primary.main,
-                  }}
-                >
-                  3 bài học
-                </Typography>
-              </Stack>
-            }
-            detail={
-              <>
-                {Array.from({ length: 3 }, (_, i) => i + 1).map((i) => (
-                  <Stack
-                    key={i}
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    sx={{
-                      px: 1.5,
-                      py: 3,
-                      borderBottom:
-                        i < 3
-                          ? `1px solid ${theme.palette.divider}`
-                          : undefined,
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
+                      fontWeight="medium"
                       sx={{
-                        color: theme.palette.grey[700],
+                        color: theme.palette.primary.main,
                       }}
                     >
-                      {i}. Giới thiệu chung về giao diện Excel
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      fontWeight="bold"
-                      color="primary"
-                      sx={{ cursor: "pointer", userSelect: "none" }}
-                    >
-                      Học ngay
+                      {chapter.lessons.length}
                     </Typography>
                   </Stack>
-                ))}
-              </>
-            }
-          />
+                }
+                detail={
+                  <>
+                    {chapter.lessons.map((lesson, i) => (
+                      <Stack
+                        key={lesson._id}
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{
+                          px: 1.5,
+                          py: 3,
+                          borderBottom:
+                            i < 5
+                              ? `1px solid ${theme.palette.divider}`
+                              : undefined,
+                        }}
+                      >
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: theme.palette.grey[700],
+                          }}
+                        >
+                          {lesson.title}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          fontWeight="bold"
+                          color="primary"
+                          sx={{ cursor: "pointer", userSelect: "none" }}
+                        >
+                          Học ngay
+                        </Typography>
+                      </Stack>
+                    ))}
+                  </>
+                }
+              />
+            );
+          })}
           <Button
             variant="outlined"
             endIcon={<ArrowForward fontSize="small" />}

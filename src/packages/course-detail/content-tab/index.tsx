@@ -2,9 +2,11 @@ import StyledAccordion from "@/components/accordion";
 import { EditIcon } from "@/packages/course/icons";
 import { Grid2, Stack, Typography, useTheme } from "@mui/material";
 import LessonCard from "./LessonCard";
+import useContentTab from "./hook";
 
 export default function CourseContent() {
   const theme = useTheme();
+  const { courseData } = useContentTab();
 
   return (
     <Stack direction="row" sx={{ height: "100%" }}>
@@ -23,100 +25,81 @@ export default function CourseContent() {
             fontWeight="medium"
             sx={{ color: theme.palette.grey[500] }}
           >
-            20 bài học
+            {courseData?.modules.reduce(
+              (accumulator, currentValue) =>
+                accumulator + currentValue.lessons.length,
+              0
+            )}
+            &nbsp; bài học
           </Typography>
         </Stack>
         <Stack gap={1.5} sx={{ px: 2, pb: 2 }}>
-          <StyledAccordion
-            summary={
-              <Stack>
-                <Typography
-                  variant="body2"
-                  fontWeight="bold"
-                  sx={{
-                    color: theme.palette.grey[700],
-                  }}
-                >
-                  Tổng quan về phần mềm Excel
-                </Typography>
-                <Typography
-                  variant="body2"
-                  fontWeight="medium"
-                  sx={{
-                    color: theme.palette.primary.main,
-                  }}
-                >
-                  4 bài học
-                </Typography>
-              </Stack>
-            }
-            detail={
-              <>
-                {Array.from({ length: 5 }, (_, i) => i + 1).map((i) => (
-                  <Typography
-                    key={i}
-                    variant="body2"
-                    sx={{
-                      color: theme.palette.grey[700],
-                      px: 1.5,
-                      py: 3,
-                      borderBottom:
-                        i < 5
-                          ? `1px solid ${theme.palette.divider}`
-                          : undefined,
-                    }}
-                  >
-                    {i}. Giới thiệu chung về giao diện Excel
-                  </Typography>
-                ))}
-              </>
-            }
-          />
-          <StyledAccordion
-            summary={
-              <Stack>
-                <Typography
-                  variant="body2"
-                  fontWeight="bold"
-                  sx={{
-                    color: theme.palette.grey[700],
-                  }}
-                >
-                  Tổng quan về phần mềm Excel
-                </Typography>
-                <Typography
-                  variant="body2"
-                  fontWeight="medium"
-                  sx={{
-                    color: theme.palette.primary.main,
-                  }}
-                >
-                  4 bài học
-                </Typography>
-              </Stack>
-            }
-            detail={
-              <>
-                {Array.from({ length: 3 }, (_, i) => i + 1).map((i) => (
-                  <Typography
-                    key={i}
-                    variant="body2"
-                    sx={{
-                      color: theme.palette.grey[700],
-                      px: 1.5,
-                      py: 3,
-                      borderBottom:
-                        i < 3
-                          ? `1px solid ${theme.palette.divider}`
-                          : undefined,
-                    }}
-                  >
-                    {i}. Giới thiệu chung về giao diện Excel
-                  </Typography>
-                ))}
-              </>
-            }
-          />
+          {courseData?.modules.map((chapter) => {
+            return (
+              <StyledAccordion
+                key={chapter._id}
+                summary={
+                  <Stack>
+                    <Typography
+                      variant="body2"
+                      fontWeight="bold"
+                      sx={{
+                        color: theme.palette.grey[700],
+                      }}
+                    >
+                      {chapter.title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      fontWeight="medium"
+                      sx={{
+                        color: theme.palette.primary.main,
+                      }}
+                    >
+                      {chapter.lessons.length}
+                    </Typography>
+                  </Stack>
+                }
+                detail={
+                  <>
+                    {chapter.lessons.map((lesson, i) => (
+                      <Stack
+                        key={lesson._id}
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{
+                          px: 1.5,
+                          py: 3,
+                          borderBottom:
+                            i < 5
+                              ? `1px solid ${theme.palette.divider}`
+                              : undefined,
+                        }}
+                      >
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: theme.palette.grey[700],
+                          }}
+                        >
+                          {lesson.title}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          fontWeight="bold"
+                          color="primary"
+                          sx={{ cursor: "pointer", userSelect: "none" }}
+                        >
+                          Học ngay
+                        </Typography>
+                      </Stack>
+                    ))}
+                  </>
+                }
+              />
+            );
+          })}
         </Stack>
       </Stack>
       <Stack

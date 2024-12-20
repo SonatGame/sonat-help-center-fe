@@ -1,6 +1,4 @@
-import { Theme } from "@mui/material";
-
-export default function Dialog(theme: Theme) {
+export default function Dialog(theme: any) {
   return {
     MuiDialog: {
       styleOverrides: {

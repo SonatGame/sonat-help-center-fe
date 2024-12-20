@@ -2,11 +2,11 @@ import { RHFImagePicker } from "@/components/form/RHFImagePicker";
 import RHFSelect from "@/components/form/RHFSelect";
 import RHFTextField from "@/components/form/RHFTextField";
 import ModalWrapper from "@/components/modal";
+import { ksaOptions, teamOptions } from "@/packages/course/constants";
 import { Add } from "@mui/icons-material";
 import { Grid2, Stack } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { ksaOptions, teamOptions } from "../../constants";
 
 export interface ICreateCourseModalProps {
   isModalOpen: boolean;
@@ -39,7 +39,7 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
 
   useEffect(() => {
     if (!editingCourse) reset();
-  }, [editingCourse]);
+  }, [editingCourse, reset]);
 
   return (
     <ModalWrapper
