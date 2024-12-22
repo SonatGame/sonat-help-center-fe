@@ -3,18 +3,21 @@ import { RHFImagePicker } from "@/components/form/RHFImagePicker";
 import RHFSelect from "@/components/form/RHFSelect";
 import RHFTextField from "@/components/form/RHFTextField";
 import ModalWrapper from "@/components/modal";
+import { Course } from "@/lib/types/course";
 import { ksaOptions, teamOptions } from "@/packages/course/constants";
 import { Add } from "@mui/icons-material";
 import { Grid2, Stack } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { KeyedMutator } from "swr";
+import { useCourseDetailContext } from "../context";
 
 export interface ICreateCourseModalProps {
   isModalOpen: boolean;
   handleOpen: () => any;
   handleClose: () => any;
-  editingCourse?: any;
   isEditing?: boolean;
+  mutate?: KeyedMutator<Course[]>;
 }
 
 interface IForm {
@@ -26,9 +29,10 @@ interface IForm {
 }
 
 export default function CreateCourseModal(props: ICreateCourseModalProps) {
-  const { isModalOpen, handleOpen, handleClose, isEditing, editingCourse } =
-    props;
-  const { control, setValue, watch, handleSubmit, reset } = useForm<IForm>({
+  const { isModalOpen, handleOpen, handleClose, isEditing, mutate } = props;
+  const { courseData: editingCourse } = useCourseDetailContext();
+
+  const { control, handleSubmit, reset } = useForm<IForm>({
     defaultValues: {
       title: "",
       team: "",
@@ -38,17 +42,35 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
 
   async function onSubmit(data: IForm) {
     const { title, team, KSA, thumbnail, coverImage } = data;
-    await CourseApi.createCourse({ title, team, KSA, thumbnail, coverImage });
+    let res;
+    if (!editingCourse)
+      res = await CourseApi.createCourse({
+        title,
+        team,
+        KSA,
+        thumbnail,
+        coverImage,
+      });
+    else
+      res = await CourseApi.updateCourse(editingCourse._id, {
+        title,
+        team,
+        KSA,
+        thumbnail,
+        coverImage,
+      });
+    if (res && mutate) await mutate();
   }
 
   useEffect(() => {
     if (!editingCourse) reset();
+    reset({});
   }, [editingCourse, reset]);
 
   return (
     <ModalWrapper
       title={!isEditing ? "Tạo khóa học mới" : "Chỉnh sửa khóa học"}
-      buttonTitle={!isEditing ? "Khóa học mới" : "Chỉnh sửa"}
+      buttonTitle={!isEditing ? "Tạo khóa học mới" : "Chỉnh sửa"}
       buttonProps={
         !isEditing
           ? {
@@ -107,9 +129,15 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
               name="thumbnail"
               control={control}
               required
-              rules={{
-                required: "Vui lòng chọn Ảnh đại diện",
-              }}
+              rules={
+                editingCourse
+                  ? {
+                      required: "Vui lòng chọn Ảnh đại diện",
+                    }
+                  : undefined
+              }
+              imageUrl={editingCourse?.thumbnailUrl}
+              sx={{ height: "100%" }}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 8 }}>
@@ -118,9 +146,15 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
               name="coverImage"
               control={control}
               required
-              rules={{
-                required: "Vui lòng chọn Ảnh bìa",
-              }}
+              rules={
+                editingCourse
+                  ? {
+                      required: "Vui lòng chọn Ảnh bìa",
+                    }
+                  : undefined
+              }
+              imageUrl={editingCourse?.coverImageUrl}
+              sx={{ height: "100%" }}
             />
           </Grid2>
         </Grid2>

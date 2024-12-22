@@ -1,3 +1,4 @@
+import { CourseApi } from "@/api/CourseApi";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useCourseDetailContext } from "../context";
@@ -10,7 +11,12 @@ interface IForm {
 }
 
 export default function useOverviewTab() {
-  const { setValue: setTabValue, courseData } = useCourseDetailContext();
+  const {
+    setValue: setTabValue,
+    courseData,
+    mutate,
+    isLoading,
+  } = useCourseDetailContext();
   const { control, setValue, watch, reset } = useForm<IForm>({
     defaultValues: {
       isEdittingDescription: false,
@@ -21,6 +27,7 @@ export default function useOverviewTab() {
   });
   const isEdittingDescription = watch("isEdittingDescription");
   const isEdittingOutcomes = watch("isEdittingOutcomes");
+  const description = watch("description");
   const outcomes = watch("outcomes");
 
   function handleEnableEditDescription() {
@@ -35,20 +42,30 @@ export default function useOverviewTab() {
     setTabValue("content");
   }
 
-  function handleChangeDescription() {
+  async function handleChangeDescription() {
+    if (!courseData) return;
+    await CourseApi.updateCourse(courseData._id, {
+      description: description,
+    });
+    await mutate();
     handleCancelEditDescription();
   }
 
   function handleAddOutcome() {
     setValue("isEdittingOutcomes", true);
-    setValue("outcomes", [...outcomes, ""]);
+    setValue("outcomes", [...(outcomes ?? []), ""]);
   }
 
   function handleCancelEditOutcome() {
     setValue("isEdittingOutcomes", false);
   }
 
-  function handleChangeOutcome() {
+  async function handleChangeOutcome() {
+    if (!courseData) return;
+    await CourseApi.updateCourse(courseData._id, {
+      learningOutcomes: outcomes,
+    });
+    await mutate();
     handleCancelEditOutcome();
   }
 

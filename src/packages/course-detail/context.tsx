@@ -11,7 +11,7 @@ import {
   useContext,
   useState,
 } from "react";
-import useSWR from "swr";
+import useSWR, { KeyedMutator } from "swr";
 
 interface ContextProps {
   children?: React.ReactNode;
@@ -22,6 +22,8 @@ interface CourseDetailContextProps {
   setValue: (value: SetStateAction<string>) => void;
   handleChange: (e: SyntheticEvent, newValue: string) => void;
   courseData?: Course;
+  isLoading: boolean;
+  mutate: KeyedMutator<Course>;
   isAddingLesson: boolean;
   setIsAddingLesson: Dispatch<SetStateAction<boolean>>;
 }
@@ -32,6 +34,8 @@ const CourseDetailContext = createContext<CourseDetailContextProps>({
   handleChange: () => {},
   isAddingLesson: false,
   setIsAddingLesson: () => {},
+  isLoading: false,
+  mutate: () => Promise.resolve(undefined),
 });
 
 const CourseDetailProvider = ({ children }: ContextProps) => {
@@ -39,7 +43,7 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
   const [isAddingLesson, setIsAddingLesson] = useState(false);
   const { courseId } = useParams<{ courseId: string }>();
 
-  const { data, isLoading } = useSWR(
+  const { data, isLoading, mutate } = useSWR(
     ["get-course-detail", courseId],
     () => CourseApi.getCourse(courseId),
     {
@@ -59,6 +63,8 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
         setValue,
         handleChange,
         courseData: data,
+        isLoading,
+        mutate,
         isAddingLesson,
         setIsAddingLesson,
       }}

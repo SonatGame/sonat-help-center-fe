@@ -1,7 +1,6 @@
 import { AppRoutes } from "@/lib/constants/routesAndPermissions";
-import { Grid2, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
-import CourseCard from "./CourseCard";
 
 export interface ICourseListProps {
   team: string;
@@ -27,48 +26,17 @@ export default function CourseList() {
           Xem thêm
         </Typography>
       </Stack>
-      <Grid2 container spacing={3}>
-        <Grid2 size={{ xs: 12, sm: 6, xl: 4 }}>
+      {/* <Grid2 container spacing={3}>
+        {[].map((item, i) => {
+
+          return  <Grid2 size={{ xs: 12, sm: 6, xl: 4 }}>
           <CourseCard
-            team="Business Intelligence"
-            description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum"
-            courseCount={18}
-            ksa="Skill"
-            thumbnail="/assets/img/sample_course.png"
-            title="THÀNH THẠO XỬ LÝ DỮ LIỆU VỚI PYTHON TỪ SỐ 0 - 2024"
+            key={i}
+            courseData={}
           />
         </Grid2>
-        <Grid2 size={{ xs: 12, sm: 6, xl: 4 }}>
-          <CourseCard
-            team="Business Intelligence"
-            description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum"
-            courseCount={18}
-            ksa="Skill"
-            thumbnail="/assets/img/sample_course.png"
-            title="Khóa học Graphics Design"
-          />
-        </Grid2>
-        <Grid2 size={{ xs: 12, sm: 6, xl: 4 }}>
-          <CourseCard
-            team="Business Intelligence"
-            description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum"
-            courseCount={18}
-            ksa="Skill"
-            thumbnail="/assets/img/sample_course.png"
-            title="THÀNH THẠO XỬ LÝ DỮ LIỆU VỚI PYTHON TỪ SỐ 0 - 2024"
-          />
-        </Grid2>
-        <Grid2 size={{ xs: 12, sm: 6, xl: 4 }}>
-          <CourseCard
-            team="Business Intelligence"
-            description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum"
-            courseCount={18}
-            ksa="Skill"
-            thumbnail="/assets/img/sample_course.png"
-            title="Khóa học Graphics Design"
-          />
-        </Grid2>
-      </Grid2>
+        })}
+      </Grid2> */}
     </Stack>
   );
 }

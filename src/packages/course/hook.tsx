@@ -10,6 +10,7 @@ export default function useCourseSection() {
     () => CourseApi.getCourseList(),
     { refreshInterval: 0, revalidateOnFocus: false }
   );
+
   function handleOpen() {
     setIsModalOpen(true);
   }
@@ -23,5 +24,6 @@ export default function useCourseSection() {
     handleClose,
     data,
     isLoading,
+    mutate,
   };
 }

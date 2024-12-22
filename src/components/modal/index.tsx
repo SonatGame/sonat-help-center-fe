@@ -45,6 +45,7 @@ interface ModalWrapperProps {
   dialogContentProps?: DialogContentProps;
   disableCloseOnApply?: boolean;
   isRawApply?: boolean;
+  applyButtonProps?: ButtonProps;
 }
 
 export default function ModalWrapper(props: ModalWrapperProps) {
@@ -137,7 +138,6 @@ export default function ModalWrapper(props: ModalWrapperProps) {
                         }
                         setIsLoading(false);
                         setOpen(false);
-                        //handleClose();
                       }}
                     >
                       {item.title}
@@ -168,6 +168,7 @@ export default function ModalWrapper(props: ModalWrapperProps) {
                 }
               }}
               disabled={isLoading || props.disableApplyButton}
+              {...props.applyButtonProps}
             >
               {isLoading ? <CircularProgress size={24} /> : "Áp dụng"}
             </Button>

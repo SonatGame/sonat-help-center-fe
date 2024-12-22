@@ -68,15 +68,15 @@ export default function CourseOverview() {
               TextFieldProps={{
                 multiline: true,
                 rows: 10,
+                autoComplete: "off",
               }}
             />
           )}
         </Stack>
-
         <Stack gap={3}>
           <Typography variant="h4">Mục tiêu khóa học</Typography>
           <Stack gap={1.5}>
-            {courseData?.learningOutcomes.map((outcome, i) => (
+            {courseData?.learningOutcomes?.map((outcome, i) => (
               <Stack key={i} direction="row" alignItems="center" gap={1}>
                 <Verified color="primary" fontSize="small" />
                 <Typography variant="body2" sx={{ flexGrow: 1 }}>
@@ -88,7 +88,11 @@ export default function CourseOverview() {
             {isEdittingOutcomes && (
               <Stack direction="row" alignItems="center" gap={1}>
                 <Verified color="primary" fontSize="small" />
-                <TextField placeholder="Điền thông tin" sx={{ flexGrow: 1 }} />
+                <TextField
+                  placeholder="Điền thông tin"
+                  autoComplete="off"
+                  sx={{ flexGrow: 1 }}
+                />
                 <Button variant="outlined" onClick={handleCancelEditOutcome}>
                   Hủy bỏ
                 </Button>
@@ -117,7 +121,7 @@ export default function CourseOverview() {
                 color: theme.palette.grey[500],
               }}
             >
-              {courseData?.modules.reduce(
+              {courseData?.modules?.reduce(
                 (accumulator, currentValue) =>
                   accumulator + currentValue.lessons.length,
                 0
@@ -125,7 +129,7 @@ export default function CourseOverview() {
               &nbsp; bài học
             </Typography>
           </Stack>
-          {courseData?.modules.map((chapter) => {
+          {courseData?.modules?.map((chapter) => {
             return (
               <StyledAccordion
                 key={chapter._id}

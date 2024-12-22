@@ -244,7 +244,7 @@ const COMMON = {
   bring_pink: { ...BRING_PINK, contrastText: "#ffffff" },
   grey: GREY,
   gradients: GRADIENTS,
-  divider: GREY[500_24],
+  divider: GREY[200],
   action: {
     hover: PRIMARY[100],
     selected: PRIMARY[100],

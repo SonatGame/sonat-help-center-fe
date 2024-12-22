@@ -3,6 +3,8 @@ import { MoreVert } from "@mui/icons-material";
 import {
   Box,
   Button,
+  Menu,
+  MenuItem,
   Stack,
   Tab,
   Tabs,
@@ -10,26 +12,26 @@ import {
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
-import { useParams } from "next/navigation";
-import { useState } from "react";
 import CourseContent from "./content-tab";
-import { useCourseDetailContext } from "./context";
 import CreateCourseModal from "./create-course-modal";
+import useCourseDetail from "./hook";
 import CourseOverview from "./overview-tab";
 
 export default function CourseDetail() {
   const theme = useTheme();
-  const params = useParams<{ courseId: string }>();
-
-  const { handleChange, value, isAddingLesson } = useCourseDetailContext();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  function handleOpen() {
-    setIsModalOpen(true);
-  }
-  function handleClose() {
-    setIsModalOpen(false);
-  }
+  const {
+    handleChange,
+    value,
+    isAddingLesson,
+    courseData,
+    isModalOpen,
+    handleOpenModalEdit,
+    handleCloseModalEdit,
+    anchorEl,
+    open,
+    handleClick,
+    handleClose,
+  } = useCourseDetail();
 
   const tabList = [
     {
@@ -80,7 +82,7 @@ export default function CourseDetail() {
               gap={3}
             >
               <Image
-                src={"/assets/img/sample_course.png"}
+                src={courseData?.thumbnailUrl ?? ""}
                 alt="course-thumbnail"
                 width={300}
                 height={300}
@@ -92,7 +94,7 @@ export default function CourseDetail() {
                 }}
               />
               <Stack gap={1.5}>
-                <Typography variant="h5">Nhập môn Excel cùng Sonat</Typography>
+                <Typography variant="h5">{courseData?.title}</Typography>
                 <Stack direction="row" gap={1}>
                   <Tag>
                     <Typography
@@ -100,7 +102,12 @@ export default function CourseDetail() {
                       color="primary"
                       fontWeight="medium"
                     >
-                      12 bài học
+                      {courseData?.modules?.reduce(
+                        (accumulator, currentValue) =>
+                          accumulator + currentValue.lessons.length,
+                        0
+                      ) ?? 0}
+                      &nbsp; bài học
                     </Typography>
                   </Tag>
                   <Tag>
@@ -109,7 +116,7 @@ export default function CourseDetail() {
                       color="primary"
                       fontWeight="medium"
                     >
-                      Skill
+                      {courseData?.KSA}
                     </Typography>
                   </Tag>
                 </Stack>
@@ -118,13 +125,14 @@ export default function CourseDetail() {
             <Stack direction="row" gap={1.5}>
               <CreateCourseModal
                 isModalOpen={isModalOpen}
-                handleOpen={handleOpen}
-                handleClose={handleClose}
+                handleOpen={handleOpenModalEdit}
+                handleClose={handleCloseModalEdit}
                 isEditing
               />
               <Button
                 variant="outlined"
                 sx={{ minWidth: "fit-content", px: 1 }}
+                onClick={handleClick}
               >
                 <MoreVert fontSize="small" />
               </Button>
@@ -152,6 +160,38 @@ export default function CourseDetail() {
           {value === tab.value && tab.component}
         </Box>
       ))}
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        onClick={(e) => e.stopPropagation()}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+        sx={{
+          "& .MuiList-root": {
+            py: 0,
+          },
+          "& .MuiMenuItem-root": {
+            fontSize: 14,
+          },
+        }}
+      >
+        <MenuItem sx={{ color: theme.palette.grey[500] }}>Tạo bản sao</MenuItem>
+        <MenuItem
+          sx={{
+            color: theme.palette.error.main,
+            ":hover": {
+              background: theme.palette.error[100],
+              color: theme.palette.error.main,
+            },
+          }}
+          // onClick={handleOpenModalConfirm}
+        >
+          Xoá khoá học
+        </MenuItem>
+      </Menu>
     </Stack>
   );
 }

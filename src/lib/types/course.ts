@@ -2,6 +2,7 @@ export type Lesson = {
   _id: string;
   title: string;
   description: string;
+  googleDocsUrl: string;
 };
 
 export type Chapter = {

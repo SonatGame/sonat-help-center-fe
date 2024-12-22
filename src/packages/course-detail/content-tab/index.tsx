@@ -1,20 +1,26 @@
 import StyledAccordion from "@/components/accordion";
-import { EditIcon } from "@/packages/course/icons";
-import {
-  Button,
-  Divider,
-  Grid2,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { EditIcon, TrashIcon } from "@/packages/course/icons";
+import { ArrowBack, DragIndicator } from "@mui/icons-material";
+import { Grid2, Stack, Typography, useTheme } from "@mui/material";
 import LessonCard from "./LessonCard";
 import useContentTab from "./hook";
+import LessonDetail from "./lesson-detail";
+import UploadDocsModal from "./upload-docs-modal";
 
 export default function CourseContent() {
   const theme = useTheme();
-  const { courseData, handleAddLesson, isAddingLesson, handleCancel } =
-    useContentTab();
+  const {
+    courseData,
+    edittingChapter,
+    edittingLesson,
+    handleAddLesson,
+    isAddingLesson,
+    handleCancel,
+    handleAddChapter,
+    showModalUpload,
+    handleOpenUploadDocsModal,
+    handleCloseUploadDocsModal,
+  } = useContentTab();
 
   return (
     <Stack direction="row" sx={{ height: "100%" }}>
@@ -38,6 +44,7 @@ export default function CourseContent() {
               }}
               onClick={handleCancel}
             >
+              <ArrowBack fontSize="small" />
               <Typography variant="body2" fontWeight="bold">
                 Quay lại
               </Typography>
@@ -49,16 +56,16 @@ export default function CourseContent() {
             fontWeight="medium"
             sx={{ color: theme.palette.grey[500] }}
           >
-            {courseData?.modules.reduce(
+            {courseData?.modules?.reduce(
               (accumulator, currentValue) =>
                 accumulator + currentValue.lessons.length,
               0
-            )}
+            ) ?? 0}
             &nbsp; bài học
           </Typography>
         </Stack>
         <Stack gap={1.5} sx={{ px: 2, pb: 2 }}>
-          {courseData?.modules.map((chapter) => {
+          {courseData?.modules?.map((chapter) => {
             return (
               <StyledAccordion
                 key={chapter._id}
@@ -127,15 +134,35 @@ export default function CourseContent() {
             p: 4,
           }}
         >
-          {courseData?.modules.map((chapter) => (
+          {courseData?.modules?.map((chapter) => (
             <Stack key={chapter._id} gap={2}>
-              <Stack direction="row" alignItems="center" gap={1.5}>
-                <Typography variant="h5">{chapter.title}</Typography>
-                <EditIcon fontSize="small" sx={{ cursor: "pointer" }} />
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Stack direction="row" alignItems="center" gap={1.5}>
+                  <DragIndicator fontSize="small" />
+                  <Typography variant="h5">{chapter.title}</Typography>
+                  <EditIcon fontSize="small" sx={{ cursor: "pointer" }} />
+                </Stack>
+                <Stack direction="row" alignItems="center" gap={1.5}>
+                  <Typography
+                    variant="body2"
+                    fontWeight="medium"
+                    sx={{ color: theme.palette.grey[500] }}
+                  >
+                    {chapter.lessons.length}&nbsp;bài học
+                  </Typography>
+                  <TrashIcon fontSize="small" sx={{ cursor: "pointer" }} />
+                </Stack>
               </Stack>
               <Grid2 container spacing={3}>
                 <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
-                  <LessonCard isEmpty onClick={handleAddLesson} />
+                  <LessonCard
+                    isEmpty
+                    onClick={() => handleAddLesson(chapter)}
+                  />
                 </Grid2>
                 {chapter.lessons.map((lesson) => (
                   <Grid2 key={lesson._id} size={{ md: 6, lg: 4, xl: 3 }}>
@@ -148,47 +175,28 @@ export default function CourseContent() {
               </Grid2>
             </Stack>
           ))}
+          <Stack gap={2}>
+            <Typography variant="h5">Chương không có tiêu đề</Typography>
+            <Grid2 container spacing={3}>
+              <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
+                <LessonCard isEmpty onClick={() => handleAddLesson()} />
+              </Grid2>
+            </Grid2>
+          </Stack>
         </Stack>
       ) : (
-        <Stack sx={{ flexGrow: 1 }}>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}
-          >
-            <Stack direction="row" gap={1.5}>
-              <Button
-                variant="outlined"
-                onClick={handleCancel}
-                sx={{ width: 96 }}
-              >
-                Hủy
-              </Button>
-              <Button variant="contained" sx={{ width: 96 }}>
-                Lưu
-              </Button>
-            </Stack>
-          </Stack>
-          <Stack
-            direction="row"
-            sx={{
-              p: 1.5,
-              border: 1,
-              borderColor: "divider",
-              color: theme.palette.primary.main,
-            }}
-          >
-            <Typography variant="body2" fontWeight="bold">
-              Đăng tải tài liệu Doc
-            </Typography>
-            <Divider orientation="vertical" flexItem />
-            <Typography variant="body2" fontWeight="bold">
-              Tạo mini test
-            </Typography>
-          </Stack>
-        </Stack>
+        <LessonDetail
+          edittingChapter={edittingChapter}
+          edittingLesson={edittingLesson}
+          handleGoBack={handleCancel}
+          handleOpenUploadDocsModal={handleOpenUploadDocsModal}
+        />
       )}
+      <UploadDocsModal
+        isModalOpen={showModalUpload}
+        handleClose={handleCloseUploadDocsModal}
+        edittingLesson={edittingLesson}
+      />
     </Stack>
   );
 }
