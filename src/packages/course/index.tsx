@@ -1,15 +1,14 @@
-import { Grid2, Stack, Typography, useTheme } from "@mui/material";
+import { Grid2, Stack, Typography } from "@mui/material";
 import CreateCourseModal from "../course-detail/create-course-modal";
 import CourseCard from "../home/components/course-list/CourseCard";
 import useCourseSection from "./hook";
 import { BookSettingIcon } from "./icons";
 
 export default function CourseSection() {
-  const theme = useTheme();
   const { isModalOpen, handleOpen, handleClose, data, isLoading, mutate } =
     useCourseSection();
 
-  return !data || data.length === 0 ? (
+  return !data || data.data.length === 0 ? (
     <Stack
       justifyContent="center"
       alignItems="center"
@@ -47,7 +46,7 @@ export default function CourseSection() {
         />
       </Stack>
       <Grid2 container spacing={2}>
-        {data?.map((course) => (
+        {data?.data?.map((course) => (
           <Grid2 key={course._id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }}>
             <CourseCard courseData={course} />
           </Grid2>

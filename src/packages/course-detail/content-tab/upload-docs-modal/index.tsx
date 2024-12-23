@@ -3,12 +3,15 @@ import RHFTextField from "@/components/form/RHFTextField";
 import ModalWrapper from "@/components/modal";
 import { Lesson } from "@/lib/types/course";
 import { Stack } from "@mui/material";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { getGoogleDocId } from "../../helper";
 
 export interface ICreateCourseModalProps {
   isModalOpen: boolean;
   handleClose: () => any;
+  setGoogleDocsUrl: Dispatch<SetStateAction<string>>;
+  setGoogleDocsContent: Dispatch<SetStateAction<string>>;
   edittingLesson?: Lesson;
 }
 
@@ -17,7 +20,13 @@ interface IForm {
 }
 
 export default function UploadDocsModal(props: ICreateCourseModalProps) {
-  const { isModalOpen, handleClose, edittingLesson } = props;
+  const {
+    isModalOpen,
+    handleClose,
+    setGoogleDocsUrl,
+    setGoogleDocsContent,
+    edittingLesson,
+  } = props;
   const { control, handleSubmit, reset } = useForm<IForm>({
     defaultValues: {
       googleDocUrl: "",
@@ -25,16 +34,19 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
   });
 
   async function onSubmit(data: IForm) {
-    if (!edittingLesson) return;
     const { googleDocUrl } = data;
-    const res = await CourseApi.updateLesson(edittingLesson._id, {
-      googleDocUrl,
-    });
+    setGoogleDocsUrl(googleDocUrl);
+    const googleDocsId = getGoogleDocId(googleDocUrl);
+    if (!googleDocsId) return;
+    const res = await CourseApi.getHTMLContent(googleDocsId);
+    setGoogleDocsContent(res);
+    handleClose();
+    reset();
   }
 
   useEffect(() => {
     if (!edittingLesson) reset();
-    reset({ googleDocUrl: edittingLesson?.googleDocsUrl });
+    reset({ googleDocUrl: edittingLesson?.googleDocUrl });
   }, [edittingLesson, reset]);
 
   return (
@@ -57,10 +69,11 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
           control={control}
           required
           rules={{
-            required: "Vui lòng nhập tên khóa học",
+            required: "Vui lòng nhập đường dẫn tới google docs",
           }}
           TextFieldProps={{
             placeholder: "Nhập đường dẫn ",
+            autoComplete: "off",
           }}
         />
       </Stack>

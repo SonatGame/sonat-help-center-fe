@@ -3,13 +3,11 @@ import { RHFImagePicker } from "@/components/form/RHFImagePicker";
 import RHFSelect from "@/components/form/RHFSelect";
 import RHFTextField from "@/components/form/RHFTextField";
 import ModalWrapper from "@/components/modal";
-import { Course } from "@/lib/types/course";
 import { ksaOptions, teamOptions } from "@/packages/course/constants";
 import { Add } from "@mui/icons-material";
 import { Grid2, Stack } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { KeyedMutator } from "swr";
 import { useCourseDetailContext } from "../context";
 
 export interface ICreateCourseModalProps {
@@ -17,7 +15,7 @@ export interface ICreateCourseModalProps {
   handleOpen: () => any;
   handleClose: () => any;
   isEditing?: boolean;
-  mutate?: KeyedMutator<Course[]>;
+  mutate?: any;
 }
 
 interface IForm {
@@ -59,12 +57,24 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
         thumbnail,
         coverImage,
       });
-    if (res && mutate) await mutate();
+    console.log(res);
+    if (res && mutate) {
+      await mutate();
+      reset();
+      handleClose();
+    }
   }
 
   useEffect(() => {
-    if (!editingCourse) reset();
-    reset({});
+    if (!editingCourse) {
+      reset();
+      return;
+    }
+    reset({
+      title: editingCourse.title,
+      team: editingCourse.team,
+      KSA: editingCourse.KSA,
+    });
   }, [editingCourse, reset]);
 
   return (
@@ -130,13 +140,13 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
               control={control}
               required
               rules={
-                editingCourse
+                !editingCourse
                   ? {
                       required: "Vui lòng chọn Ảnh đại diện",
                     }
                   : undefined
               }
-              imageUrl={editingCourse?.thumbnailUrl}
+              imageUrl={editingCourse?.thumbnail}
               sx={{ height: "100%" }}
             />
           </Grid2>
@@ -147,13 +157,13 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
               control={control}
               required
               rules={
-                editingCourse
+                !editingCourse
                   ? {
                       required: "Vui lòng chọn Ảnh bìa",
                     }
                   : undefined
               }
-              imageUrl={editingCourse?.coverImageUrl}
+              imageUrl={editingCourse?.coverImage}
               sx={{ height: "100%" }}
             />
           </Grid2>

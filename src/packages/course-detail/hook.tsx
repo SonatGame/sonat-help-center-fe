@@ -2,8 +2,13 @@ import { useState } from "react";
 import { useCourseDetailContext } from "./context";
 
 export default function useCourseDetail() {
-  const { handleChange, value, isAddingLesson, courseData } =
-    useCourseDetailContext();
+  const {
+    handleChange,
+    value,
+    isAddingLesson,
+    courseData,
+    mutate: mutateCourse,
+  } = useCourseDetailContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -35,5 +40,6 @@ export default function useCourseDetail() {
     open,
     handleClick,
     handleClose,
+    mutateCourse,
   };
 }

@@ -18,8 +18,7 @@ export interface ICourseCardProps {
 }
 
 export default function CourseCard({ courseData }: ICourseCardProps) {
-  const { team, _id, thumbnailUrl, KSA, title, description, modules } =
-    courseData;
+  const { team, _id, thumbnail, KSA, title, description, modules } = courseData;
   const router = useRouter();
 
   return (
@@ -51,7 +50,7 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
         }}
       >
         <Image
-          src={thumbnailUrl}
+          src={thumbnail}
           alt="course-thumbnail"
           width={600}
           height={248}
@@ -61,11 +60,11 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
       <Stack direction="row" spacing={1} sx={{ mt: 1.5 }}>
         <Tag>
           <Typography variant="body2" color="primary" fontWeight="medium">
-            {modules.reduce(
+            {modules?.reduce(
               (accumulator, currentValue) =>
-                accumulator + currentValue.lessons.length,
+                accumulator + (currentValue.lessons?.length ?? 0),
               0
-            )}
+            ) ?? 0}
             &nbsp; bài học
           </Typography>
         </Tag>

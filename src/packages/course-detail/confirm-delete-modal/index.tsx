@@ -16,7 +16,7 @@ export default function ConfirmDeleteLessonModal(
 
   return (
     <ModalWrapper
-      title="Xóa chương học"
+      title="Xóa bài học"
       dialogProps={{
         maxWidth: "sm",
         fullWidth: true,
@@ -33,8 +33,7 @@ export default function ConfirmDeleteLessonModal(
       }}
     >
       <Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
-        Bạn có chắc chắn muốn xóa chương này không? Hành động này sẽ xóa vĩnh
-        viễn tất cả các bài học bên trong chương. Bạn sẽ không thể khôi phục lại
+        Bạn có chắc chắn muốn xóa bài này không? Bạn sẽ không thể khôi phục lại
         chúng sau khi xóa. Hãy cân nhắc kỹ trước khi thực hiện.
       </Typography>
     </ModalWrapper>

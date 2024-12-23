@@ -1,8 +1,12 @@
+import BaseChip from "@/components/BaseChip";
+import useDebounce from "@/lib/hooks/useDebounce";
+import { Close, KeyboardArrowDown, Search } from "@mui/icons-material";
 import {
   Button,
   Checkbox,
   Chip,
   CircularProgress,
+  Divider,
   IconButton,
   List,
   MenuItem,
@@ -13,11 +17,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Divider, Empty } from "antd";
-
-import BaseChip from "@/components/BaseChip";
-import useDebounce from "@/lib/hooks/useDebounce";
-import { Close, KeyboardArrowDown, Search } from "@mui/icons-material";
+import { Empty } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import { menuItemStyles } from "./constants";
 import { IOption } from "./types";

@@ -1,4 +1,6 @@
+import { CourseApi } from "@/api/CourseApi";
 import TextMaxLine from "@/components/TextMaxLine";
+import { Lesson } from "@/lib/types/course";
 import { AddRounded, ArrowForwardRounded, MoreVert } from "@mui/icons-material";
 import {
   Box,
@@ -12,17 +14,18 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import ConfirmDeleteLessonModal from "../confirm-delete-modal";
+import { useCourseDetailContext } from "../context";
 
 interface IProps {
-  title?: string;
-  content?: string;
+  lessonData?: Lesson;
   isEmpty?: boolean;
   onClick?: () => any;
 }
 
 export default function LessonCard(props: IProps) {
   const theme = useTheme();
-  const { isEmpty = false, title, content, onClick } = props;
+  const { isEmpty = false, lessonData, onClick } = props;
+  const { mutate: mutateCourse } = useCourseDetailContext();
   const [hovering, setHovering] = useState(false);
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -46,7 +49,10 @@ export default function LessonCard(props: IProps) {
     setIsOpenConfirmModal(false);
   };
 
-  const handleDeleteLesson = () => {
+  const handleDeleteLesson = async () => {
+    if (!lessonData) return;
+    await CourseApi.deleteLesson(lessonData._id);
+    await mutateCourse();
     setIsOpenConfirmModal(false);
   };
 
@@ -91,7 +97,12 @@ export default function LessonCard(props: IProps) {
     >
       <Stack justifyContent="space-between" sx={{ height: "100%" }}>
         <Box>
-          <Stack direction="row" alignItems="start" gap={1}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="start"
+            gap={1}
+          >
             {/* {hovering && (
               <IconButton
                 size="small"
@@ -111,7 +122,7 @@ export default function LessonCard(props: IProps) {
                 color: theme.palette.grey[700],
               }}
             >
-              {title}
+              {lessonData?.title}
             </TextMaxLine>
             {hovering && (
               <IconButton
@@ -127,49 +138,6 @@ export default function LessonCard(props: IProps) {
                 />
               </IconButton>
             )}
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              onClick={(e) => e.stopPropagation()}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-              sx={{
-                "& .MuiList-root": {
-                  py: 0,
-                },
-                "& .MuiMenuItem-root": {
-                  fontSize: 14,
-                },
-              }}
-            >
-              <MenuItem
-                sx={{ color: theme.palette.grey[500] }}
-                onClick={onClick}
-              >
-                Chỉnh sửa
-              </MenuItem>
-              <MenuItem sx={{ color: theme.palette.grey[500] }}>
-                Thay đổi link
-              </MenuItem>
-              <MenuItem sx={{ color: theme.palette.grey[500] }}>
-                Sao chép link
-              </MenuItem>
-              <MenuItem
-                sx={{
-                  color: theme.palette.error.main,
-                  ":hover": {
-                    background: theme.palette.error[100],
-                    color: theme.palette.error.main,
-                  },
-                }}
-                onClick={handleOpenModalConfirm}
-              >
-                Xoá bài học
-              </MenuItem>
-            </Menu>
           </Stack>
           <TextMaxLine
             TypographyProps={{ variant: "body2" }}
@@ -178,7 +146,7 @@ export default function LessonCard(props: IProps) {
               wordBreak: "break-word",
             }}
           >
-            {content}
+            {lessonData?.detail}
           </TextMaxLine>
         </Box>
         <Stack
@@ -197,6 +165,46 @@ export default function LessonCard(props: IProps) {
         handleClose={handleCloseModalConfirm}
         handleDelete={handleDeleteLesson}
       />
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        onClick={(e) => e.stopPropagation()}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+        sx={{
+          "& .MuiList-root": {
+            py: 0,
+          },
+          "& .MuiMenuItem-root": {
+            fontSize: 14,
+          },
+        }}
+      >
+        <MenuItem sx={{ color: theme.palette.grey[500] }} onClick={onClick}>
+          Chỉnh sửa
+        </MenuItem>
+        <MenuItem sx={{ color: theme.palette.grey[500] }}>
+          Thay đổi link
+        </MenuItem>
+        <MenuItem sx={{ color: theme.palette.grey[500] }}>
+          Sao chép link
+        </MenuItem>
+        <MenuItem
+          sx={{
+            color: theme.palette.error.main,
+            ":hover": {
+              background: theme.palette.error[100],
+              color: theme.palette.error.main,
+            },
+          }}
+          onClick={handleOpenModalConfirm}
+        >
+          Xoá bài học
+        </MenuItem>
+      </Menu>
     </Card>
   );
 }

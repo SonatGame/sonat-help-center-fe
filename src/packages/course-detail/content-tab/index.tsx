@@ -1,6 +1,7 @@
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import StyledAccordion from "@/components/accordion";
 import { EditIcon, TrashIcon } from "@/packages/course/icons";
-import { ArrowBack, DragIndicator } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
 import { Grid2, Stack, Typography, useTheme } from "@mui/material";
 import LessonCard from "./LessonCard";
 import useContentTab from "./hook";
@@ -20,6 +21,14 @@ export default function CourseContent() {
     showModalUpload,
     handleOpenUploadDocsModal,
     handleCloseUploadDocsModal,
+    showConfirmDeleteChapterModal,
+    handleOpenConfirmDeleteChapterModal,
+    handleCloseConfirmDeleteChapterModal,
+    handleConfirmDeleteChapter,
+    googleDocsUrl,
+    setGoogleDocsUrl,
+    googleDocsContent,
+    setGoogleDocsContent,
   } = useContentTab();
 
   return (
@@ -56,9 +65,9 @@ export default function CourseContent() {
             fontWeight="medium"
             sx={{ color: theme.palette.grey[500] }}
           >
-            {courseData?.modules?.reduce(
+            {courseData?.modules.reduce(
               (accumulator, currentValue) =>
-                accumulator + currentValue.lessons.length,
+                accumulator + (currentValue.lessons?.length ?? 0),
               0
             ) ?? 0}
             &nbsp; bài học
@@ -87,13 +96,13 @@ export default function CourseContent() {
                         color: theme.palette.primary.main,
                       }}
                     >
-                      {chapter.lessons.length}
+                      {chapter.lessons?.length}&nbsp;bài học
                     </Typography>
                   </Stack>
                 }
                 detail={
                   <>
-                    {chapter.lessons.map((lesson, i) => (
+                    {chapter.lessons?.map((lesson, i) => (
                       <Stack
                         key={lesson._id}
                         direction="row"
@@ -103,7 +112,7 @@ export default function CourseContent() {
                           px: 1.5,
                           py: 3,
                           borderBottom:
-                            i < chapter.lessons.length - 1
+                            i < (chapter.lessons?.length ?? 0) - 1
                               ? `1px solid ${theme.palette.divider}`
                               : undefined,
                         }}
@@ -142,7 +151,7 @@ export default function CourseContent() {
                 alignItems="center"
               >
                 <Stack direction="row" alignItems="center" gap={1.5}>
-                  <DragIndicator fontSize="small" />
+                  {/* <DragIndicator fontSize="small" /> */}
                   <Typography variant="h5">{chapter.title}</Typography>
                   <EditIcon fontSize="small" sx={{ cursor: "pointer" }} />
                 </Stack>
@@ -152,9 +161,15 @@ export default function CourseContent() {
                     fontWeight="medium"
                     sx={{ color: theme.palette.grey[500] }}
                   >
-                    {chapter.lessons.length}&nbsp;bài học
+                    {chapter.lessons?.length ?? 0}&nbsp;bài học
                   </Typography>
-                  <TrashIcon fontSize="small" sx={{ cursor: "pointer" }} />
+                  <TrashIcon
+                    fontSize="small"
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => {
+                      handleOpenConfirmDeleteChapterModal(chapter);
+                    }}
+                  />
                 </Stack>
               </Stack>
               <Grid2 container spacing={3}>
@@ -164,12 +179,9 @@ export default function CourseContent() {
                     onClick={() => handleAddLesson(chapter)}
                   />
                 </Grid2>
-                {chapter.lessons.map((lesson) => (
+                {chapter.lessons?.map((lesson) => (
                   <Grid2 key={lesson._id} size={{ md: 6, lg: 4, xl: 3 }}>
-                    <LessonCard
-                      title={lesson.title}
-                      content={lesson.description}
-                    />
+                    <LessonCard lessonData={lesson} />
                   </Grid2>
                 ))}
               </Grid2>
@@ -190,13 +202,29 @@ export default function CourseContent() {
           edittingLesson={edittingLesson}
           handleGoBack={handleCancel}
           handleOpenUploadDocsModal={handleOpenUploadDocsModal}
+          googleDocsContent={googleDocsContent}
+          googleDocsUrl={googleDocsUrl}
         />
       )}
       <UploadDocsModal
         isModalOpen={showModalUpload}
         handleClose={handleCloseUploadDocsModal}
+        setGoogleDocsUrl={setGoogleDocsUrl}
+        setGoogleDocsContent={setGoogleDocsContent}
         edittingLesson={edittingLesson}
       />
+      <ConfirmDeleteModal
+        title="Xác nhận xóa chương"
+        isOpen={showConfirmDeleteChapterModal}
+        onApply={handleConfirmDeleteChapter}
+        onClose={handleCloseConfirmDeleteChapterModal}
+      >
+        <Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
+          Bạn có chắc chắn muốn xóa chương này không? Hành động này sẽ xóa vĩnh
+          viễn tất cả các bài học bên trong chương. Bạn sẽ không thể khôi phục
+          lại chúng sau khi xóa. Hãy cân nhắc kỹ trước khi thực hiện.
+        </Typography>
+      </ConfirmDeleteModal>
     </Stack>
   );
 }

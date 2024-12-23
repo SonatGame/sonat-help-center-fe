@@ -31,6 +31,7 @@ export default function CourseDetail() {
     open,
     handleClick,
     handleClose,
+    mutateCourse,
   } = useCourseDetail();
 
   const tabList = [
@@ -82,7 +83,7 @@ export default function CourseDetail() {
               gap={3}
             >
               <Image
-                src={courseData?.thumbnailUrl ?? ""}
+                src={courseData?.thumbnail ?? ""}
                 alt="course-thumbnail"
                 width={300}
                 height={300}
@@ -104,7 +105,7 @@ export default function CourseDetail() {
                     >
                       {courseData?.modules?.reduce(
                         (accumulator, currentValue) =>
-                          accumulator + currentValue.lessons.length,
+                          accumulator + (currentValue.lessons?.length ?? 0),
                         0
                       ) ?? 0}
                       &nbsp; bài học
@@ -128,6 +129,7 @@ export default function CourseDetail() {
                 handleOpen={handleOpenModalEdit}
                 handleClose={handleCloseModalEdit}
                 isEditing
+                mutate={mutateCourse}
               />
               <Button
                 variant="outlined"

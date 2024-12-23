@@ -1,7 +1,7 @@
-import { Course } from "@/lib/types/course";
+import { Chapter, Course, CourseRes, Lesson } from "@/lib/types/course";
 import { ApiUtils } from "./ApiUtils";
 
-const { HOST, METHOD, fetchList, fetchOne } = ApiUtils;
+const { HOST, METHOD, fetchList, fetchOne, fetchOneFormData } = ApiUtils;
 
 async function getCourseList(params?: {
   order?: "ASC" | "DESC";
@@ -9,7 +9,7 @@ async function getCourseList(params?: {
   take?: number;
   title?: string;
 }) {
-  return await fetchList<Course>({
+  return await fetchOne<CourseRes>({
     functionName: "Get courses",
     url: HOST + "course",
     method: METHOD.GET,
@@ -32,7 +32,7 @@ async function createCourse(data: {
   thumbnail: File;
   coverImage: File;
 }) {
-  return fetchOne({
+  return fetchOneFormData({
     functionName: "Create course",
     url: HOST + "course",
     method: METHOD.POST,
@@ -54,7 +54,7 @@ async function updateCourse(
     description?: string;
   }
 ) {
-  return fetchOne({
+  return fetchOneFormData<Course>({
     functionName: "Update course",
     url: HOST + "course/" + courseId,
     method: METHOD.PATCH,
@@ -68,6 +68,7 @@ async function createChapter(
   courseId: string,
   data: {
     title: string;
+    lessons: Omit<Lesson, "_id">[];
   }
 ) {
   return fetchOne({
@@ -86,7 +87,7 @@ async function updateChapter(
     title: string;
   }
 ) {
-  return fetchOne({
+  return fetchOne<Chapter>({
     functionName: "Update chapter",
     url: HOST + "course/module/" + chapterId,
     method: METHOD.PATCH,
@@ -106,10 +107,20 @@ async function deleteChapter(chapterId: string) {
   });
 }
 
+async function getLessonById(lessonId: string) {
+  return fetchOne<Lesson>({
+    functionName: "Delete lesson",
+    url: HOST + "course/lesson/" + lessonId,
+    method: METHOD.GET,
+  });
+}
+
 async function createLesson(
   chapterId: string,
   data: {
     title: string;
+    detail: string;
+    googleDocUrl: string;
   }
 ) {
   return fetchOne({
@@ -149,6 +160,14 @@ async function deleteLesson(lessonId: string) {
   });
 }
 
+async function getHTMLContent(googleDocId: string) {
+  return fetchOne<string>({
+    functionName: "Delete lesson",
+    url: HOST + "course/google-doc/" + googleDocId,
+    method: METHOD.GET,
+  });
+}
+
 export const CourseApi = {
   getCourseList,
   getCourse,
@@ -157,7 +176,9 @@ export const CourseApi = {
   createChapter,
   updateChapter,
   deleteChapter,
+  getLessonById,
   createLesson,
   updateLesson,
   deleteLesson,
+  getHTMLContent,
 };
