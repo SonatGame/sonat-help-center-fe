@@ -1,13 +1,34 @@
-import { Box, Stack, Tabs, useTheme } from "@mui/material";
+import { Grid2, Stack, Typography } from "@mui/material";
 import CreateCourseModal from "../course-detail/create-course-modal";
 import CourseCard from "../home/components/course-list/CourseCard";
 import useCourseSection from "./hook";
+import { BookSettingIcon } from "./icons";
 
 export default function CourseSection() {
-  const theme = useTheme();
-  const { isModalOpen, handleOpen, handleClose } = useCourseSection();
+  const { isModalOpen, handleOpen, handleClose, data, isLoading, mutate } =
+    useCourseSection();
 
-  return (
+  return !data || data.data.length === 0 ? (
+    <Stack
+      justifyContent="center"
+      alignItems="center"
+      gap={3}
+      sx={{
+        height: "100%",
+      }}
+    >
+      <BookSettingIcon sx={{ fontSize: 255 }} />
+      <Typography variant="h5">
+        Khai thác sức mạnh bản thân với bộ bài test toàn diện
+      </Typography>
+      <CreateCourseModal
+        isModalOpen={isModalOpen}
+        handleOpen={handleOpen}
+        handleClose={handleClose}
+        mutate={mutate}
+      />
+    </Stack>
+  ) : (
     <Stack
       sx={{
         px: 4,
@@ -21,51 +42,16 @@ export default function CourseSection() {
           isModalOpen={isModalOpen}
           handleOpen={handleOpen}
           handleClose={handleClose}
+          mutate={mutate}
         />
       </Stack>
-      <Tabs
-        variant="scrollable"
-        sx={{
-          position: "relative",
-          "& .MuiTabs-flexContainer": {
-            gap: 3,
-          },
-          "& .MuiTabScrollButton-root": {
-            width: 56,
-            height: 56,
-            borderRadius: "50%",
-            zIndex: 1,
-            backgroundColor: theme.palette.grey[700],
-            color: theme.palette.grey[400],
-            position: "absolute",
-            top: "50%",
-            transform: "translateY(-50%)",
-            border: 1,
-            borderColor: theme.palette.grey[400],
-            opacity: 1,
-          },
-          ".MuiTabs-scrollButtons.Mui-disabled": { display: "none" },
-          "& .MuiTabScrollButton-root:first-child": {
-            left: 32,
-          },
-          "& .MuiTabScrollButton-root:last-child": {
-            right: 32,
-          },
-        }}
-      >
-        {Array.from({ length: 10 }, (_, i) => i + 1).map((i) => (
-          <Box key={i} sx={{ width: 400 }}>
-            <CourseCard
-              team="Business Intelligence"
-              description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum"
-              courseCount={18}
-              ksa="Skill"
-              thumbnail="/assets/img/sample_course.png"
-              title="THÀNH THẠO XỬ LÝ DỮ LIỆU VỚI PYTHON TỪ SỐ 0 - 2024"
-            />
-          </Box>
+      <Grid2 container spacing={2}>
+        {data?.data?.map((course) => (
+          <Grid2 key={course._id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }}>
+            <CourseCard courseData={course} />
+          </Grid2>
         ))}
-      </Tabs>
+      </Grid2>
     </Stack>
   );
 }

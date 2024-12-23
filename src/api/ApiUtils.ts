@@ -78,6 +78,8 @@ async function fetchData<T>(config: ApiRequest): Promise<T> {
 
       return responseData as T;
     }
+    const contentType = response.headers.get("content-type");
+    if (contentType?.includes("text/html")) return (await response.text()) as T;
     const body = config.isEmpty ? response : await response.json();
     return body as T;
   } catch (error) {
@@ -191,47 +193,79 @@ async function fetchFormData<T>(config: ApiRequest): Promise<T> {
   const token = await getToken();
   const myHeaders = new Headers();
   const url = new URL(config.url);
+  const formData = new FormData();
 
-  if (config.params) {
-    Object.entries(config.params).forEach((entry) => {
-      if (Array.isArray(entry[1])) {
-        entry[1].forEach((value) => {
-          if (value !== undefined && value !== null)
-            url.searchParams.append(entry[0], value.toString());
+  // Helper function to append query parameters
+  const appendParams = (params: Record<string, any>) => {
+    Object.entries(params).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((v) => {
+          if (v !== undefined && v !== null)
+            url.searchParams.append(key, v.toString());
         });
-      } else {
-        if (entry[1] !== undefined && entry[1] !== null)
-          url.searchParams.append(entry[0], entry[1].toString());
+      } else if (value !== undefined && value !== null) {
+        url.searchParams.append(key, value.toString());
       }
     });
+  };
+
+  // Helper function to append form data
+  const appendFormData = (body: Record<string, any>) => {
+    Object.entries(body).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        if (value.every((item) => item instanceof File)) {
+          value.forEach((file) => formData.append(key, file));
+        } else {
+          value.forEach((v) => {
+            if (v !== undefined && v !== null)
+              formData.append(key, v.toString());
+          });
+        }
+      } else if (value !== undefined && value !== null) {
+        formData.append(key, value.toString());
+      }
+    });
+  };
+
+  // Append parameters to URL
+  if (config.params) {
+    appendParams(config.params);
   }
 
-  myHeaders.append("Authorization", `Bearer ${token}`);
-  // myHeaders.append("Content-Type", "multipart/form-data");
+  // Append body to FormData
+  if (config.body) {
+    appendFormData(config.body);
+  }
 
-  const requestOptions = {
+  // Add Authorization header
+  myHeaders.append("Authorization", `Bearer ${token}`);
+
+  // Request options
+  const requestOptions: RequestInit = {
     method: config.method,
     mode: "cors",
-    body: config.body,
+    body: formData,
     headers: myHeaders,
-  } as any;
+  };
 
   try {
-    const response = await fetch(url, requestOptions);
+    const response = await fetch(url.toString(), requestOptions);
 
     if (!response.ok) {
-      const responseData = await response.json();
-
-      if (config.showError) {
-        return { ...responseData, error: "Error" } as T;
+      try {
+        const responseData = await response.json();
+        if (config.showError) {
+          return { ...responseData, error: "Error" } as T;
+        }
+        return responseData as T;
+      } catch {
+        throw new Error(`Failed to fetch: ${response.statusText}`);
       }
-
-      return responseData as T;
     }
-    const body = config.isEmpty ? response : await response.json();
-    return body as T;
+
+    return config.isEmpty ? (response as unknown as T) : await response.json();
   } catch (error) {
-    return { ...(error as Error), error: (error as Error)?.message } as T;
+    return { ...(error as Error), error: (error as Error).message } as T;
   }
 }
 
@@ -285,16 +319,25 @@ async function fetchListFormData<T>({
   else return result as T[];
 }
 
-async function fetchOneFormData<T>(
-  functionName: string,
-  url: string,
-  method: string,
-  hasSuccessfulMsg?: boolean,
-  hasErrorMsg?: boolean,
-  body?: Record<string, any>,
-  params?: Record<string, any>,
-  showError?: boolean
-): Promise<T> {
+async function fetchOneFormData<T>({
+  functionName,
+  url,
+  method,
+  hasSuccessfulMsg,
+  hasErrorMsg,
+  body,
+  params,
+  showError,
+}: {
+  functionName: string;
+  url: string;
+  method: string;
+  hasSuccessfulMsg?: boolean;
+  hasErrorMsg?: boolean;
+  body?: Record<string, any>;
+  params?: Record<string, any>;
+  showError?: boolean;
+}): Promise<T> {
   const result = await fetchFormData<ApiResponse<T[]>>({
     url,
     method,

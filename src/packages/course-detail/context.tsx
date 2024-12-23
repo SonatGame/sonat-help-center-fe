@@ -1,13 +1,17 @@
 "use client";
 
+import { CourseApi } from "@/api/CourseApi";
 import { Course } from "@/lib/types/course";
+import { useParams } from "next/navigation";
 import {
   createContext,
+  Dispatch,
   SetStateAction,
   SyntheticEvent,
   useContext,
   useState,
 } from "react";
+import useSWR, { KeyedMutator } from "swr";
 
 interface ContextProps {
   children?: React.ReactNode;
@@ -18,23 +22,52 @@ interface CourseDetailContextProps {
   setValue: (value: SetStateAction<string>) => void;
   handleChange: (e: SyntheticEvent, newValue: string) => void;
   courseData?: Course;
+  isLoading: boolean;
+  mutate: KeyedMutator<Course>;
+  isAddingLesson: boolean;
+  setIsAddingLesson: Dispatch<SetStateAction<boolean>>;
 }
 
 const CourseDetailContext = createContext<CourseDetailContextProps>({
   value: "",
   setValue: () => {},
   handleChange: () => {},
+  isAddingLesson: false,
+  setIsAddingLesson: () => {},
+  isLoading: false,
+  mutate: () => Promise.resolve(undefined),
 });
 
 const CourseDetailProvider = ({ children }: ContextProps) => {
   const [value, setValue] = useState("overview");
+  const [isAddingLesson, setIsAddingLesson] = useState(false);
+  const { courseId } = useParams<{ courseId: string }>();
+
+  const { data, isLoading, mutate } = useSWR(
+    ["get-course-detail", courseId],
+    () => CourseApi.getCourse(courseId),
+    {
+      refreshInterval: 0,
+      revalidateOnFocus: false,
+    }
+  );
+
   const handleChange = (e: SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
   return (
     <CourseDetailContext.Provider
-      value={{ value, setValue, handleChange, courseData: fakeCourseData }}
+      value={{
+        value,
+        setValue,
+        handleChange,
+        courseData: data,
+        isLoading,
+        mutate,
+        isAddingLesson,
+        setIsAddingLesson,
+      }}
     >
       {children}
     </CourseDetailContext.Provider>
@@ -44,41 +77,3 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
 const useCourseDetailContext = () => useContext(CourseDetailContext);
 
 export { CourseDetailProvider, useCourseDetailContext };
-
-const fakeCourseData = {
-  _id: "6763c00805d7f3569e8aeb03",
-  title: "Onboarding course",
-  description: "Onboarding course overview",
-  learningOutcomes: ["Learn the basics", "Understand the process"],
-  modules: [
-    {
-      title: "Module 1",
-      description: "Module 1 description",
-      lessons: [
-        {
-          _id: "6763c00805d7f3569e8aeaff",
-          title: "Game domain part 1",
-        },
-      ],
-      _id: "6763c00805d7f3569e8aeb04",
-    },
-  ],
-  team: "BI",
-  KSA: "Knowledge",
-  thumbnailUrl: "https://example.com/thumbnail.jpg",
-  coverImageUrl: "https://example.com/cover.jpg",
-  ratings: [],
-  comments: [],
-  tests: [
-    {
-      _id: "6763c00805d7f3569e8aeb01",
-      name: "Test VHDN",
-    },
-  ],
-  createdAt: "2024-12-19T06:41:12.475Z",
-  updatedAt: "2024-12-19T06:41:12.475Z",
-  rating: {
-    rating: 0,
-    count: 0,
-  },
-};

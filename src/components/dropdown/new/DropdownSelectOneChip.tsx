@@ -1,6 +1,9 @@
+import BaseChip from "@/components/BaseChip";
+import { Close, KeyboardArrowDown, Search } from "@mui/icons-material";
 import {
   Chip,
   CircularProgress,
+  Divider,
   IconButton,
   List,
   MenuItem,
@@ -10,10 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Divider, Empty } from "antd";
-
-import BaseChip from "@/components/BaseChip";
-import { Close, KeyboardArrowDown, Search } from "@mui/icons-material";
+import { Empty } from "antd";
 import React, { useMemo, useState } from "react";
 import { menuItemStyles } from "./constants";
 import { IOption } from "./types";

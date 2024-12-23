@@ -1,29 +1,29 @@
 export const teamOptions = [
   {
-    value: "care",
+    value: "Care",
     label: "Care",
   },
   {
-    value: "product",
+    value: "Product",
     label: "Product",
   },
   {
-    value: "business intelligent",
+    value: "Business intelligent",
     label: "Business Intelligent",
   },
 ];
 
 export const ksaOptions = [
   {
-    value: "knowledge",
+    value: "Knowledge",
     label: "Knowledge",
   },
   {
-    value: "skill",
+    value: "Skill",
     label: "Skill",
   },
   {
-    value: "attitude",
+    value: "Attitude",
     label: "Attitude",
   },
 ];

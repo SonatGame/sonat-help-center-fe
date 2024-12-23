@@ -10,8 +10,15 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useState } from "react";
-import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
+import { useEffect, useState } from "react";
+import {
+  Control,
+  Controller,
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+  Path,
+} from "react-hook-form";
 import Asterisk from "./Asterisk";
 
 interface IRHFImagePickerProps<T extends FieldValues> {
@@ -21,6 +28,7 @@ interface IRHFImagePickerProps<T extends FieldValues> {
   required?: boolean;
   sx?: SxProps;
   rules?: any;
+  imageUrl?: string;
 }
 
 export function RHFImagePicker<T extends FieldValues>({
@@ -30,25 +38,52 @@ export function RHFImagePicker<T extends FieldValues>({
   required,
   sx,
   rules,
+  imageUrl,
 }: IRHFImagePickerProps<T>) {
   const theme = useTheme();
   const [image, setImage] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleImageChange = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveImage = (field: ControllerRenderProps<T, Path<T>>) => {
+    setImage(null);
+    field.onChange(undefined);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (
+    e: React.DragEvent<HTMLLabelElement>,
+    field: ControllerRenderProps<T, Path<T>>
+  ) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      field.onChange(file);
+      handleImageChange(file);
     }
   };
 
-  const handleRemoveImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setImage(null);
-  };
+  useEffect(() => {
+    if (imageUrl) {
+      setImage(imageUrl);
+    }
+  }, [imageUrl]);
 
   return (
     <Stack spacing={0.5} width="100%" sx={{ ...sx }}>
@@ -61,72 +96,102 @@ export function RHFImagePicker<T extends FieldValues>({
         control={control}
         rules={rules}
         render={({ field, fieldState: { error } }) => (
-          <FormControl>
-            <label style={{ cursor: "pointer", flexGrow: 1 }}>
-              <Stack
-                justifyContent="center"
-                alignItems="center"
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  position: "relative",
-                  border: image ? "none" : `1px solid ${theme.palette.divider}`,
-                  borderRadius: 1.5,
-                }}
-              >
-                {image ? (
-                  <>
-                    <CardMedia
-                      component="img"
-                      sx={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                      image={image}
-                      alt="Selected Image"
-                    />
-                    <IconButton
-                      onClick={(e) => {
-                        handleRemoveImage(e);
-                        field.onChange(undefined);
-                      }}
-                      sx={{
-                        position: "absolute",
-                        top: 8,
-                        right: 8,
-                        background: "rgba(255, 255, 255, 0.7)",
-                      }}
-                    >
-                      <Close />
-                    </IconButton>
-                  </>
-                ) : (
-                  <>
+          <FormControl sx={{ flexGrow: 1 }}>
+            <Stack
+              justifyContent="center"
+              alignItems="center"
+              sx={{
+                width: "100%",
+                height: "100%",
+                position: "relative",
+                border: image ? "none" : `1px solid ${theme.palette.divider}`,
+                borderRadius: 1.5,
+                backgroundColor: isDragging
+                  ? theme.palette.action.hover
+                  : "transparent",
+              }}
+            >
+              {image ? (
+                <>
+                  <CardMedia
+                    component="img"
+                    sx={{
+                      width: "auto",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                    image={image}
+                    alt="Selected Image"
+                  />
+                  <IconButton
+                    onClick={() => {
+                      handleRemoveImage(field);
+                    }}
+                    sx={{
+                      position: "absolute",
+                      top: 8,
+                      right: 8,
+                      background: "rgba(255, 255, 255, 0.7)",
+                    }}
+                  >
+                    <Close />
+                  </IconButton>
+                </>
+              ) : (
+                <label
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, field)}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    cursor: "pointer",
+                    textAlign: "center",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Stack
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{ py: 2 }}
+                  >
                     <CloudIcon sx={{ fontSize: 40 }} />
-                    <Typography
-                      variant="body2"
-                      color="primary"
-                      fontWeight="bold"
+                    <Stack
+                      direction="row"
+                      justifyContent="center"
+                      gap={0.5}
+                      flexWrap="wrap"
                     >
-                      Ấn vào để đăng tải
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      hoặc kéo và thả
-                    </Typography>
-                  </>
-                )}
-              </Stack>
-              <input
-                hidden
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  if (e.target.files) field.onChange(e.target.files?.[0]);
-                  handleImageChange(e);
-                }}
-              />
-            </label>
+                      <Typography
+                        variant="body2"
+                        color="primary"
+                        fontWeight="bold"
+                      >
+                        Ấn vào để đăng tải
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        hoặc kéo và thả
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                  <input
+                    hidden
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        field.onChange(file);
+                        handleImageChange(file);
+                      }
+                    }}
+                  />
+                </label>
+              )}
+            </Stack>
+
             {!!error && (
               <FormHelperText error={!!error}>{error?.message}</FormHelperText>
             )}

@@ -1,6 +1,7 @@
 import Tag from "@/components/Tag";
 import TextMaxLine from "@/components/TextMaxLine";
 import { AppRoutes } from "@/lib/constants/routesAndPermissions";
+import { Course } from "@/lib/types/course";
 import {
   Avatar,
   AvatarGroup,
@@ -13,16 +14,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export interface ICourseCardProps {
-  team: string;
-  thumbnail: string;
-  courseCount: number;
-  ksa: string;
-  title: string;
-  description: string;
+  courseData: Course;
 }
 
-export default function CourseCard(props: ICourseCardProps) {
-  const { team, thumbnail, courseCount, ksa, title, description } = props;
+export default function CourseCard({ courseData }: ICourseCardProps) {
+  const { team, _id, thumbnail, KSA, title, description, modules } = courseData;
   const router = useRouter();
 
   return (
@@ -38,7 +34,7 @@ export default function CourseCard(props: ICourseCardProps) {
         //   transform: "scale(1.05)",
         // },
       }}
-      onClick={() => router.push(`${AppRoutes.COURSE}123`)}
+      onClick={() => router.push(`${AppRoutes.COURSE}${_id}`)}
     >
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2" color="primary" fontWeight="medium">
@@ -64,12 +60,17 @@ export default function CourseCard(props: ICourseCardProps) {
       <Stack direction="row" spacing={1} sx={{ mt: 1.5 }}>
         <Tag>
           <Typography variant="body2" color="primary" fontWeight="medium">
-            {courseCount} bài học
+            {modules?.reduce(
+              (accumulator, currentValue) =>
+                accumulator + (currentValue.lessons?.length ?? 0),
+              0
+            ) ?? 0}
+            &nbsp; bài học
           </Typography>
         </Tag>
         <Tag>
           <Typography variant="body2" color="primary" fontWeight="medium">
-            {ksa}
+            {KSA}
           </Typography>
         </Tag>
       </Stack>

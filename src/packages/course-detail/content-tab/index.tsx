@@ -1,12 +1,35 @@
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import StyledAccordion from "@/components/accordion";
-import { EditIcon } from "@/packages/course/icons";
+import { EditIcon, TrashIcon } from "@/packages/course/icons";
+import { ArrowBack } from "@mui/icons-material";
 import { Grid2, Stack, Typography, useTheme } from "@mui/material";
 import LessonCard from "./LessonCard";
 import useContentTab from "./hook";
+import LessonDetail from "./lesson-detail";
+import UploadDocsModal from "./upload-docs-modal";
 
 export default function CourseContent() {
   const theme = useTheme();
-  const { courseData } = useContentTab();
+  const {
+    courseData,
+    edittingChapter,
+    edittingLesson,
+    handleAddLesson,
+    isAddingLesson,
+    handleCancel,
+    handleAddChapter,
+    showModalUpload,
+    handleOpenUploadDocsModal,
+    handleCloseUploadDocsModal,
+    showConfirmDeleteChapterModal,
+    handleOpenConfirmDeleteChapterModal,
+    handleCloseConfirmDeleteChapterModal,
+    handleConfirmDeleteChapter,
+    googleDocsUrl,
+    setGoogleDocsUrl,
+    googleDocsContent,
+    setGoogleDocsContent,
+  } = useContentTab();
 
   return (
     <Stack direction="row" sx={{ height: "100%" }}>
@@ -19,6 +42,23 @@ export default function CourseContent() {
         }}
       >
         <Stack gap={1.5} sx={{ p: 3 }}>
+          {isAddingLesson && (
+            <Stack
+              direction="row"
+              gap={0.5}
+              sx={{
+                cursor: "pointer",
+                userSelect: "none",
+                color: theme.palette.primary.main,
+              }}
+              onClick={handleCancel}
+            >
+              <ArrowBack fontSize="small" />
+              <Typography variant="body2" fontWeight="bold">
+                Quay lại
+              </Typography>
+            </Stack>
+          )}
           <Typography variant="h6">Nội dung khóa học</Typography>
           <Typography
             variant="body2"
@@ -27,14 +67,14 @@ export default function CourseContent() {
           >
             {courseData?.modules.reduce(
               (accumulator, currentValue) =>
-                accumulator + currentValue.lessons.length,
+                accumulator + (currentValue.lessons?.length ?? 0),
               0
-            )}
+            ) ?? 0}
             &nbsp; bài học
           </Typography>
         </Stack>
         <Stack gap={1.5} sx={{ px: 2, pb: 2 }}>
-          {courseData?.modules.map((chapter) => {
+          {courseData?.modules?.map((chapter) => {
             return (
               <StyledAccordion
                 key={chapter._id}
@@ -56,13 +96,13 @@ export default function CourseContent() {
                         color: theme.palette.primary.main,
                       }}
                     >
-                      {chapter.lessons.length}
+                      {chapter.lessons?.length}&nbsp;bài học
                     </Typography>
                   </Stack>
                 }
                 detail={
                   <>
-                    {chapter.lessons.map((lesson, i) => (
+                    {chapter.lessons?.map((lesson, i) => (
                       <Stack
                         key={lesson._id}
                         direction="row"
@@ -72,7 +112,7 @@ export default function CourseContent() {
                           px: 1.5,
                           py: 3,
                           borderBottom:
-                            i < 5
+                            i < (chapter.lessons?.length ?? 0) - 1
                               ? `1px solid ${theme.palette.divider}`
                               : undefined,
                         }}
@@ -85,14 +125,6 @@ export default function CourseContent() {
                         >
                           {lesson.title}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          fontWeight="bold"
-                          color="primary"
-                          sx={{ cursor: "pointer", userSelect: "none" }}
-                        >
-                          Học ngay
-                        </Typography>
                       </Stack>
                     ))}
                   </>
@@ -102,46 +134,97 @@ export default function CourseContent() {
           })}
         </Stack>
       </Stack>
-      <Stack
-        gap={5}
-        sx={{
-          backgroundColor: theme.palette.grey[50],
-          flexGrow: 1,
-          p: 4,
-        }}
-      >
-        <Stack gap={2}>
-          <Stack direction="row" alignItems="center" gap={1.5}>
-            <Typography variant="h5">Chương 1</Typography>
-            <EditIcon fontSize="small" sx={{ cursor: "pointer" }} />
-          </Stack>
-          <Grid2 container spacing={3}>
-            {Array.from({ length: 10 }, (_, i) => i + 1).map((i) => (
-              <Grid2 key={i} size={{ md: 6, lg: 4, xl: 3 }}>
-                <LessonCard
-                  title={`${i}. Giới thiệu chung về giao diện Excel`}
-                  content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum"
-                />
+      {!isAddingLesson ? (
+        <Stack
+          gap={5}
+          sx={{
+            backgroundColor: theme.palette.grey[50],
+            flexGrow: 1,
+            p: 4,
+          }}
+        >
+          {courseData?.modules?.map((chapter) => (
+            <Stack key={chapter._id} gap={2}>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Stack direction="row" alignItems="center" gap={1.5}>
+                  {/* <DragIndicator fontSize="small" /> */}
+                  <Typography variant="h5">{chapter.title}</Typography>
+                  <EditIcon fontSize="small" sx={{ cursor: "pointer" }} />
+                </Stack>
+                <Stack direction="row" alignItems="center" gap={1.5}>
+                  <Typography
+                    variant="body2"
+                    fontWeight="medium"
+                    sx={{ color: theme.palette.grey[500] }}
+                  >
+                    {chapter.lessons?.length ?? 0}&nbsp;bài học
+                  </Typography>
+                  <TrashIcon
+                    fontSize="small"
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => {
+                      handleOpenConfirmDeleteChapterModal(chapter);
+                    }}
+                  />
+                </Stack>
+              </Stack>
+              <Grid2 container spacing={3}>
+                <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
+                  <LessonCard
+                    isEmpty
+                    onClick={() => handleAddLesson(chapter)}
+                  />
+                </Grid2>
+                {chapter.lessons?.map((lesson) => (
+                  <Grid2 key={lesson._id} size={{ md: 6, lg: 4, xl: 3 }}>
+                    <LessonCard lessonData={lesson} />
+                  </Grid2>
+                ))}
               </Grid2>
-            ))}
-            <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
-              <LessonCard isEmpty />
+            </Stack>
+          ))}
+          <Stack gap={2}>
+            <Typography variant="h5">Chương không có tiêu đề</Typography>
+            <Grid2 container spacing={3}>
+              <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
+                <LessonCard isEmpty onClick={() => handleAddLesson()} />
+              </Grid2>
             </Grid2>
-          </Grid2>
-        </Stack>
-
-        <Stack gap={2}>
-          <Stack direction="row" alignItems="center" gap={1.5}>
-            <Typography variant="h5">Chương 2</Typography>
-            <EditIcon fontSize="small" sx={{ cursor: "pointer" }} />
           </Stack>
-          <Grid2 container spacing={3}>
-            <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
-              <LessonCard isEmpty />
-            </Grid2>
-          </Grid2>
         </Stack>
-      </Stack>
+      ) : (
+        <LessonDetail
+          edittingChapter={edittingChapter}
+          edittingLesson={edittingLesson}
+          handleGoBack={handleCancel}
+          handleOpenUploadDocsModal={handleOpenUploadDocsModal}
+          googleDocsContent={googleDocsContent}
+          googleDocsUrl={googleDocsUrl}
+        />
+      )}
+      <UploadDocsModal
+        isModalOpen={showModalUpload}
+        handleClose={handleCloseUploadDocsModal}
+        setGoogleDocsUrl={setGoogleDocsUrl}
+        setGoogleDocsContent={setGoogleDocsContent}
+        edittingLesson={edittingLesson}
+      />
+      <ConfirmDeleteModal
+        title="Xác nhận xóa chương"
+        isOpen={showConfirmDeleteChapterModal}
+        onApply={handleConfirmDeleteChapter}
+        onClose={handleCloseConfirmDeleteChapterModal}
+      >
+        <Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
+          Bạn có chắc chắn muốn xóa chương này không? Hành động này sẽ xóa vĩnh
+          viễn tất cả các bài học bên trong chương. Bạn sẽ không thể khôi phục
+          lại chúng sau khi xóa. Hãy cân nhắc kỹ trước khi thực hiện.
+        </Typography>
+      </ConfirmDeleteModal>
     </Stack>
   );
 }

@@ -1,3 +1,4 @@
+import { CourseApi } from "@/api/CourseApi";
 import { RHFImagePicker } from "@/components/form/RHFImagePicker";
 import RHFSelect from "@/components/form/RHFSelect";
 import RHFTextField from "@/components/form/RHFTextField";
@@ -7,44 +8,79 @@ import { Add } from "@mui/icons-material";
 import { Grid2, Stack } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useCourseDetailContext } from "../context";
 
 export interface ICreateCourseModalProps {
   isModalOpen: boolean;
   handleOpen: () => any;
   handleClose: () => any;
-  editingCourse?: any;
   isEditing?: boolean;
+  mutate?: any;
 }
 
 interface IForm {
-  name: string;
+  title: string;
   team: string;
-  ksa: string;
+  KSA: string;
   thumbnail: File;
   coverImage: File;
 }
 
 export default function CreateCourseModal(props: ICreateCourseModalProps) {
-  const { isModalOpen, handleOpen, handleClose, isEditing, editingCourse } =
-    props;
-  const { control, setValue, watch, handleSubmit, reset } = useForm<IForm>({
+  const { isModalOpen, handleOpen, handleClose, isEditing, mutate } = props;
+  const { courseData: editingCourse } = useCourseDetailContext();
+
+  const { control, handleSubmit, reset } = useForm<IForm>({
     defaultValues: {
-      name: "",
+      title: "",
       team: "",
-      ksa: "",
+      KSA: "",
     },
   });
 
-  function onSubmit(data: IForm) {}
+  async function onSubmit(data: IForm) {
+    const { title, team, KSA, thumbnail, coverImage } = data;
+    let res;
+    if (!editingCourse)
+      res = await CourseApi.createCourse({
+        title,
+        team,
+        KSA,
+        thumbnail,
+        coverImage,
+      });
+    else
+      res = await CourseApi.updateCourse(editingCourse._id, {
+        title,
+        team,
+        KSA,
+        thumbnail,
+        coverImage,
+      });
+    console.log(res);
+    if (res && mutate) {
+      await mutate();
+      reset();
+      handleClose();
+    }
+  }
 
   useEffect(() => {
-    if (!editingCourse) reset();
+    if (!editingCourse) {
+      reset();
+      return;
+    }
+    reset({
+      title: editingCourse.title,
+      team: editingCourse.team,
+      KSA: editingCourse.KSA,
+    });
   }, [editingCourse, reset]);
 
   return (
     <ModalWrapper
       title={!isEditing ? "Tạo khóa học mới" : "Chỉnh sửa khóa học"}
-      buttonTitle={!isEditing ? "Khóa học mới" : "Chỉnh sửa"}
+      buttonTitle={!isEditing ? "Tạo khóa học mới" : "Chỉnh sửa"}
       buttonProps={
         !isEditing
           ? {
@@ -69,7 +105,7 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
       <Stack gap={3}>
         <RHFTextField
           label="Tên khóa học"
-          name="name"
+          name="title"
           control={control}
           required
           rules={{
@@ -88,12 +124,12 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
         />
         <RHFSelect
           label="KSA"
-          name="ksa"
+          name="KSA"
           control={control}
           options={ksaOptions}
           required
           rules={{
-            required: "Vui lòng chọn ksa",
+            required: "Vui lòng chọn KSA",
           }}
         />
         <Grid2 container spacing={2}>
@@ -103,9 +139,15 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
               name="thumbnail"
               control={control}
               required
-              rules={{
-                required: "Vui lòng chọn Ảnh đại diện",
-              }}
+              rules={
+                !editingCourse
+                  ? {
+                      required: "Vui lòng chọn Ảnh đại diện",
+                    }
+                  : undefined
+              }
+              imageUrl={editingCourse?.thumbnail}
+              sx={{ height: "100%" }}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 8 }}>
@@ -114,9 +156,15 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
               name="coverImage"
               control={control}
               required
-              rules={{
-                required: "Vui lòng chọn Ảnh bìa",
-              }}
+              rules={
+                !editingCourse
+                  ? {
+                      required: "Vui lòng chọn Ảnh bìa",
+                    }
+                  : undefined
+              }
+              imageUrl={editingCourse?.coverImage}
+              sx={{ height: "100%" }}
             />
           </Grid2>
         </Grid2>

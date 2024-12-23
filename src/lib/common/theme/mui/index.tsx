@@ -12,7 +12,14 @@ export default function AppTheme({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <SnackbarProvider>{children}</SnackbarProvider>
+      <SnackbarProvider
+        anchorOrigin={{
+          horizontal: "right",
+          vertical: "top",
+        }}
+      >
+        {children}
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }
