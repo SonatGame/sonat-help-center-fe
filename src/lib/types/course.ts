@@ -49,6 +49,7 @@ export type Course = {
     rating: number;
     count: number;
   };
+  learnersCount: number;
 };
 
 export type CourseRes = {

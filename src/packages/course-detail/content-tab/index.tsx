@@ -25,10 +25,8 @@ export default function CourseContent() {
     handleOpenConfirmDeleteChapterModal,
     handleCloseConfirmDeleteChapterModal,
     handleConfirmDeleteChapter,
-    googleDocsUrl,
-    setGoogleDocsUrl,
-    googleDocsContent,
-    setGoogleDocsContent,
+    googleDocs,
+    setGoogleDocs,
   } = useContentTab();
 
   return (
@@ -70,7 +68,7 @@ export default function CourseContent() {
                 accumulator + (currentValue.lessons?.length ?? 0),
               0
             ) ?? 0}
-            &nbsp; bài học
+            &nbsp;bài học
           </Typography>
         </Stack>
         <Stack gap={1.5} sx={{ px: 2, pb: 2 }}>
@@ -181,7 +179,10 @@ export default function CourseContent() {
                 </Grid2>
                 {chapter.lessons?.map((lesson) => (
                   <Grid2 key={lesson._id} size={{ md: 6, lg: 4, xl: 3 }}>
-                    <LessonCard lessonData={lesson} />
+                    <LessonCard
+                      lessonData={lesson}
+                      onClick={() => handleAddLesson(chapter, lesson)}
+                    />
                   </Grid2>
                 ))}
               </Grid2>
@@ -202,15 +203,15 @@ export default function CourseContent() {
           edittingLesson={edittingLesson}
           handleGoBack={handleCancel}
           handleOpenUploadDocsModal={handleOpenUploadDocsModal}
-          googleDocsContent={googleDocsContent}
-          googleDocsUrl={googleDocsUrl}
+          googleDocs={googleDocs}
+          setGoogleDocs={setGoogleDocs}
         />
       )}
       <UploadDocsModal
         isModalOpen={showModalUpload}
         handleClose={handleCloseUploadDocsModal}
-        setGoogleDocsUrl={setGoogleDocsUrl}
-        setGoogleDocsContent={setGoogleDocsContent}
+        googleDocs={googleDocs}
+        setGoogleDocs={setGoogleDocs}
         edittingLesson={edittingLesson}
       />
       <ConfirmDeleteModal
@@ -219,7 +220,10 @@ export default function CourseContent() {
         onApply={handleConfirmDeleteChapter}
         onClose={handleCloseConfirmDeleteChapterModal}
       >
-        <Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
+        <Typography
+          variant="body2"
+          sx={{ color: theme.palette.grey[500], textAlign: "center" }}
+        >
           Bạn có chắc chắn muốn xóa chương này không? Hành động này sẽ xóa vĩnh
           viễn tất cả các bài học bên trong chương. Bạn sẽ không thể khôi phục
           lại chúng sau khi xóa. Hãy cân nhắc kỹ trước khi thực hiện.

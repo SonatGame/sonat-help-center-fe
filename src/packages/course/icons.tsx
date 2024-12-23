@@ -125,7 +125,7 @@ export const BookSettingIcon = (props: SvgIconProps) => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g clip-path="url(#clip0_1892_32392)">
+        <g clipPath="url(#clip0_1892_32392)">
           <path
             d="M253.054 88.2591C212.494 69.3268 167.924 69.6371 127.5 89.1835C87.076 69.6371 42.5058 69.3268 1.94587 88.2591C0.754043 88.8154 0 90.0222 0 91.3375V239.405C0 241.862 2.5256 243.521 4.77228 242.527C42.1348 225.982 82.7096 225.621 120.209 241.437C122.517 242.41 124.996 242.911 127.5 242.911C130.005 242.911 132.484 242.41 134.792 241.437C172.291 225.621 212.866 225.982 250.229 242.527C252.475 243.521 255 241.862 255 239.405V91.3375C255 90.0222 254.246 88.8154 253.054 88.2591Z"
             fill="url(#paint0_linear_1892_32392)"
@@ -292,11 +292,11 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="270.168"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#BBEC6C" />
-            <stop offset="0.197" stop-color="#B5E665" />
-            <stop offset="0.48" stop-color="#A5D552" />
-            <stop offset="0.812" stop-color="#8ABB33" />
-            <stop offset="1" stop-color="#78A91F" />
+            <stop stopColor="#BBEC6C" />
+            <stop offset="0.197" stopColor="#B5E665" />
+            <stop offset="0.48" stopColor="#A5D552" />
+            <stop offset="0.812" stopColor="#8ABB33" />
+            <stop offset="1" stopColor="#78A91F" />
           </linearGradient>
           <linearGradient
             id="paint1_linear_1892_32392"
@@ -306,12 +306,12 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="242.143"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#334C0F" stop-opacity="0" />
-            <stop offset="0.32" stop-color="#344C12" stop-opacity="0.32" />
-            <stop offset="0.565" stop-color="#374A1C" stop-opacity="0.565" />
-            <stop offset="0.786" stop-color="#3C482C" stop-opacity="0.786" />
-            <stop offset="0.991" stop-color="#444443" stop-opacity="0.991" />
-            <stop offset="1" stop-color="#444444" />
+            <stop stopColor="#334C0F" stopOpacity="0" />
+            <stop offset="0.32" stopColor="#344C12" stopOpacity="0.32" />
+            <stop offset="0.565" stopColor="#374A1C" stopOpacity="0.565" />
+            <stop offset="0.786" stopColor="#3C482C" stopOpacity="0.786" />
+            <stop offset="0.991" stopColor="#444443" stopOpacity="0.991" />
+            <stop offset="1" stopColor="#444444" />
           </linearGradient>
           <linearGradient
             id="paint2_linear_1892_32392"
@@ -321,12 +321,12 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="158.965"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#334C0F" stop-opacity="0" />
-            <stop offset="0.32" stop-color="#344C12" stop-opacity="0.32" />
-            <stop offset="0.565" stop-color="#374A1C" stop-opacity="0.565" />
-            <stop offset="0.786" stop-color="#3C482C" stop-opacity="0.786" />
-            <stop offset="0.991" stop-color="#444443" stop-opacity="0.991" />
-            <stop offset="1" stop-color="#444444" />
+            <stop stopColor="#334C0F" stopOpacity="0" />
+            <stop offset="0.32" stopColor="#344C12" stopOpacity="0.32" />
+            <stop offset="0.565" stopColor="#374A1C" stopOpacity="0.565" />
+            <stop offset="0.786" stopColor="#3C482C" stopOpacity="0.786" />
+            <stop offset="0.991" stopColor="#444443" stopOpacity="0.991" />
+            <stop offset="1" stopColor="#444444" />
           </linearGradient>
           <linearGradient
             id="paint3_linear_1892_32392"
@@ -336,11 +336,11 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="158.6"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#BBEC6C" />
-            <stop offset="0.197" stop-color="#B5E665" />
-            <stop offset="0.48" stop-color="#A5D552" />
-            <stop offset="0.812" stop-color="#8ABB33" />
-            <stop offset="1" stop-color="#78A91F" />
+            <stop stopColor="#BBEC6C" />
+            <stop offset="0.197" stopColor="#B5E665" />
+            <stop offset="0.48" stopColor="#A5D552" />
+            <stop offset="0.812" stopColor="#8ABB33" />
+            <stop offset="1" stopColor="#78A91F" />
           </linearGradient>
           <linearGradient
             id="paint4_linear_1892_32392"
@@ -350,12 +350,12 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="158.6"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#334C0F" stop-opacity="0" />
-            <stop offset="0.32" stop-color="#344C12" stop-opacity="0.32" />
-            <stop offset="0.565" stop-color="#374A1C" stop-opacity="0.565" />
-            <stop offset="0.786" stop-color="#3C482C" stop-opacity="0.786" />
-            <stop offset="0.991" stop-color="#444443" stop-opacity="0.991" />
-            <stop offset="1" stop-color="#444444" />
+            <stop stopColor="#334C0F" stopOpacity="0" />
+            <stop offset="0.32" stopColor="#344C12" stopOpacity="0.32" />
+            <stop offset="0.565" stopColor="#374A1C" stopOpacity="0.565" />
+            <stop offset="0.786" stopColor="#3C482C" stopOpacity="0.786" />
+            <stop offset="0.991" stopColor="#444443" stopOpacity="0.991" />
+            <stop offset="1" stopColor="#444444" />
           </linearGradient>
           <linearGradient
             id="paint5_linear_1892_32392"
@@ -365,12 +365,12 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="244.477"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#334C0F" stop-opacity="0" />
-            <stop offset="0.32" stop-color="#344C12" stop-opacity="0.32" />
-            <stop offset="0.565" stop-color="#374A1C" stop-opacity="0.565" />
-            <stop offset="0.786" stop-color="#3C482C" stop-opacity="0.786" />
-            <stop offset="0.991" stop-color="#444443" stop-opacity="0.991" />
-            <stop offset="1" stop-color="#444444" />
+            <stop stopColor="#334C0F" stopOpacity="0" />
+            <stop offset="0.32" stopColor="#344C12" stopOpacity="0.32" />
+            <stop offset="0.565" stopColor="#374A1C" stopOpacity="0.565" />
+            <stop offset="0.786" stopColor="#3C482C" stopOpacity="0.786" />
+            <stop offset="0.991" stopColor="#444443" stopOpacity="0.991" />
+            <stop offset="1" stopColor="#444444" />
           </linearGradient>
           <linearGradient
             id="paint6_linear_1892_32392"
@@ -380,12 +380,12 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="278.479"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#334C0F" stop-opacity="0" />
-            <stop offset="0.32" stop-color="#344C12" stop-opacity="0.32" />
-            <stop offset="0.565" stop-color="#374A1C" stop-opacity="0.565" />
-            <stop offset="0.786" stop-color="#3C482C" stop-opacity="0.786" />
-            <stop offset="0.991" stop-color="#444443" stop-opacity="0.991" />
-            <stop offset="1" stop-color="#444444" />
+            <stop stopColor="#334C0F" stopOpacity="0" />
+            <stop offset="0.32" stopColor="#344C12" stopOpacity="0.32" />
+            <stop offset="0.565" stopColor="#374A1C" stopOpacity="0.565" />
+            <stop offset="0.786" stopColor="#3C482C" stopOpacity="0.786" />
+            <stop offset="0.991" stopColor="#444443" stopOpacity="0.991" />
+            <stop offset="1" stopColor="#444444" />
           </linearGradient>
           <linearGradient
             id="paint7_linear_1892_32392"
@@ -395,8 +395,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="243.48"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#F5FBFF" />
-            <stop offset="1" stop-color="#91DCFA" />
+            <stop stopColor="#F5FBFF" />
+            <stop offset="1" stopColor="#91DCFA" />
           </linearGradient>
           <linearGradient
             id="paint8_linear_1892_32392"
@@ -406,8 +406,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="216.351"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint9_linear_1892_32392"
@@ -417,8 +417,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="196.114"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint10_linear_1892_32392"
@@ -428,8 +428,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="175.876"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint11_linear_1892_32392"
@@ -439,8 +439,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="155.638"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint12_linear_1892_32392"
@@ -450,8 +450,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="135.401"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint13_linear_1892_32392"
@@ -461,8 +461,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="113.042"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint14_linear_1892_32392"
@@ -472,8 +472,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="216.351"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint15_linear_1892_32392"
@@ -483,8 +483,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="196.114"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint16_linear_1892_32392"
@@ -494,8 +494,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="175.876"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint17_linear_1892_32392"
@@ -505,8 +505,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="155.638"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint18_linear_1892_32392"
@@ -516,8 +516,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="135.401"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint19_linear_1892_32392"
@@ -527,8 +527,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="113.945"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint20_linear_1892_32392"
@@ -538,8 +538,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="150.639"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint21_linear_1892_32392"
@@ -549,8 +549,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="150.365"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint22_linear_1892_32392"
@@ -560,8 +560,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="192.51"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint23_linear_1892_32392"
@@ -571,8 +571,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="189.22"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint24_linear_1892_32392"
@@ -582,8 +582,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="185.93"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint25_linear_1892_32392"
@@ -593,8 +593,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="182.641"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint26_linear_1892_32392"
@@ -604,8 +604,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="96.5585"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint27_linear_1892_32392"
@@ -615,8 +615,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="80.9679"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#60B7FF" stop-opacity="0" />
-            <stop offset="1" stop-color="#60B7FF" />
+            <stop stopColor="#60B7FF" stopOpacity="0" />
+            <stop offset="1" stopColor="#60B7FF" />
           </linearGradient>
           <linearGradient
             id="paint28_linear_1892_32392"
@@ -626,8 +626,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="105.839"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#8AC9FE" />
-            <stop offset="1" stop-color="#0172FB" />
+            <stop stopColor="#8AC9FE" />
+            <stop offset="1" stopColor="#0172FB" />
           </linearGradient>
           <linearGradient
             id="paint29_linear_1892_32392"
@@ -637,8 +637,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="52.9727"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#8AC9FE" />
-            <stop offset="1" stop-color="#0172FB" />
+            <stop stopColor="#8AC9FE" />
+            <stop offset="1" stopColor="#0172FB" />
           </linearGradient>
           <linearGradient
             id="paint30_linear_1892_32392"
@@ -648,8 +648,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="129.277"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2740B0" stop-opacity="0" />
-            <stop offset="1" stop-color="#2740B0" />
+            <stop stopColor="#2740B0" stopOpacity="0" />
+            <stop offset="1" stopColor="#2740B0" />
           </linearGradient>
           <linearGradient
             id="paint31_linear_1892_32392"
@@ -659,8 +659,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="120.658"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2740B0" stop-opacity="0" />
-            <stop offset="1" stop-color="#2740B0" />
+            <stop stopColor="#2740B0" stopOpacity="0" />
+            <stop offset="1" stopColor="#2740B0" />
           </linearGradient>
           <linearGradient
             id="paint32_linear_1892_32392"
@@ -670,8 +670,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="70.2322"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2740B0" stop-opacity="0" />
-            <stop offset="1" stop-color="#2740B0" />
+            <stop stopColor="#2740B0" stopOpacity="0" />
+            <stop offset="1" stopColor="#2740B0" />
           </linearGradient>
           <linearGradient
             id="paint33_linear_1892_32392"
@@ -681,8 +681,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="23.2724"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2740B0" stop-opacity="0" />
-            <stop offset="1" stop-color="#2740B0" />
+            <stop stopColor="#2740B0" stopOpacity="0" />
+            <stop offset="1" stopColor="#2740B0" />
           </linearGradient>
           <linearGradient
             id="paint34_linear_1892_32392"
@@ -692,8 +692,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="140.246"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2740B0" stop-opacity="0" />
-            <stop offset="1" stop-color="#2740B0" />
+            <stop stopColor="#2740B0" stopOpacity="0" />
+            <stop offset="1" stopColor="#2740B0" />
           </linearGradient>
           <linearGradient
             id="paint35_linear_1892_32392"
@@ -703,8 +703,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="150.585"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2740B0" stop-opacity="0" />
-            <stop offset="1" stop-color="#2740B0" />
+            <stop stopColor="#2740B0" stopOpacity="0" />
+            <stop offset="1" stopColor="#2740B0" />
           </linearGradient>
           <linearGradient
             id="paint36_linear_1892_32392"
@@ -714,8 +714,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="70.7245"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2740B0" stop-opacity="0" />
-            <stop offset="1" stop-color="#2740B0" />
+            <stop stopColor="#2740B0" stopOpacity="0" />
+            <stop offset="1" stopColor="#2740B0" />
           </linearGradient>
           <linearGradient
             id="paint37_linear_1892_32392"
@@ -725,8 +725,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="117.595"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2740B0" stop-opacity="0" />
-            <stop offset="1" stop-color="#2740B0" />
+            <stop stopColor="#2740B0" stopOpacity="0" />
+            <stop offset="1" stopColor="#2740B0" />
           </linearGradient>
           <linearGradient
             id="paint38_linear_1892_32392"
@@ -736,8 +736,8 @@ export const BookSettingIcon = (props: SvgIconProps) => {
             y2="127.481"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2740B0" stop-opacity="0" />
-            <stop offset="1" stop-color="#2740B0" />
+            <stop stopColor="#2740B0" stopOpacity="0" />
+            <stop offset="1" stopColor="#2740B0" />
           </linearGradient>
           <clipPath id="clip0_1892_32392">
             <rect

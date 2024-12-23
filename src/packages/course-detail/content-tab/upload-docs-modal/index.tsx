@@ -10,8 +10,18 @@ import { getGoogleDocId } from "../../helper";
 export interface ICreateCourseModalProps {
   isModalOpen: boolean;
   handleClose: () => any;
-  setGoogleDocsUrl: Dispatch<SetStateAction<string>>;
-  setGoogleDocsContent: Dispatch<SetStateAction<string>>;
+  googleDocs: {
+    title: string;
+    url: string;
+    htmlContent: string;
+  };
+  setGoogleDocs: Dispatch<
+    SetStateAction<{
+      title: string;
+      url: string;
+      htmlContent: string;
+    }>
+  >;
   edittingLesson?: Lesson;
 }
 
@@ -23,8 +33,8 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
   const {
     isModalOpen,
     handleClose,
-    setGoogleDocsUrl,
-    setGoogleDocsContent,
+    googleDocs,
+    setGoogleDocs,
     edittingLesson,
   } = props;
   const { control, handleSubmit, reset } = useForm<IForm>({
@@ -35,11 +45,11 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
 
   async function onSubmit(data: IForm) {
     const { googleDocUrl } = data;
-    setGoogleDocsUrl(googleDocUrl);
+    setGoogleDocs({ ...googleDocs, url: googleDocUrl });
     const googleDocsId = getGoogleDocId(googleDocUrl);
     if (!googleDocsId) return;
     const res = await CourseApi.getHTMLContent(googleDocsId);
-    setGoogleDocsContent(res);
+    setGoogleDocs({ ...googleDocs, ...res });
     handleClose();
     reset();
   }

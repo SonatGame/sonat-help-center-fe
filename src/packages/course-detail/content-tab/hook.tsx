@@ -15,8 +15,11 @@ export default function useContentTab() {
   const [showModalUpload, setShowModalUpload] = useState<boolean>(false);
   const [showConfirmDeleteChapterModal, setShowConfirmDeleteChapterModal] =
     useState<boolean>(false);
-  const [googleDocsUrl, setGoogleDocsUrl] = useState<string>("");
-  const [googleDocsContent, setGoogleDocsContent] = useState<string>("");
+  const [googleDocs, setGoogleDocs] = useState({
+    title: "",
+    url: "",
+    htmlContent: "",
+  });
 
   function handleAddChapter() {
     if (!courseData) return;
@@ -76,9 +79,7 @@ export default function useContentTab() {
     handleOpenConfirmDeleteChapterModal,
     handleCloseConfirmDeleteChapterModal,
     handleConfirmDeleteChapter,
-    googleDocsUrl,
-    setGoogleDocsUrl,
-    googleDocsContent,
-    setGoogleDocsContent,
+    googleDocs,
+    setGoogleDocs,
   };
 }

@@ -25,6 +25,10 @@ export default function ConfirmDeleteModal(props: IProps) {
         color: "error",
       }}
       disableCloseOnApply
+      dialogProps={{
+        maxWidth: "sm",
+        fullWidth: true,
+      }}
     >
       {children}
     </ModalWrapper>

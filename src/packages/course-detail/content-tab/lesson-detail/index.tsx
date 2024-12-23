@@ -11,7 +11,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useMemo } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
 import useSWR from "swr";
 import { useCourseDetailContext } from "../../context";
 import { getGoogleDocId } from "../../helper";
@@ -22,8 +22,18 @@ interface IProps {
   edittingLesson?: Lesson;
   handleGoBack: () => void;
   handleOpenUploadDocsModal: () => void;
-  googleDocsUrl: string;
-  googleDocsContent: string;
+  googleDocs: {
+    title: string;
+    url: string;
+    htmlContent: string;
+  };
+  setGoogleDocs: Dispatch<
+    SetStateAction<{
+      title: string;
+      url: string;
+      htmlContent: string;
+    }>
+  >;
 }
 
 export default function LessonDetail(props: IProps) {
@@ -32,8 +42,8 @@ export default function LessonDetail(props: IProps) {
     edittingLesson,
     handleGoBack,
     handleOpenUploadDocsModal,
-    googleDocsUrl,
-    googleDocsContent,
+    googleDocs,
+    setGoogleDocs,
   } = props;
   const { courseData } = useCourseDetail();
   const { mutate: mutateCourse, setIsAddingLesson } = useCourseDetailContext();
@@ -66,9 +76,12 @@ export default function LessonDetail(props: IProps) {
       refreshInterval: 0,
     }
   );
+
   const htmlContent = useMemo(() => {
-    return googleDocsContent ?? data;
-  }, [googleDocsContent, data]);
+    return googleDocs.htmlContent.length > 0
+      ? googleDocs.htmlContent
+      : data?.htmlContent ?? "";
+  }, [googleDocs, data]);
 
   async function handleCreateLesson() {
     if (!edittingChapter && !edittingLesson) {
@@ -78,20 +91,20 @@ export default function LessonDetail(props: IProps) {
         lessons: [
           {
             title: "Bài viết không có tiêu đề",
-            googleDocUrl: googleDocsUrl,
-            detail: "Test",
+            googleDocUrl: googleDocs.url,
+            detail: "",
           },
         ],
       });
     } else if (edittingChapter) {
       await CourseApi.createLesson(edittingChapter._id, {
-        title: "Bài viết không có tiêu đề",
-        detail: "Test",
-        googleDocUrl: googleDocsUrl,
+        title: googleDocs.title,
+        detail: "",
+        googleDocUrl: googleDocs.url,
       });
     } else if (edittingLesson)
       await CourseApi.updateLesson(edittingLesson._id, {
-        googleDocUrl: googleDocsUrl,
+        googleDocUrl: googleDocs.url,
       });
     await mutateCourse();
     await mutateLesson();
