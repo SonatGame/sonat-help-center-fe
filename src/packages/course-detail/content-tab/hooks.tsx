@@ -141,11 +141,12 @@ export default function useContentTab() {
         handleCancelEditChapter();
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isEditingChapterTitle]);
+  }, [isEditingChapterTitle, chapterTitle, courseData, editingChapter]);
 
   return {
     courseData,
