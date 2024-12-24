@@ -64,6 +64,16 @@ async function updateCourse(
   });
 }
 
+async function deleteCourse(courseId: string) {
+  return fetchOne({
+    functionName: "Delete course",
+    url: HOST + "course/" + courseId,
+    method: METHOD.DELETE,
+    hasErrorMsg: true,
+    hasSuccessfulMsg: true,
+  });
+}
+
 async function createChapter(
   courseId: string,
   data: {
@@ -161,7 +171,7 @@ async function deleteLesson(lessonId: string) {
 }
 
 async function getHTMLContent(googleDocId: string) {
-  return fetchOne<string>({
+  return fetchOne<{ title: string; htmlContent: string }>({
     functionName: "Delete lesson",
     url: HOST + "course/google-doc/" + googleDocId,
     method: METHOD.GET,
@@ -173,6 +183,7 @@ export const CourseApi = {
   getCourse,
   createCourse,
   updateCourse,
+  deleteCourse,
   createChapter,
   updateChapter,
   deleteChapter,

@@ -10,7 +10,7 @@ export const BadIcon = (props: SvgIconProps) => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g clip-path="url(#clip0_1175_33391)">
+        <g clipPath="url(#clip0_1175_33391)">
           <path
             d="M41.807 56H15.193C7.07672 56 0.5 49.4199 0.5 41.307V14.693C0.5 6.57672 7.07672 0 15.193 0H41.807C49.9199 0 56.5 6.57672 56.5 14.693V41.307C56.5 49.4199 49.9199 56 41.807 56Z"
             fill="#FF7A7A"
@@ -61,7 +61,7 @@ export const NotGoodIcon = (props: SvgIconProps) => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g clip-path="url(#clip0_1175_33409)">
+        <g clipPath="url(#clip0_1175_33409)">
           <path
             d="M41.1382 56H14.8618C6.65437 56 0 49.3456 0 41.1382V14.8618C0 6.65437 6.65437 0 14.8618 0H41.1382C49.3456 0 56 6.65437 56 14.8618V41.1382C56 49.3456 49.3456 56 41.1382 56Z"
             fill="#A7A2F6"
@@ -115,7 +115,7 @@ export const FineIcon = (props: SvgIconProps) => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g clip-path="url(#clip0_1175_33430)">
+        <g clipPath="url(#clip0_1175_33430)">
           <path
             d="M41.6382 56H15.3618C7.15437 56 0.5 49.3456 0.5 41.1382V14.8618C0.5 6.65437 7.15437 0 15.3618 0H41.6382C49.8456 0 56.5 6.65437 56.5 14.8618V41.1382C56.5 49.3456 49.8456 56 41.6382 56Z"
             fill="#92CBEF"
@@ -170,7 +170,7 @@ export const GoodIcon = (props: SvgIconProps) => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g clip-path="url(#clip0_1175_33446)">
+        <g clipPath="url(#clip0_1175_33446)">
           <path
             d="M41.807 56H15.193C7.07672 56 0.5 49.4199 0.5 41.307V14.693C0.5 6.57672 7.07672 0 15.193 0H41.807C49.9199 0 56.5 6.57672 56.5 14.693V41.307C56.5 49.4199 49.9199 56 41.807 56Z"
             fill="#C5DD75"
@@ -237,7 +237,7 @@ export const AwesomeIcon = (props: SvgIconProps) => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g clip-path="url(#clip0_1175_33473)">
+        <g clipPath="url(#clip0_1175_33473)">
           <path
             d="M41.807 56H15.193C7.07672 56 0.5 49.4199 0.5 41.307V14.693C0.5 6.57672 7.07672 0 15.193 0H41.807C49.9199 0 56.5 6.57672 56.5 14.693V41.307C56.5 49.4199 49.9199 56 41.807 56Z"
             fill="#FBE541"

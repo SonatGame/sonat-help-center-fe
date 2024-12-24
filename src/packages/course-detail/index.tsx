@@ -1,3 +1,4 @@
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import Tag from "@/components/Tag";
 import { MoreVert } from "@mui/icons-material";
 import {
@@ -32,6 +33,10 @@ export default function CourseDetail() {
     handleClick,
     handleClose,
     mutateCourse,
+    isModalConfirmOpen,
+    handleOpenModalConfirm,
+    handleCloseModalConfirm,
+    handleConfirmDeleteCourse,
   } = useCourseDetail();
 
   const tabList = [
@@ -108,7 +113,7 @@ export default function CourseDetail() {
                           accumulator + (currentValue.lessons?.length ?? 0),
                         0
                       ) ?? 0}
-                      &nbsp; bài học
+                      &nbsp;bài học
                     </Typography>
                   </Tag>
                   <Tag>
@@ -149,7 +154,6 @@ export default function CourseDetail() {
           </Box>
         </>
       )}
-
       {tabList.map((tab, index) => (
         <Box
           key={`tab-panel-${index}`}
@@ -189,11 +193,25 @@ export default function CourseDetail() {
               color: theme.palette.error.main,
             },
           }}
-          // onClick={handleOpenModalConfirm}
+          onClick={handleOpenModalConfirm}
         >
           Xoá khoá học
         </MenuItem>
       </Menu>
+
+      <ConfirmDeleteModal
+        title="Xóa khóa học"
+        isOpen={isModalConfirmOpen}
+        onApply={handleConfirmDeleteCourse}
+        onClose={handleCloseModalConfirm}
+      >
+        <Typography
+          variant="body2"
+          sx={{ color: theme.palette.grey[500], textAlign: "center" }}
+        >
+          Bạn có chắc muốn xóa khóa học này không?
+        </Typography>
+      </ConfirmDeleteModal>
     </Stack>
   );
 }

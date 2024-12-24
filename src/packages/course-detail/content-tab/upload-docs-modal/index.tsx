@@ -10,9 +10,19 @@ import { getGoogleDocId } from "../../helper";
 export interface ICreateCourseModalProps {
   isModalOpen: boolean;
   handleClose: () => any;
-  setGoogleDocsUrl: Dispatch<SetStateAction<string>>;
-  setGoogleDocsContent: Dispatch<SetStateAction<string>>;
-  edittingLesson?: Lesson;
+  googleDocs: {
+    title: string;
+    url: string;
+    htmlContent: string;
+  };
+  setGoogleDocs: Dispatch<
+    SetStateAction<{
+      title: string;
+      url: string;
+      htmlContent: string;
+    }>
+  >;
+  editingLesson?: Lesson;
 }
 
 interface IForm {
@@ -20,13 +30,8 @@ interface IForm {
 }
 
 export default function UploadDocsModal(props: ICreateCourseModalProps) {
-  const {
-    isModalOpen,
-    handleClose,
-    setGoogleDocsUrl,
-    setGoogleDocsContent,
-    edittingLesson,
-  } = props;
+  const { isModalOpen, handleClose, googleDocs, setGoogleDocs, editingLesson } =
+    props;
   const { control, handleSubmit, reset } = useForm<IForm>({
     defaultValues: {
       googleDocUrl: "",
@@ -35,19 +40,18 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
 
   async function onSubmit(data: IForm) {
     const { googleDocUrl } = data;
-    setGoogleDocsUrl(googleDocUrl);
     const googleDocsId = getGoogleDocId(googleDocUrl);
     if (!googleDocsId) return;
     const res = await CourseApi.getHTMLContent(googleDocsId);
-    setGoogleDocsContent(res);
+    setGoogleDocs({ url: googleDocUrl, ...res });
     handleClose();
     reset();
   }
 
   useEffect(() => {
-    if (!edittingLesson) reset();
-    reset({ googleDocUrl: edittingLesson?.googleDocUrl });
-  }, [edittingLesson, reset]);
+    if (!editingLesson) reset();
+    reset({ googleDocUrl: editingLesson?.googleDocUrl });
+  }, [editingLesson, reset]);
 
   return (
     <ModalWrapper

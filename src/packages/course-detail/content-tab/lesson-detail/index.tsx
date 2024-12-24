@@ -18,25 +18,27 @@ import { getGoogleDocId } from "../../helper";
 import useCourseDetail from "../../hook";
 
 interface IProps {
-  edittingChapter?: Chapter;
-  edittingLesson?: Lesson;
+  editingChapter?: Chapter;
+  editingLesson?: Lesson;
   handleGoBack: () => void;
   handleOpenUploadDocsModal: () => void;
-  googleDocsUrl: string;
-  googleDocsContent: string;
+  googleDocs: {
+    title: string;
+    url: string;
+    htmlContent: string;
+  };
 }
 
 export default function LessonDetail(props: IProps) {
   const {
-    edittingChapter,
-    edittingLesson,
+    editingChapter,
+    editingLesson,
     handleGoBack,
     handleOpenUploadDocsModal,
-    googleDocsUrl,
-    googleDocsContent,
+    googleDocs,
   } = props;
   const { courseData } = useCourseDetail();
-  const { mutate: mutateCourse, setIsAddingLesson } = useCourseDetailContext();
+  const { mutate: mutateCourse } = useCourseDetailContext();
   const theme = useTheme();
 
   const {
@@ -44,10 +46,10 @@ export default function LessonDetail(props: IProps) {
     isLoading: isLoadingLesson,
     mutate: mutateLesson,
   } = useSWR(
-    ["get-lesson-detail", edittingLesson],
+    ["get-lesson-detail", editingLesson],
     async () => {
-      if (!edittingLesson) return;
-      return await CourseApi.getLessonById(edittingLesson?._id);
+      if (!editingLesson) return;
+      return await CourseApi.getLessonById(editingLesson?._id);
     },
     {
       refreshInterval: 0,
@@ -66,35 +68,39 @@ export default function LessonDetail(props: IProps) {
       refreshInterval: 0,
     }
   );
+
   const htmlContent = useMemo(() => {
-    return googleDocsContent ?? data;
-  }, [googleDocsContent, data]);
+    return googleDocs.htmlContent.length > 0
+      ? googleDocs.htmlContent
+      : data?.htmlContent ?? "";
+  }, [googleDocs, data]);
 
   async function handleCreateLesson() {
-    if (!edittingChapter && !edittingLesson) {
+    if (!editingChapter && !editingLesson) {
       if (!courseData) return;
       await CourseApi.createChapter(courseData?._id, {
         title: "Chương không có tiêu đề",
         lessons: [
           {
-            title: "Bài viết không có tiêu đề",
-            googleDocUrl: googleDocsUrl,
-            detail: "Test",
+            title: googleDocs.title,
+            googleDocUrl: googleDocs.url,
+            detail: "",
           },
         ],
       });
-    } else if (edittingChapter) {
-      await CourseApi.createLesson(edittingChapter._id, {
-        title: "Bài viết không có tiêu đề",
-        detail: "Test",
-        googleDocUrl: googleDocsUrl,
+    } else if (editingChapter) {
+      await CourseApi.createLesson(editingChapter._id, {
+        title: googleDocs.title,
+        detail: "",
+        googleDocUrl: googleDocs.url,
       });
-    } else if (edittingLesson)
-      await CourseApi.updateLesson(edittingLesson._id, {
-        googleDocUrl: googleDocsUrl,
+    } else if (editingLesson)
+      await CourseApi.updateLesson(editingLesson._id, {
+        googleDocUrl: googleDocs.url,
       });
     await mutateCourse();
     await mutateLesson();
+    handleGoBack();
   }
 
   return (
@@ -111,11 +117,11 @@ export default function LessonDetail(props: IProps) {
             fontWeight="bold"
             sx={{ color: theme.palette.grey[500] }}
           >
-            {edittingChapter?.title ?? "Chương không có tiêu đề"}
+            {editingChapter?.title ?? "Chương không có tiêu đề"}
           </Typography>
           <KeyboardArrowRight sx={{ color: theme.palette.grey[500] }} />
           <Typography variant="body2" color="primary" fontWeight="bold">
-            {edittingLesson?.title ?? "Bài viết không có tiêu đề"}
+            {editingLesson?.title ?? "Bài viết không có tiêu đề"}
           </Typography>
         </Stack>
         <Stack direction="row" gap={1.5}>

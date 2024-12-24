@@ -10,7 +10,7 @@ interface IForm {
   description: string;
   outcomes: string[];
   isModalConfirmDeleteOutcomeOpen: boolean;
-  edittingOutcomeIndex?: number;
+  editingOutcomeIndex?: number;
 }
 
 export default function useOverviewTab() {
@@ -29,7 +29,7 @@ export default function useOverviewTab() {
       isModalConfirmDeleteOutcomeOpen: false,
     },
   });
-  const edittingOutcomeIndex = watch("edittingOutcomeIndex");
+  const editingOutcomeIndex = watch("editingOutcomeIndex");
   const isEdittingDescription = watch("isEdittingDescription");
   const isAddingOutcomes = watch("isAddingOutcomes");
   const isEditingOutcomes = watch("isEditingOutcomes");
@@ -65,7 +65,7 @@ export default function useOverviewTab() {
   function handleAddOutcome() {
     setValue("isAddingOutcomes", true);
     setValue("outcomes", [...(outcomes ?? []), ""]);
-    setValue("edittingOutcomeIndex", undefined);
+    setValue("editingOutcomeIndex", undefined);
     setValue("isEditingOutcomes", false);
   }
 
@@ -74,19 +74,19 @@ export default function useOverviewTab() {
   }
 
   function handleDeleteOutcome(index: number) {
-    setValue("edittingOutcomeIndex", index);
+    setValue("editingOutcomeIndex", index);
     setValue("isModalConfirmDeleteOutcomeOpen", true);
   }
 
   function handleCancelDeleteOutcome() {
-    setValue("edittingOutcomeIndex", undefined);
+    setValue("editingOutcomeIndex", undefined);
     setValue("isModalConfirmDeleteOutcomeOpen", false);
   }
 
   async function handleConfirmDeleteOutcome() {
     if (!courseData) return;
     await CourseApi.updateCourse(courseData._id, {
-      learningOutcomes: outcomes.filter((_, i) => i !== edittingOutcomeIndex),
+      learningOutcomes: outcomes.filter((_, i) => i !== editingOutcomeIndex),
     });
     await mutate();
     handleCancelDeleteOutcome();
@@ -96,12 +96,12 @@ export default function useOverviewTab() {
     setValue("isEditingOutcomes", true);
     setValue("outcomes", courseData?.learningOutcomes ?? []);
     setValue("isAddingOutcomes", false);
-    setValue("edittingOutcomeIndex", index);
+    setValue("editingOutcomeIndex", index);
   }
 
   function handleCancelEditOutcome() {
     setValue("outcomes", courseData?.learningOutcomes ?? []);
-    setValue("edittingOutcomeIndex", undefined);
+    setValue("editingOutcomeIndex", undefined);
     setValue("isEditingOutcomes", false);
   }
 
@@ -124,7 +124,7 @@ export default function useOverviewTab() {
 
   return {
     isEdittingDescription,
-    edittingOutcomeIndex,
+    editingOutcomeIndex,
     isAddingOutcomes,
     handleEnableEditDescription,
     handleCancelEditDescription,

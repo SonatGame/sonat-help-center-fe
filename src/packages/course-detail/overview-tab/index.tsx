@@ -11,7 +11,7 @@ export default function CourseOverview() {
   const theme = useTheme();
   const {
     isEdittingDescription,
-    edittingOutcomeIndex,
+    editingOutcomeIndex,
     isAddingOutcomes,
     handleEnableEditDescription,
     handleCancelEditDescription,
@@ -42,7 +42,9 @@ export default function CourseOverview() {
             alignItems="center"
             gap={2}
           >
-            <Typography variant="h4">Mô tả khóa học</Typography>
+            <Typography sx={{ fontSize: 30, fontWeight: 600 }}>
+              Mô tả khóa học
+            </Typography>
             {(() => {
               if (isEdittingDescription)
                 return (
@@ -111,9 +113,11 @@ export default function CourseOverview() {
           })()}
         </Stack>
         <Stack gap={3}>
-          <Typography variant="h4">Mục tiêu khóa học</Typography>
+          <Typography sx={{ fontSize: 30, fontWeight: 600 }}>
+            Mục tiêu khóa học
+          </Typography>
           <Stack gap={1.5}>
-            {!courseData?.learningOutcomes && !isAddingOutcomes && (
+            {courseData?.learningOutcomes.length === 0 && !isAddingOutcomes && (
               <Typography
                 variant="caption"
                 sx={{ color: theme.palette.grey[500] }}
@@ -124,7 +128,7 @@ export default function CourseOverview() {
             {courseData?.learningOutcomes?.map((outcome, i) => (
               <Stack key={i} direction="row" alignItems="center" gap={1}>
                 <Verified color="primary" fontSize="small" />
-                {edittingOutcomeIndex === i && isEditingOutcomes ? (
+                {editingOutcomeIndex === i && isEditingOutcomes ? (
                   <>
                     <RHFTextField
                       name={`outcomes.${outcomes.length - 1}`}
@@ -203,7 +207,17 @@ export default function CourseOverview() {
 
         <Stack gap={3}>
           <Stack gap={1.5}>
-            <Typography variant="h4">Nội dung khóa học</Typography>
+            <Typography sx={{ fontSize: 30, fontWeight: 600 }}>
+              Nội dung khóa học
+            </Typography>
+            {courseData?.modules.length === 0 && (
+              <Typography
+                variant="caption"
+                sx={{ color: theme.palette.grey[500] }}
+              >
+                (Lưu ý: Phần này chỉ hiển thị khi có thông tin)
+              </Typography>
+            )}
             <Typography
               variant="body2"
               fontWeight="medium"
@@ -296,13 +310,16 @@ export default function CourseOverview() {
         </Stack>
       </Stack>
       <ConfirmDeleteModal
-        title="Xóa kết quả"
+        title="Xóa mục tiêu"
         isOpen={isModalConfirmDeleteOutcomeOpen}
         onApply={handleConfirmDeleteOutcome}
         onClose={handleCancelDeleteOutcome}
       >
-        <Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
-          Bạn có chắc chắc muốn xóa kết quả học này không?
+        <Typography
+          variant="body2"
+          sx={{ color: theme.palette.grey[500], textAlign: "center" }}
+        >
+          Bạn có chắc chắc muốn xóa mục tiêu học này không?
         </Typography>
       </ConfirmDeleteModal>
     </Container>

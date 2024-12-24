@@ -222,7 +222,7 @@ async function fetchFormData<T>(config: ApiRequest): Promise<T> {
           });
         }
       } else if (value !== undefined && value !== null) {
-        formData.append(key, value.toString());
+        formData.append(key, value);
       }
     });
   };
