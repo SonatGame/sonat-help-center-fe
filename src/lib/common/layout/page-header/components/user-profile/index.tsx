@@ -10,12 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 
 import { menuItemStyles } from "@/components/dropdown/new/constants";
 // import usePermission from "@/lib/hooks/usePermission";
 import { LocalStorageUtils } from "@/lib/utils/localStorageUtils";
+import { toast } from "react-toastify";
 
 function getItem(
   label: string,
@@ -50,7 +50,7 @@ export const UserProfileButton = () => {
 
   const handleSignOut = async () => {
     if (logout) await logout();
-    enqueueSnackbar("Sign out successfully", { variant: "success" });
+    toast.success("Sign out successfully");
   };
 
   // const handleManageUser = () => {

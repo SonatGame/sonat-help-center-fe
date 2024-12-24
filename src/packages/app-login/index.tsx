@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 
 import { useAuthentication } from "@/contexts/authenticationContext";
 import Head from "@/lib/common/layout/Head";
-import { enqueueSnackbar } from "notistack";
+import { toast } from "react-toastify";
 
 export default function LoginSection() {
   const { login } = useAuthentication();
@@ -15,7 +15,7 @@ export default function LoginSection() {
     try {
       if (login !== undefined) await login();
     } catch (error) {
-      enqueueSnackbar("Sign in failed", { variant: "error" });
+      toast.error("Sign in failed");
     }
   };
 

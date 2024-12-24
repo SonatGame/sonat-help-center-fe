@@ -10,7 +10,7 @@ async function getCourseList(params?: {
   title?: string;
 }) {
   return await fetchOne<CourseRes>({
-    functionName: "Get courses",
+    functionName: "Lấy danh sách khóa học",
     url: HOST + "course",
     method: METHOD.GET,
     params,
@@ -19,7 +19,7 @@ async function getCourseList(params?: {
 
 async function getCourse(courseId: string) {
   return await fetchOne<Course>({
-    functionName: "Get course detail",
+    functionName: "Lấy chi tiết khóa học",
     url: HOST + "course/" + courseId,
     method: METHOD.GET,
   });
@@ -33,7 +33,7 @@ async function createCourse(data: {
   coverImage: File;
 }) {
   return fetchOneFormData({
-    functionName: "Create course",
+    functionName: "Tạo khóa học",
     url: HOST + "course",
     method: METHOD.POST,
     hasErrorMsg: true,
@@ -55,7 +55,7 @@ async function updateCourse(
   }
 ) {
   return fetchOneFormData<Course>({
-    functionName: "Update course",
+    functionName: "Cập nhật khóa học",
     url: HOST + "course/" + courseId,
     method: METHOD.PATCH,
     hasErrorMsg: true,
@@ -66,7 +66,7 @@ async function updateCourse(
 
 async function deleteCourse(courseId: string) {
   return fetchOne({
-    functionName: "Delete course",
+    functionName: "Xóa khóa học",
     url: HOST + "course/" + courseId,
     method: METHOD.DELETE,
     hasErrorMsg: true,
@@ -82,7 +82,7 @@ async function createChapter(
   }
 ) {
   return fetchOne({
-    functionName: "Create chapter",
+    functionName: "Tạo chương",
     url: HOST + "course/" + courseId + "/module",
     method: METHOD.POST,
     hasErrorMsg: true,
@@ -98,7 +98,7 @@ async function updateChapter(
   }
 ) {
   return fetchOne<Chapter>({
-    functionName: "Update chapter",
+    functionName: "Cập nhật chương",
     url: HOST + "course/module/" + chapterId,
     method: METHOD.PATCH,
     hasErrorMsg: true,
@@ -109,7 +109,7 @@ async function updateChapter(
 
 async function deleteChapter(chapterId: string) {
   return fetchOne({
-    functionName: "Delete chapter",
+    functionName: "Xóa chương",
     url: HOST + "course/module/" + chapterId,
     method: METHOD.DELETE,
     hasErrorMsg: true,
@@ -119,7 +119,7 @@ async function deleteChapter(chapterId: string) {
 
 async function getLessonById(lessonId: string) {
   return fetchOne<Lesson>({
-    functionName: "Delete lesson",
+    functionName: "Lấy chi tiết bài học",
     url: HOST + "course/lesson/" + lessonId,
     method: METHOD.GET,
   });
@@ -133,7 +133,7 @@ async function createLesson(
   }
 ) {
   return fetchOne({
-    functionName: "Create lesson",
+    functionName: "Tạo bài học",
     url: HOST + "course/module/" + chapterId + "/lesson",
     method: METHOD.POST,
     hasErrorMsg: true,
@@ -150,7 +150,7 @@ async function updateLesson(
   }
 ) {
   return fetchOne({
-    functionName: "Update lesson",
+    functionName: "Cập nhật bài học",
     url: HOST + "course/lesson/" + lessonId,
     method: METHOD.PATCH,
     hasErrorMsg: true,
@@ -161,7 +161,7 @@ async function updateLesson(
 
 async function deleteLesson(lessonId: string) {
   return fetchOne({
-    functionName: "Delete lesson",
+    functionName: "Xóa bài học",
     url: HOST + "course/lesson/" + lessonId,
     method: METHOD.DELETE,
     hasErrorMsg: true,
@@ -171,7 +171,7 @@ async function deleteLesson(lessonId: string) {
 
 async function getHTMLContent(googleDocId: string) {
   return fetchOne<{ title: string; htmlContent: string }>({
-    functionName: "Delete lesson",
+    functionName: "Lấy nội dung HTML",
     url: HOST + "course/google-doc/" + googleDocId,
     method: METHOD.GET,
   });

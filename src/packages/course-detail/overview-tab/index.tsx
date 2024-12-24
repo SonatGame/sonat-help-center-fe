@@ -138,7 +138,7 @@ export default function CourseOverview() {
                 {editingOutcomeIndex === i && isEditingOutcomes ? (
                   <>
                     <RHFTextField
-                      name={`outcomes.${outcomes.length - 1}`}
+                      name={`outcomes.${i}`}
                       control={control}
                       sx={{ flexGrow: 1 }}
                       TextFieldProps={{
