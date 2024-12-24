@@ -1,8 +1,8 @@
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import StyledAccordion from "@/components/accordion";
-import { EditIcon, TrashIcon } from "@/packages/course/icons";
+import { EditIcon, TrashIcon } from "@/lib/constants/icons";
 import { ArrowBack } from "@mui/icons-material";
-import { Grid2, Stack, Typography, useTheme } from "@mui/material";
+import { Grid2, Stack, TextField, Typography, useTheme } from "@mui/material";
 import LessonCard from "./LessonCard";
 import useContentTab from "./hook";
 import LessonDetail from "./lesson-detail";
@@ -152,8 +152,26 @@ export default function CourseContent() {
               >
                 <Stack direction="row" alignItems="center" gap={1.5}>
                   {/* <DragIndicator fontSize="small" /> */}
-                  <Typography variant="h5">{chapter.title}</Typography>
-                  <EditIcon fontSize="small" sx={{ cursor: "pointer" }} />
+                  {editingChapter?._id === chapter._id ? (
+                    <TextField
+                      variant="standard"
+                      placeholder={chapter.title}
+                      slotProps={{
+                        input: {
+                          disableUnderline: true,
+                        },
+                      }}
+                    />
+                  ) : (
+                    <Typography variant="h5">{chapter.title}</Typography>
+                  )}
+                  <EditIcon
+                    fontSize="small"
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => {
+                      handleEditChapter(chapter);
+                    }}
+                  />
                 </Stack>
                 <Stack direction="row" alignItems="center" gap={1.5}>
                   <Typography
@@ -182,6 +200,7 @@ export default function CourseContent() {
                 {chapter.lessons?.map((lesson) => (
                   <Grid2 key={lesson._id} size={{ md: 6, lg: 4, xl: 3 }}>
                     <LessonCard
+                      isAdmin
                       lessonData={lesson}
                       onClick={() => handleAddLesson(chapter, lesson)}
                     />
@@ -191,7 +210,17 @@ export default function CourseContent() {
             </Stack>
           ))}
           <Stack gap={2}>
-            <Typography variant="h5">Chương không có tiêu đề</Typography>
+            <TextField
+              variant="standard"
+              placeholder="Chương không có tiêu đề"
+              autoComplete="off"
+              sx={{ width: "fit-content" }}
+              slotProps={{
+                input: {
+                  disableUnderline: true,
+                },
+              }}
+            />
             <Grid2 container spacing={3}>
               <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
                 <LessonCard isEmpty onClick={() => handleAddLesson()} />

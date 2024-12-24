@@ -1,17 +1,19 @@
 import { CourseApi } from "@/api/CourseApi";
+import { ClipboardPlusIcon, UploadCloudIcon } from "@/lib/constants/icons";
 import { Chapter, Lesson } from "@/lib/types/course";
-import { ClipboardPlusIcon, UploadCloudIcon } from "@/packages/course/icons";
 import { KeyboardArrowRight } from "@mui/icons-material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   Divider,
   Stack,
   Typography,
   useTheme,
 } from "@mui/material";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import useSWR from "swr";
 import { useCourseDetailContext } from "../../context";
 import { getGoogleDocId } from "../../helper";
@@ -40,6 +42,7 @@ export default function LessonDetail(props: IProps) {
   const { courseData } = useCourseDetail();
   const { mutate: mutateCourse } = useCourseDetailContext();
   const theme = useTheme();
+  const [isSaving, setIsSaving] = useState(false);
 
   const {
     data: lessonData,
@@ -76,6 +79,7 @@ export default function LessonDetail(props: IProps) {
   }, [googleDocs, data]);
 
   async function handleCreateLesson() {
+    setIsSaving(true);
     if (!editingChapter && !editingLesson) {
       if (!courseData) return;
       await CourseApi.createChapter(courseData?._id, {
@@ -84,23 +88,24 @@ export default function LessonDetail(props: IProps) {
           {
             title: googleDocs.title,
             googleDocUrl: googleDocs.url,
-            detail: "",
           },
         ],
       });
-    } else if (editingChapter) {
-      await CourseApi.createLesson(editingChapter._id, {
-        title: googleDocs.title,
-        detail: "",
-        googleDocUrl: googleDocs.url,
-      });
     } else if (editingLesson)
       await CourseApi.updateLesson(editingLesson._id, {
+        title: googleDocs.title,
         googleDocUrl: googleDocs.url,
       });
+    else if (editingChapter) {
+      await CourseApi.createLesson(editingChapter._id, {
+        title: googleDocs.title,
+        googleDocUrl: googleDocs.url,
+      });
+    }
     await mutateCourse();
     await mutateLesson();
     handleGoBack();
+    setIsSaving(false);
   }
 
   return (
@@ -128,13 +133,14 @@ export default function LessonDetail(props: IProps) {
           <Button variant="outlined" onClick={handleGoBack} sx={{ width: 96 }}>
             Hủy
           </Button>
-          <Button
+          <LoadingButton
             variant="contained"
             sx={{ width: 96 }}
             onClick={handleCreateLesson}
+            loading={isSaving}
           >
             Lưu
-          </Button>
+          </LoadingButton>
         </Stack>
       </Stack>
       <Stack alignItems="center">
@@ -175,8 +181,18 @@ export default function LessonDetail(props: IProps) {
           </Stack>
         </Stack>
       </Stack>
-      <Container>
-        <Box dangerouslySetInnerHTML={{ __html: htmlContent }} />
+      <Container sx={{ flexGrow: 1 }}>
+        {isLoadingLesson || isLoading ? (
+          <Stack
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: "100%" }}
+          >
+            <CircularProgress />
+          </Stack>
+        ) : (
+          <Box dangerouslySetInnerHTML={{ __html: htmlContent }} />
+        )}
       </Container>
     </Stack>
   );

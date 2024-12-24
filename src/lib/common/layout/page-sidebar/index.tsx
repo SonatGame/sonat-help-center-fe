@@ -2,7 +2,11 @@ import { PermissionProps } from "@/contexts/authorizationContext";
 import { Assets } from "@/lib/constants/assets";
 import { AppRoutes } from "@/lib/constants/routesAndPermissions";
 import { canView, isAuth } from "@/lib/utils/auth.helper";
-import { FolderOutlined, HomeOutlined } from "@mui/icons-material";
+import {
+  FileCopyOutlined,
+  FolderOutlined,
+  HomeOutlined,
+} from "@mui/icons-material";
 import {
   Box,
   CSSObject,
@@ -128,20 +132,19 @@ export default function PageSidebar(props: PageSidebarProps) {
 
   const items: MenuItem[] = [
     {
-      // requirePermissions: [
-      //   { permission: Permission.SYSTEM_OVERVIEW, checkView: true },
-      // ],
       key: AppRoutes.HOME,
       icon: <HomeOutlined />,
-      title: "Home",
+      title: "Trang Chủ",
     },
     {
-      // requirePermissions: [
-      //   { permission: Permission.SYSTEM_OVERVIEW, checkView: true },
-      // ],
       key: AppRoutes.COURSE,
       icon: <FolderOutlined />,
-      title: "Course",
+      title: "Khóa Học",
+    },
+    {
+      key: AppRoutes.DOCUMENT,
+      icon: <FileCopyOutlined />,
+      title: "Tài liệu",
     },
   ];
   // const menuItems: MenuItem[] = convertItemsWithPermissions(permissions, items);

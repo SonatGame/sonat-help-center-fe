@@ -19,6 +19,9 @@ export default function useOverviewTab() {
     courseData,
     mutate,
     isLoading,
+    setIsAddingLesson,
+    setEdittingChapter,
+    setEdittingLesson,
   } = useCourseDetailContext();
   const { control, setValue, watch, reset } = useForm<IForm>({
     defaultValues: {
@@ -143,5 +146,9 @@ export default function useOverviewTab() {
     handleDeleteOutcome,
     handleCancelDeleteOutcome,
     handleConfirmDeleteOutcome,
+    setIsAddingLesson,
+    setEdittingChapter,
+    setEdittingLesson,
+    setTabValue,
   };
 }

@@ -2,13 +2,15 @@ import StyledAccordion from "@/components/accordion";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import RHFTextField from "@/components/form/RHFTextField";
 import TextMaxLine from "@/components/TextMaxLine";
-import { EditIcon, TrashIcon } from "@/packages/course/icons";
+import { EditIcon, TrashIcon } from "@/lib/constants/icons";
 import { ArrowForward, Verified } from "@mui/icons-material";
 import { Button, Container, Stack, Typography, useTheme } from "@mui/material";
+import { useRouter } from "next/navigation";
 import useOverviewTab from "./hook";
 
 export default function CourseOverview() {
   const theme = useTheme();
+  const router = useRouter();
   const {
     isEdittingDescription,
     editingOutcomeIndex,
@@ -30,6 +32,10 @@ export default function CourseOverview() {
     handleDeleteOutcome,
     handleCancelDeleteOutcome,
     handleConfirmDeleteOutcome,
+    setIsAddingLesson,
+    setEdittingChapter,
+    setEdittingLesson,
+    setTabValue,
   } = useOverviewTab();
 
   return (
@@ -117,14 +123,15 @@ export default function CourseOverview() {
             Mục tiêu khóa học
           </Typography>
           <Stack gap={1.5}>
-            {courseData?.learningOutcomes.length === 0 && !isAddingOutcomes && (
-              <Typography
-                variant="caption"
-                sx={{ color: theme.palette.grey[500] }}
-              >
-                (Lưu ý: Phần này chỉ hiển thị khi có thông tin)
-              </Typography>
-            )}
+            {courseData?.learningOutcomes?.length === 0 &&
+              !isAddingOutcomes && (
+                <Typography
+                  variant="caption"
+                  sx={{ color: theme.palette.grey[500] }}
+                >
+                  (Lưu ý: Phần này chỉ hiển thị khi có thông tin)
+                </Typography>
+              )}
             {courseData?.learningOutcomes?.map((outcome, i) => (
               <Stack key={i} direction="row" alignItems="center" gap={1}>
                 <Verified color="primary" fontSize="small" />
@@ -210,7 +217,7 @@ export default function CourseOverview() {
             <Typography sx={{ fontSize: 30, fontWeight: 600 }}>
               Nội dung khóa học
             </Typography>
-            {courseData?.modules.length === 0 && (
+            {courseData?.modules?.length === 0 && (
               <Typography
                 variant="caption"
                 sx={{ color: theme.palette.grey[500] }}
@@ -289,8 +296,14 @@ export default function CourseOverview() {
                           fontWeight="bold"
                           color="primary"
                           sx={{ cursor: "pointer", userSelect: "none" }}
+                          onClick={() => {
+                            setIsAddingLesson(true);
+                            setEdittingChapter(chapter);
+                            setEdittingLesson(lesson);
+                            setTabValue("content");
+                          }}
                         >
-                          Học ngay
+                          Chỉnh sửa
                         </Typography>
                       </Stack>
                     ))}

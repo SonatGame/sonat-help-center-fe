@@ -1,7 +1,7 @@
 export type Lesson = {
   _id: string;
   title: string;
-  detail: string;
+  detail?: string;
   googleDocUrl: string;
 };
 

@@ -26,14 +26,17 @@ const TextMaxLine = ({
   const [maxLine, setMaxLine] = useState<number | undefined>(line);
 
   return (
-    <Box>
+    <Box
+      sx={{
+        ...sx,
+      }}
+    >
       <Typography
         sx={{
           display: "-webkit-box",
           WebkitBoxOrient: "vertical",
           overflow: "hidden",
           WebkitLineClamp: maxLine,
-          ...sx,
         }}
         {...TypographyProps}
       >
