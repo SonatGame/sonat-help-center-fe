@@ -17,7 +17,7 @@ import { useMemo, useState } from "react";
 import useSWR from "swr";
 import { useCourseDetailContext } from "../../context";
 import { getGoogleDocId } from "../../helper";
-import useCourseDetail from "../../hook";
+import useCourseDetail from "../../hooks";
 
 interface IProps {
   editingChapter?: Chapter;
@@ -164,7 +164,9 @@ export default function LessonDetail(props: IProps) {
           >
             <UploadCloudIcon />
             <Typography variant="body2" fontWeight="bold">
-              Đăng tải tài liệu Doc
+              {!editingLesson
+                ? "Đăng tải tài liệu docs"
+                : "Thay đổi tài liệu docs"}
             </Typography>
           </Stack>
           <Divider orientation="vertical" flexItem />

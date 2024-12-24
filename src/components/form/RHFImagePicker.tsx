@@ -155,6 +155,7 @@ export function RHFImagePicker<T extends FieldValues>({
                   <Stack
                     justifyContent="center"
                     alignItems="center"
+                    gap={1.5}
                     sx={{ py: 2 }}
                   >
                     <CloudIcon sx={{ fontSize: 40 }} />

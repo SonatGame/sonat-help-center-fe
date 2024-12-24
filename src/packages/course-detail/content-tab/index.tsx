@@ -4,7 +4,7 @@ import { EditIcon, TrashIcon } from "@/lib/constants/icons";
 import { ArrowBack } from "@mui/icons-material";
 import { Grid2, Stack, TextField, Typography, useTheme } from "@mui/material";
 import LessonCard from "./LessonCard";
-import useContentTab from "./hook";
+import useContentTab from "./hooks";
 import LessonDetail from "./lesson-detail";
 import UploadDocsModal from "./upload-docs-modal";
 
@@ -31,6 +31,8 @@ export default function CourseContent() {
     handleCancelEditChapter,
     isEditingChapterTitle,
     inputRefs,
+    setChapterTitle,
+    chapterTitle,
   } = useContentTab();
 
   return (
@@ -153,7 +155,6 @@ export default function CourseContent() {
                 alignItems="center"
               >
                 <Stack direction="row" alignItems="center" gap={1.5}>
-                  {/* <DragIndicator fontSize="small" /> */}
                   {editingChapter?._id === chapter._id &&
                   isEditingChapterTitle ? (
                     <TextField
@@ -175,11 +176,13 @@ export default function CourseContent() {
                           },
                         },
                       }}
-                      onBlur={handleCancelEditChapter}
                       ref={(el) => {
                         inputRefs.current[chapter._id] = el;
                       }}
+                      onBlur={handleCancelEditChapter}
                       autoComplete="off"
+                      value={chapterTitle}
+                      onChange={(e) => setChapterTitle(e.target.value)}
                     />
                   ) : (
                     <>
@@ -231,28 +234,54 @@ export default function CourseContent() {
             </Stack>
           ))}
           <Stack gap={2}>
-            <TextField
-              variant="standard"
-              placeholder="Chương không có tiêu đề"
-              autoComplete="off"
-              sx={{
-                width: "fit-content",
-                "& .MuiInput-input": {
-                  py: 0,
-                  fontSize: theme.typography.h5.fontSize,
-                  fontWeight: theme.typography.h5.fontWeight,
-                  "::placeholder": {
-                    fontSize: theme.typography.h5.fontSize,
-                    fontWeight: theme.typography.h5.fontWeight,
-                  },
-                },
-              }}
-              slotProps={{
-                input: {
-                  disableUnderline: true,
-                },
-              }}
-            />
+            <Stack direction="row" alignItems="center" gap={1.5}>
+              {isEditingChapterTitle && !editingChapter ? (
+                <TextField
+                  variant="standard"
+                  placeholder="Chương không có tiêu đề"
+                  autoComplete="off"
+                  sx={{
+                    width: "fit-content",
+                    "& .MuiInput-input": {
+                      py: 0,
+                      fontSize: theme.typography.h5.fontSize,
+                      fontWeight: theme.typography.h5.fontWeight,
+                      "::placeholder": {
+                        fontSize: theme.typography.h5.fontSize,
+                        fontWeight: theme.typography.h5.fontWeight,
+                      },
+                    },
+                  }}
+                  slotProps={{
+                    input: {
+                      disableUnderline: true,
+                    },
+                  }}
+                  onBlur={handleCancelEditChapter}
+                  ref={(el) => {
+                    inputRefs.current.new = el;
+                  }}
+                  onChange={(e) => setChapterTitle(e.target.value)}
+                />
+              ) : (
+                <>
+                  <Typography
+                    variant="h5"
+                    sx={{ color: theme.palette.grey[400] }}
+                  >
+                    Chương không có tiêu đề
+                  </Typography>
+                  <EditIcon
+                    fontSize="small"
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => {
+                      handleEditChapter();
+                    }}
+                  />
+                </>
+              )}
+            </Stack>
+
             <Grid2 container spacing={3}>
               <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
                 <LessonCard isEmpty onClick={() => handleAddLesson()} />

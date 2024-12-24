@@ -9,6 +9,7 @@ export default function Button(theme: any) {
           },
           padding: theme.spacing(0.75, 2),
           borderRadius: theme.shape.borderRadius,
+          textTransform: "none",
         },
         sizeLarge: {
           minHeight: 48,

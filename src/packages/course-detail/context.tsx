@@ -9,6 +9,7 @@ import {
   SetStateAction,
   SyntheticEvent,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import useSWR, { KeyedMutator } from "swr";
@@ -22,6 +23,7 @@ interface CourseDetailContextProps {
   setValue: (value: SetStateAction<string>) => void;
   handleChange: (e: SyntheticEvent, newValue: string) => void;
   courseData?: Course;
+  setCourseData: Dispatch<SetStateAction<Course | undefined>>;
   isLoading: boolean;
   mutate: KeyedMutator<Course>;
   isAddingLesson: boolean;
@@ -42,6 +44,7 @@ const CourseDetailContext = createContext<CourseDetailContextProps>({
   mutate: () => Promise.resolve(undefined),
   setEdittingChapter: () => {},
   setEdittingLesson: () => {},
+  setCourseData: () => {},
 });
 
 const CourseDetailProvider = ({ children }: ContextProps) => {
@@ -50,6 +53,7 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
   const [isAddingLesson, setIsAddingLesson] = useState(false);
   const [editingChapter, setEdittingChapter] = useState<Chapter>();
   const [editingLesson, setEdittingLesson] = useState<Lesson>();
+  const [courseData, setCourseData] = useState<Course>();
 
   const { data, isLoading, mutate } = useSWR(
     ["get-course-detail", courseId],
@@ -64,13 +68,17 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
     setValue(newValue);
   };
 
+  useEffect(() => {
+    setCourseData(data);
+  }, [data]);
+
   return (
     <CourseDetailContext.Provider
       value={{
         value,
         setValue,
         handleChange,
-        courseData: data,
+        courseData,
         isLoading,
         mutate,
         isAddingLesson,
@@ -79,6 +87,7 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
         setEdittingChapter,
         editingLesson,
         setEdittingLesson,
+        setCourseData,
       }}
     >
       {children}
