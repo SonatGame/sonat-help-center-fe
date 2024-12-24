@@ -1,6 +1,6 @@
 import { getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { enqueueSnackbar } from "notistack";
+import { toast } from "react-toastify";
 
 export type ApiResponse<T> = T & {
   message?: string;
@@ -16,8 +16,6 @@ export type ApiRequest = {
   isEmpty?: boolean;
   showError?: boolean;
 };
-
-const autoHideDuration = 4000;
 
 const METHOD = {
   GET: "GET",
@@ -120,20 +118,13 @@ async function fetchOne<T>({
     hasErrorMsg &&
     (result?.error || (result?.statusCode && result?.statusCode >= 400))
   ) {
-    enqueueSnackbar(
-      `${functionName} failed${result.message ? `: ${result.message}` : ""}`,
-      {
-        variant: "error",
-        autoHideDuration: autoHideDuration,
-      }
+    toast.error(
+      `${functionName} failed${result.message ? `: ${result.message}` : ""}`
     );
     return undefined as T;
   }
   if (hasSuccessfulMsg && !result?.error) {
-    enqueueSnackbar(`${functionName} successfully.`, {
-      variant: "success",
-      autoHideDuration: autoHideDuration,
-    });
+    toast.success(`${functionName} successfully.`);
   }
   return result;
 }
@@ -170,20 +161,13 @@ async function fetchList<T>({
     (result?.error || (result?.statusCode && result?.statusCode >= 400))
   ) {
     {
-      enqueueSnackbar(
-        `${functionName} failed${result.message ? `: ${result.message}` : ""}`,
-        {
-          variant: "error",
-          autoHideDuration: autoHideDuration,
-        }
+      toast.error(
+        `${functionName} failed${result.message ? `: ${result.message}` : ""}`
       );
     }
     return undefined as unknown as T[];
   } else if (hasSuccessfulMsg && !result?.error) {
-    enqueueSnackbar(`${functionName} successfully.`, {
-      variant: "success",
-      autoHideDuration: autoHideDuration,
-    });
+    toast.success(`${functionName} successfully.`);
   }
   if (!Array.isArray(result)) return [] as T[];
   else return result as T[];
@@ -300,20 +284,13 @@ async function fetchListFormData<T>({
     (result?.error || (result?.statusCode && result?.statusCode >= 400))
   ) {
     {
-      enqueueSnackbar(
-        `${functionName} failed${result.message ? `: ${result.message}` : ""}`,
-        {
-          variant: "error",
-          autoHideDuration: autoHideDuration,
-        }
+      toast.error(
+        `${functionName} failed${result.message ? `: ${result.message}` : ""}`
       );
     }
     return undefined as unknown as T[];
   } else if (hasSuccessfulMsg && !result?.error) {
-    enqueueSnackbar(`${functionName} successfully.`, {
-      variant: "success",
-      autoHideDuration: autoHideDuration,
-    });
+    toast.success(`${functionName} successfully.`);
   }
   if (!Array.isArray(result)) return [] as T[];
   else return result as T[];
@@ -350,20 +327,13 @@ async function fetchOneFormData<T>({
     (result?.error || (result?.statusCode && result?.statusCode >= 400))
   ) {
     {
-      enqueueSnackbar(
-        `${functionName} failed${result.message ? `: ${result.message}` : ""}`,
-        {
-          variant: "error",
-          autoHideDuration: autoHideDuration,
-        }
+      toast.error(
+        `${functionName} thất bại${result.message ? `: ${result.message}` : ""}`
       );
     }
     return undefined as unknown as T;
   } else if (hasSuccessfulMsg && !result?.error) {
-    enqueueSnackbar(`${functionName} successfully.`, {
-      variant: "success",
-      autoHideDuration: autoHideDuration,
-    });
+    toast.success(`${functionName} thành công.`);
   }
   return result as T;
 }

@@ -2,8 +2,8 @@
 
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-import { SnackbarProvider } from "notistack";
 import React from "react";
+import { ToastContainer } from "react-toastify";
 import useAppThemeHook from "./hooks";
 
 export default function AppTheme({ children }: { children: React.ReactNode }) {
@@ -12,14 +12,8 @@ export default function AppTheme({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <SnackbarProvider
-        anchorOrigin={{
-          horizontal: "right",
-          vertical: "top",
-        }}
-      >
-        {children}
-      </SnackbarProvider>
+      <ToastContainer hideProgressBar />
+      {children}
     </ThemeProvider>
   );
 }

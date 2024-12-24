@@ -1,6 +1,6 @@
 import { CourseApi } from "@/api/CourseApi";
 import { Chapter, Lesson } from "@/lib/types/course";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCourseDetailContext } from "../context";
 
 export default function useContentTab() {
@@ -26,6 +26,7 @@ export default function useContentTab() {
     url: "",
     htmlContent: "",
   });
+  const inputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   async function handleAddChapter() {
     if (!courseData) return;
@@ -87,6 +88,24 @@ export default function useContentTab() {
     handleCloseConfirmDeleteChapterModal();
   }
 
+  const handleClickOutside = (e: MouseEvent) => {
+    if (
+      isEditingChapterTitle &&
+      editingChapter &&
+      inputRefs.current[editingChapter._id] &&
+      !inputRefs.current[editingChapter._id]?.contains(e.target as Node)
+    ) {
+      handleCancelEditChapter();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isEditingChapterTitle]);
+
   return {
     courseData,
     editingChapter,
@@ -106,5 +125,7 @@ export default function useContentTab() {
     setGoogleDocs,
     handleEditChapter,
     handleCancelEditChapter,
+    isEditingChapterTitle,
+    inputRefs,
   };
 }

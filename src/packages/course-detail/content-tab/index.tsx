@@ -29,6 +29,8 @@ export default function CourseContent() {
     setGoogleDocs,
     handleEditChapter,
     handleCancelEditChapter,
+    isEditingChapterTitle,
+    inputRefs,
   } = useContentTab();
 
   return (
@@ -152,7 +154,8 @@ export default function CourseContent() {
               >
                 <Stack direction="row" alignItems="center" gap={1.5}>
                   {/* <DragIndicator fontSize="small" /> */}
-                  {editingChapter?._id === chapter._id ? (
+                  {editingChapter?._id === chapter._id &&
+                  isEditingChapterTitle ? (
                     <TextField
                       variant="standard"
                       placeholder={chapter.title}
@@ -161,17 +164,35 @@ export default function CourseContent() {
                           disableUnderline: true,
                         },
                       }}
+                      sx={{
+                        "& .MuiInput-input": {
+                          py: 0,
+                          fontSize: theme.typography.h5.fontSize,
+                          fontWeight: theme.typography.h5.fontWeight,
+                          "::placeholder": {
+                            fontSize: theme.typography.h5.fontSize,
+                            fontWeight: theme.typography.h5.fontWeight,
+                          },
+                        },
+                      }}
+                      onBlur={handleCancelEditChapter}
+                      ref={(el) => {
+                        inputRefs.current[chapter._id] = el;
+                      }}
+                      autoComplete="off"
                     />
                   ) : (
-                    <Typography variant="h5">{chapter.title}</Typography>
+                    <>
+                      <Typography variant="h5">{chapter.title}</Typography>
+                      <EditIcon
+                        fontSize="small"
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => {
+                          handleEditChapter(chapter);
+                        }}
+                      />
+                    </>
                   )}
-                  <EditIcon
-                    fontSize="small"
-                    sx={{ cursor: "pointer" }}
-                    onClick={() => {
-                      handleEditChapter(chapter);
-                    }}
-                  />
                 </Stack>
                 <Stack direction="row" alignItems="center" gap={1.5}>
                   <Typography
@@ -214,7 +235,18 @@ export default function CourseContent() {
               variant="standard"
               placeholder="Chương không có tiêu đề"
               autoComplete="off"
-              sx={{ width: "fit-content" }}
+              sx={{
+                width: "fit-content",
+                "& .MuiInput-input": {
+                  py: 0,
+                  fontSize: theme.typography.h5.fontSize,
+                  fontWeight: theme.typography.h5.fontWeight,
+                  "::placeholder": {
+                    fontSize: theme.typography.h5.fontSize,
+                    fontWeight: theme.typography.h5.fontWeight,
+                  },
+                },
+              }}
               slotProps={{
                 input: {
                   disableUnderline: true,
