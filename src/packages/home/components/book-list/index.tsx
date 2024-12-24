@@ -9,7 +9,7 @@ export default function BookList() {
   return (
     <Stack spacing={1.5}>
       <Stack direction="row" justifyContent="space-between">
-        <Typography variant="h6">Khóa học</Typography>
+        <Typography variant="h6">Thư viện</Typography>
         <Typography
           variant="body2"
           color="primary"

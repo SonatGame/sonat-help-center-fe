@@ -9,9 +9,12 @@ export default function useContentTab() {
     setIsAddingLesson,
     isAddingLesson,
     mutate: mutateCourse,
+    editingChapter,
+    setEdittingChapter,
+    editingLesson,
+    setEdittingLesson,
   } = useCourseDetailContext();
-  const [editingChapter, setEdittingChapter] = useState<Chapter>();
-  const [editingLesson, setEdittingLesson] = useState<Lesson>();
+
   const [isEditingChapterTitle, setIsEditingChapterTitle] =
     useState<boolean>(false);
   const [chapterTitle, setChapterTitle] = useState<string>("");
@@ -32,7 +35,7 @@ export default function useContentTab() {
     });
   }
 
-  function handleEditChapter(chapter: Chapter) {
+  function handleEditChapter(chapter?: Chapter) {
     setEdittingChapter(chapter);
     setIsEditingChapterTitle(true);
   }

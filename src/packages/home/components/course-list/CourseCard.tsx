@@ -1,5 +1,6 @@
 import Tag from "@/components/Tag";
 import TextMaxLine from "@/components/TextMaxLine";
+import { BookClosedIcon, PeopleIcon } from "@/lib/constants/icons";
 import { AppRoutes } from "@/lib/constants/routesAndPermissions";
 import { Course } from "@/lib/types/course";
 import {
@@ -9,6 +10,7 @@ import {
   Card,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -28,6 +30,7 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
     modules,
     learnersCount,
   } = courseData;
+  const theme = useTheme();
   const router = useRouter();
 
   return (
@@ -38,10 +41,6 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
         display: "flex",
         flexDirection: "column",
         cursor: "pointer",
-        // transition: "transform .2s",
-        // ":hover": {
-        //   transform: "scale(1.05)",
-        // },
       }}
       onClick={() => router.push(`${AppRoutes.COURSE}${_id}`)}
     >
@@ -78,9 +77,12 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
           </Typography>
         </Tag>
         <Tag>
-          <Typography variant="body2" color="primary" fontWeight="medium">
-            {KSA}
-          </Typography>
+          <Stack direction="row" alignItems="center" gap={0.5}>
+            <BookClosedIcon fontSize="small" />
+            <Typography variant="body2" color="primary" fontWeight="medium">
+              {KSA}
+            </Typography>
+          </Stack>
         </Tag>
       </Stack>
       <TextMaxLine
@@ -105,16 +107,45 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
         {description}
       </TextMaxLine>
       <Stack direction="row" alignItems="center" gap={0.5} sx={{ mt: 1.5 }}>
-        <AvatarGroup spacing={8}>
-          {["A", "B", "C"].map((user, index) => (
-            <Avatar key={index} sx={{ width: 24, height: 24 }}>
-              {user}
-            </Avatar>
-          ))}
-        </AvatarGroup>
-        <Typography variant="body2" color="primary" fontWeight="medium">
-          +{learnersCount} người tham gia
-        </Typography>
+        {learnersCount === 0 ? (
+          <>
+            <AvatarGroup
+              spacing={8}
+              sx={{
+                "& .MuiAvatar-root": {
+                  border: 0,
+                },
+              }}
+            >
+              {["A", "B", "C"].map((user, index) => (
+                <Avatar key={index} sx={{ width: 24, height: 24 }}>
+                  {user}
+                </Avatar>
+              ))}
+            </AvatarGroup>
+            <Typography variant="body2" color="primary" fontWeight="medium">
+              +{learnersCount} người tham gia
+            </Typography>
+          </>
+        ) : (
+          <>
+            <Stack
+              justifyContent="center"
+              alignItems="center"
+              sx={{
+                width: 24,
+                height: 24,
+                borderRadius: "50%",
+                backgroundColor: theme.palette.grey[200],
+              }}
+            >
+              <PeopleIcon sx={{ fontSize: 16 }} />
+            </Stack>
+            <Typography variant="body2" color="primary" fontWeight="medium">
+              Chưa có người tham gia
+            </Typography>
+          </>
+        )}
       </Stack>
     </Card>
   );

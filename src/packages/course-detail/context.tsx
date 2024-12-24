@@ -1,7 +1,7 @@
 "use client";
 
 import { CourseApi } from "@/api/CourseApi";
-import { Course } from "@/lib/types/course";
+import { Chapter, Course, Lesson } from "@/lib/types/course";
 import { useParams } from "next/navigation";
 import {
   createContext,
@@ -26,6 +26,10 @@ interface CourseDetailContextProps {
   mutate: KeyedMutator<Course>;
   isAddingLesson: boolean;
   setIsAddingLesson: Dispatch<SetStateAction<boolean>>;
+  editingChapter?: Chapter;
+  setEdittingChapter: Dispatch<SetStateAction<Chapter | undefined>>;
+  editingLesson?: Lesson;
+  setEdittingLesson: Dispatch<SetStateAction<Lesson | undefined>>;
 }
 
 const CourseDetailContext = createContext<CourseDetailContextProps>({
@@ -36,12 +40,16 @@ const CourseDetailContext = createContext<CourseDetailContextProps>({
   setIsAddingLesson: () => {},
   isLoading: false,
   mutate: () => Promise.resolve(undefined),
+  setEdittingChapter: () => {},
+  setEdittingLesson: () => {},
 });
 
 const CourseDetailProvider = ({ children }: ContextProps) => {
+  const { courseId } = useParams<{ courseId: string }>();
   const [value, setValue] = useState("overview");
   const [isAddingLesson, setIsAddingLesson] = useState(false);
-  const { courseId } = useParams<{ courseId: string }>();
+  const [editingChapter, setEdittingChapter] = useState<Chapter>();
+  const [editingLesson, setEdittingLesson] = useState<Lesson>();
 
   const { data, isLoading, mutate } = useSWR(
     ["get-course-detail", courseId],
@@ -67,6 +75,10 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
         mutate,
         isAddingLesson,
         setIsAddingLesson,
+        editingChapter,
+        setEdittingChapter,
+        editingLesson,
+        setEdittingLesson,
       }}
     >
       {children}

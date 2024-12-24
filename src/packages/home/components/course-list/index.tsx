@@ -1,6 +1,9 @@
+import { CourseApi } from "@/api/CourseApi";
 import { AppRoutes } from "@/lib/constants/routesAndPermissions";
-import { Stack, Typography } from "@mui/material";
+import { Grid2, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
+import useSWR from "swr";
+import CourseCard from "./CourseCard";
 
 export interface ICourseListProps {
   team: string;
@@ -8,6 +11,11 @@ export interface ICourseListProps {
 
 export default function CourseList() {
   const router = useRouter();
+  const { data, isLoading, mutate } = useSWR(
+    "get-course-list",
+    () => CourseApi.getCourseList(),
+    { refreshInterval: 0, revalidateOnFocus: false }
+  );
 
   return (
     <Stack spacing={1.5}>
@@ -26,17 +34,13 @@ export default function CourseList() {
           Xem thêm
         </Typography>
       </Stack>
-      {/* <Grid2 container spacing={3}>
-        {[].map((item, i) => {
-
-          return  <Grid2 size={{ xs: 12, sm: 6, xl: 4 }}>
-          <CourseCard
-            key={i}
-            courseData={}
-          />
-        </Grid2>
-        })}
-      </Grid2> */}
+      <Grid2 container spacing={2}>
+        {data?.data?.map((course) => (
+          <Grid2 key={course._id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }}>
+            <CourseCard courseData={course} />
+          </Grid2>
+        ))}
+      </Grid2>
     </Stack>
   );
 }

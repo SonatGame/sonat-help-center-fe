@@ -20,11 +20,12 @@ interface IProps {
   lessonData?: Lesson;
   isEmpty?: boolean;
   onClick?: () => any;
+  isAdmin?: boolean;
 }
 
 export default function LessonCard(props: IProps) {
   const theme = useTheme();
-  const { isEmpty = false, lessonData, onClick } = props;
+  const { isEmpty = false, lessonData, onClick, isAdmin } = props;
   const { mutate: mutateCourse } = useCourseDetailContext();
   const [hovering, setHovering] = useState(false);
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState(false);
@@ -155,7 +156,9 @@ export default function LessonCard(props: IProps) {
           gap={1}
           sx={{ color: theme.palette.primary.main }}
         >
-          <Typography variant="body2">Học ngay</Typography>
+          <Typography variant="body2">
+            {isAdmin ? "Chỉnh sửa" : "Học ngay"}
+          </Typography>
           <ArrowForwardRounded fontSize="small" />
         </Stack>
       </Stack>

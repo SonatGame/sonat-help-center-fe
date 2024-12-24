@@ -1,4 +1,4 @@
-import { CloudIcon } from "@/packages/course/icons";
+import { CloudIcon } from "@/lib/constants/icons";
 import { Close } from "@mui/icons-material";
 import {
   CardMedia,
