@@ -11,7 +11,7 @@ export default function CourseOverview() {
   const theme = useTheme();
   const {
     isEdittingDescription,
-    edittingOutcomeIndex,
+    editingOutcomeIndex,
     isAddingOutcomes,
     handleEnableEditDescription,
     handleCancelEditDescription,
@@ -128,7 +128,7 @@ export default function CourseOverview() {
             {courseData?.learningOutcomes?.map((outcome, i) => (
               <Stack key={i} direction="row" alignItems="center" gap={1}>
                 <Verified color="primary" fontSize="small" />
-                {edittingOutcomeIndex === i && isEditingOutcomes ? (
+                {editingOutcomeIndex === i && isEditingOutcomes ? (
                   <>
                     <RHFTextField
                       name={`outcomes.${outcomes.length - 1}`}

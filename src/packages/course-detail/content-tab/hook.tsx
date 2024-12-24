@@ -10,8 +10,11 @@ export default function useContentTab() {
     isAddingLesson,
     mutate: mutateCourse,
   } = useCourseDetailContext();
-  const [edittingChapter, setEdittingChapter] = useState<Chapter>();
-  const [edittingLesson, setEdittingLesson] = useState<Lesson>();
+  const [editingChapter, setEdittingChapter] = useState<Chapter>();
+  const [editingLesson, setEdittingLesson] = useState<Lesson>();
+  const [isEditingChapterTitle, setIsEditingChapterTitle] =
+    useState<boolean>(false);
+  const [chapterTitle, setChapterTitle] = useState<string>("");
   const [showModalUpload, setShowModalUpload] = useState<boolean>(false);
   const [showConfirmDeleteChapterModal, setShowConfirmDeleteChapterModal] =
     useState<boolean>(false);
@@ -21,12 +24,22 @@ export default function useContentTab() {
     htmlContent: "",
   });
 
-  function handleAddChapter() {
+  async function handleAddChapter() {
     if (!courseData) return;
-    CourseApi.createChapter(courseData?._id, {
+    await CourseApi.createChapter(courseData?._id, {
       title: "",
       lessons: [],
     });
+  }
+
+  function handleEditChapter(chapter: Chapter) {
+    setEdittingChapter(chapter);
+    setIsEditingChapterTitle(true);
+  }
+
+  function handleCancelEditChapter() {
+    setEdittingChapter(undefined);
+    setIsEditingChapterTitle(false);
   }
 
   function handleAddLesson(chapter?: Chapter, lesson?: Lesson) {
@@ -37,6 +50,8 @@ export default function useContentTab() {
 
   function handleCancel() {
     setIsAddingLesson(false);
+    setEdittingChapter(undefined);
+    setEdittingLesson(undefined);
   }
 
   function handleOpenUploadDocsModal() {
@@ -58,16 +73,16 @@ export default function useContentTab() {
   }
 
   async function handleConfirmDeleteChapter() {
-    if (!edittingChapter) return;
-    await CourseApi.deleteChapter(edittingChapter?._id);
+    if (!editingChapter) return;
+    await CourseApi.deleteChapter(editingChapter?._id);
     await mutateCourse();
     handleCloseConfirmDeleteChapterModal();
   }
 
   return {
     courseData,
-    edittingChapter,
-    edittingLesson,
+    editingChapter,
+    editingLesson,
     handleAddLesson,
     isAddingLesson,
     handleCancel,
@@ -81,5 +96,7 @@ export default function useContentTab() {
     handleConfirmDeleteChapter,
     googleDocs,
     setGoogleDocs,
+    handleEditChapter,
+    handleCancelEditChapter,
   };
 }

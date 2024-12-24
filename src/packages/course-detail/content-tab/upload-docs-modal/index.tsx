@@ -22,7 +22,7 @@ export interface ICreateCourseModalProps {
       htmlContent: string;
     }>
   >;
-  edittingLesson?: Lesson;
+  editingLesson?: Lesson;
 }
 
 interface IForm {
@@ -30,13 +30,8 @@ interface IForm {
 }
 
 export default function UploadDocsModal(props: ICreateCourseModalProps) {
-  const {
-    isModalOpen,
-    handleClose,
-    googleDocs,
-    setGoogleDocs,
-    edittingLesson,
-  } = props;
+  const { isModalOpen, handleClose, googleDocs, setGoogleDocs, editingLesson } =
+    props;
   const { control, handleSubmit, reset } = useForm<IForm>({
     defaultValues: {
       googleDocUrl: "",
@@ -55,9 +50,9 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
   }
 
   useEffect(() => {
-    if (!edittingLesson) reset();
-    reset({ googleDocUrl: edittingLesson?.googleDocUrl });
-  }, [edittingLesson, reset]);
+    if (!editingLesson) reset();
+    reset({ googleDocUrl: editingLesson?.googleDocUrl });
+  }, [editingLesson, reset]);
 
   return (
     <ModalWrapper
