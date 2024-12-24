@@ -46,6 +46,11 @@ export default function useContentTab() {
     setEdittingChapter(chapter);
     setEdittingLesson(lesson);
     setIsAddingLesson(true);
+    setGoogleDocs({
+      title: "",
+      url: "",
+      htmlContent: "",
+    });
   }
 
   function handleCancel() {

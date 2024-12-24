@@ -117,7 +117,7 @@ export default function CourseOverview() {
             Mục tiêu khóa học
           </Typography>
           <Stack gap={1.5}>
-            {!courseData?.learningOutcomes && !isAddingOutcomes && (
+            {courseData?.learningOutcomes.length === 0 && !isAddingOutcomes && (
               <Typography
                 variant="caption"
                 sx={{ color: theme.palette.grey[500] }}
@@ -210,6 +210,14 @@ export default function CourseOverview() {
             <Typography sx={{ fontSize: 30, fontWeight: 600 }}>
               Nội dung khóa học
             </Typography>
+            {courseData?.modules.length === 0 && (
+              <Typography
+                variant="caption"
+                sx={{ color: theme.palette.grey[500] }}
+              >
+                (Lưu ý: Phần này chỉ hiển thị khi có thông tin)
+              </Typography>
+            )}
             <Typography
               variant="body2"
               fontWeight="medium"

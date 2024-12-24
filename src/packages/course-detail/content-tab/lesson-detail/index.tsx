@@ -11,7 +11,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useMemo } from "react";
+import { useMemo } from "react";
 import useSWR from "swr";
 import { useCourseDetailContext } from "../../context";
 import { getGoogleDocId } from "../../helper";
@@ -27,13 +27,6 @@ interface IProps {
     url: string;
     htmlContent: string;
   };
-  setGoogleDocs: Dispatch<
-    SetStateAction<{
-      title: string;
-      url: string;
-      htmlContent: string;
-    }>
-  >;
 }
 
 export default function LessonDetail(props: IProps) {
@@ -43,10 +36,9 @@ export default function LessonDetail(props: IProps) {
     handleGoBack,
     handleOpenUploadDocsModal,
     googleDocs,
-    setGoogleDocs,
   } = props;
   const { courseData } = useCourseDetail();
-  const { mutate: mutateCourse, setIsAddingLesson } = useCourseDetailContext();
+  const { mutate: mutateCourse } = useCourseDetailContext();
   const theme = useTheme();
 
   const {
@@ -90,7 +82,7 @@ export default function LessonDetail(props: IProps) {
         title: "Chương không có tiêu đề",
         lessons: [
           {
-            title: "Bài viết không có tiêu đề",
+            title: googleDocs.title,
             googleDocUrl: googleDocs.url,
             detail: "",
           },

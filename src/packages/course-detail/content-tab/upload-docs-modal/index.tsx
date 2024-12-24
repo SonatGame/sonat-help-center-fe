@@ -40,11 +40,10 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
 
   async function onSubmit(data: IForm) {
     const { googleDocUrl } = data;
-    setGoogleDocs({ ...googleDocs, url: googleDocUrl });
     const googleDocsId = getGoogleDocId(googleDocUrl);
     if (!googleDocsId) return;
     const res = await CourseApi.getHTMLContent(googleDocsId);
-    setGoogleDocs({ ...googleDocs, ...res });
+    setGoogleDocs({ url: googleDocUrl, ...res });
     handleClose();
     reset();
   }

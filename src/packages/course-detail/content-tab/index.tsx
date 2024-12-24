@@ -2,7 +2,7 @@ import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import StyledAccordion from "@/components/accordion";
 import { EditIcon, TrashIcon } from "@/packages/course/icons";
 import { ArrowBack } from "@mui/icons-material";
-import { Grid2, Stack, TextField, Typography, useTheme } from "@mui/material";
+import { Grid2, Stack, Typography, useTheme } from "@mui/material";
 import LessonCard from "./LessonCard";
 import useContentTab from "./hook";
 import LessonDetail from "./lesson-detail";
@@ -191,7 +191,6 @@ export default function CourseContent() {
             </Stack>
           ))}
           <Stack gap={2}>
-            <TextField placeholder="Chương không có tiêu đề" />
             <Typography variant="h5">Chương không có tiêu đề</Typography>
             <Grid2 container spacing={3}>
               <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
@@ -207,7 +206,6 @@ export default function CourseContent() {
           handleGoBack={handleCancel}
           handleOpenUploadDocsModal={handleOpenUploadDocsModal}
           googleDocs={googleDocs}
-          setGoogleDocs={setGoogleDocs}
         />
       )}
       <UploadDocsModal
