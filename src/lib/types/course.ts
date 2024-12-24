@@ -8,7 +8,7 @@ export type Lesson = {
 export type Chapter = {
   _id: string;
   title: string;
-  description: string;
+  description?: string;
   lessons?: Lesson[];
 };
 
@@ -36,7 +36,7 @@ export type Course = {
   description: string;
   learningOutcomes: string[];
   modules: Chapter[];
-  team: string;
+  team: Team;
   KSA: string;
   thumbnail: string;
   coverImage: string;
@@ -63,3 +63,10 @@ export type CourseRes = {
     hasNextPage: boolean;
   };
 };
+
+export enum Team {
+  Care = "Care",
+  "Business Intelligent" = "Business Intelligent",
+  Marketing = "Marketing",
+  Product = "Product",
+}

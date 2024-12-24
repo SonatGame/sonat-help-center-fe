@@ -15,7 +15,6 @@ import { useEffect, useState } from "react";
 import { menuItemStyles } from "@/components/dropdown/new/constants";
 // import usePermission from "@/lib/hooks/usePermission";
 import { LocalStorageUtils } from "@/lib/utils/localStorageUtils";
-import { toast } from "react-toastify";
 
 function getItem(
   label: string,
@@ -50,7 +49,6 @@ export const UserProfileButton = () => {
 
   const handleSignOut = async () => {
     if (logout) await logout();
-    toast.success("Sign out successfully");
   };
 
   // const handleManageUser = () => {
@@ -96,7 +94,7 @@ export const UserProfileButton = () => {
     //       ),
     //     ]
     //   : []),
-    getItem("Sign out", "Sign out", <Logout />, handleSignOut),
+    getItem("Đăng xuất", "Đăng xuất", <Logout />, handleSignOut),
   ].filter(Boolean);
 
   useEffect(() => {
@@ -164,7 +162,7 @@ export const UserProfileButton = () => {
       >
         <Stack p={2} spacing={1}>
           <Typography variant="caption" sx={{ px: 2 }}>
-            This account is managed by Sonat.vn
+            Tài khoản này được quản lý bởi sonat.vn
           </Typography>
 
           <Stack direction="row" spacing={1} p={1}>

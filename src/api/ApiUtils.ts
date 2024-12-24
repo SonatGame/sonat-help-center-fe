@@ -119,12 +119,12 @@ async function fetchOne<T>({
     (result?.error || (result?.statusCode && result?.statusCode >= 400))
   ) {
     toast.error(
-      `${functionName} failed${result.message ? `: ${result.message}` : ""}`
+      `${functionName} thất bại${result.message ? `: ${result.message}` : ""}`
     );
     return undefined as T;
   }
   if (hasSuccessfulMsg && !result?.error) {
-    toast.success(`${functionName} successfully.`);
+    toast.success(`${functionName} thành công.`);
   }
   return result;
 }
@@ -162,12 +162,12 @@ async function fetchList<T>({
   ) {
     {
       toast.error(
-        `${functionName} failed${result.message ? `: ${result.message}` : ""}`
+        `${functionName} thất bại${result.message ? `: ${result.message}` : ""}`
       );
     }
     return undefined as unknown as T[];
   } else if (hasSuccessfulMsg && !result?.error) {
-    toast.success(`${functionName} successfully.`);
+    toast.success(`${functionName} thành công.`);
   }
   if (!Array.isArray(result)) return [] as T[];
   else return result as T[];
@@ -285,12 +285,12 @@ async function fetchListFormData<T>({
   ) {
     {
       toast.error(
-        `${functionName} failed${result.message ? `: ${result.message}` : ""}`
+        `${functionName} thất bại${result.message ? `: ${result.message}` : ""}`
       );
     }
     return undefined as unknown as T[];
   } else if (hasSuccessfulMsg && !result?.error) {
-    toast.success(`${functionName} successfully.`);
+    toast.success(`${functionName} thành công.`);
   }
   if (!Array.isArray(result)) return [] as T[];
   else return result as T[];

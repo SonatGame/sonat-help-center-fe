@@ -6,6 +6,7 @@ import { useCourseDetailContext } from "../context";
 export default function useContentTab() {
   const {
     courseData,
+    setCourseData,
     setIsAddingLesson,
     isAddingLesson,
     mutate: mutateCourse,
@@ -26,7 +27,9 @@ export default function useContentTab() {
     url: "",
     htmlContent: "",
   });
-  const inputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const inputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({
+    new: null,
+  });
 
   async function handleAddChapter() {
     if (!courseData) return;
@@ -37,13 +40,18 @@ export default function useContentTab() {
   }
 
   function handleEditChapter(chapter?: Chapter) {
-    setEdittingChapter(chapter);
+    if (chapter) {
+      inputRefs.current[chapter._id]?.focus();
+      setEdittingChapter(chapter);
+      setChapterTitle(chapter.title);
+    }
     setIsEditingChapterTitle(true);
   }
 
   function handleCancelEditChapter() {
     setEdittingChapter(undefined);
     setIsEditingChapterTitle(false);
+    setChapterTitle("");
   }
 
   function handleAddLesson(chapter?: Chapter, lesson?: Lesson) {
@@ -88,18 +96,51 @@ export default function useContentTab() {
     handleCloseConfirmDeleteChapterModal();
   }
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (
-      isEditingChapterTitle &&
-      editingChapter &&
-      inputRefs.current[editingChapter._id] &&
-      !inputRefs.current[editingChapter._id]?.contains(e.target as Node)
-    ) {
-      handleCancelEditChapter();
-    }
-  };
-
   useEffect(() => {
+    async function handleClickOutside(e: MouseEvent) {
+      if (!isEditingChapterTitle || !courseData) return;
+      if (
+        !editingChapter &&
+        chapterTitle.length > 0 &&
+        inputRefs.current.new &&
+        !inputRefs.current.new.contains(e.target as Node)
+      ) {
+        const temp = { ...courseData };
+        temp.modules.push({
+          _id: "",
+          title: chapterTitle,
+          lessons: [],
+        });
+        await CourseApi.createChapter(courseData._id, {
+          title: chapterTitle,
+          lessons: [],
+        });
+        await mutateCourse();
+        handleCancelEditChapter();
+        return;
+      }
+      if (
+        editingChapter &&
+        inputRefs.current[editingChapter._id] &&
+        !inputRefs.current[editingChapter._id]?.contains(e.target as Node)
+      ) {
+        const temp = { ...courseData };
+        for (const chapter of temp.modules) {
+          if (
+            editingChapter._id === chapter._id &&
+            chapter.title !== chapterTitle
+          ) {
+            chapter.title = chapterTitle;
+            CourseApi.updateChapter(editingChapter._id, {
+              title: chapterTitle,
+            });
+            break;
+          }
+        }
+        setCourseData(temp);
+        handleCancelEditChapter();
+      }
+    }
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -127,5 +168,7 @@ export default function useContentTab() {
     handleCancelEditChapter,
     isEditingChapterTitle,
     inputRefs,
+    setChapterTitle,
+    chapterTitle,
   };
 }

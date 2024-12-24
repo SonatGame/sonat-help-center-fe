@@ -1,8 +1,15 @@
 import Tag from "@/components/Tag";
 import TextMaxLine from "@/components/TextMaxLine";
-import { BookClosedIcon, PeopleIcon } from "@/lib/constants/icons";
+import {
+  BIIcon,
+  BookClosedIcon,
+  CareIcon,
+  MarketingIcon,
+  PeopleIcon,
+  ProductIcon,
+} from "@/lib/constants/icons";
 import { AppRoutes } from "@/lib/constants/routesAndPermissions";
-import { Course } from "@/lib/types/course";
+import { Course, Team } from "@/lib/types/course";
 import {
   Avatar,
   AvatarGroup,
@@ -14,24 +21,39 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 
 export interface ICourseCardProps {
   courseData: Course;
 }
 
 export default function CourseCard({ courseData }: ICourseCardProps) {
-  const {
-    team,
-    _id,
-    thumbnail,
-    KSA,
-    title,
-    description,
-    modules,
-    learnersCount,
-  } = courseData;
+  const { team, _id, thumbnail, KSA, title, modules, learnersCount } =
+    courseData;
   const theme = useTheme();
   const router = useRouter();
+
+  const teamData = useMemo(() => {
+    const teamDataMap = {
+      [Team.Care]: {
+        color: theme.palette.bring_pink.main,
+        icon: <CareIcon fontSize="small" />,
+      },
+      [Team["Business Intelligent"]]: {
+        color: theme.palette.primary.main,
+        icon: <BIIcon fontSize="small" />,
+      },
+      [Team.Marketing]: {
+        color: theme.palette.warning.main,
+        icon: <MarketingIcon fontSize="small" />,
+      },
+      [Team.Product]: {
+        color: theme.palette.success.main,
+        icon: <ProductIcon fontSize="small" />,
+      },
+    };
+    return teamDataMap[team];
+  }, [team]);
 
   return (
     <Card
@@ -45,7 +67,12 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
       onClick={() => router.push(`${AppRoutes.COURSE}${_id}`)}
     >
       <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2" color="primary" fontWeight="medium">
+        {teamData.icon}
+        <Typography
+          variant="body2"
+          fontWeight="medium"
+          sx={{ color: teamData.color }}
+        >
           {team}
         </Typography>
       </Stack>
@@ -61,7 +88,7 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
           src={thumbnail}
           alt="course-thumbnail"
           width={600}
-          height={248}
+          height={157}
           style={{ objectFit: "cover" }}
         />
       </Box>
@@ -78,7 +105,10 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
         </Tag>
         <Tag>
           <Stack direction="row" alignItems="center" gap={0.5}>
-            <BookClosedIcon fontSize="small" />
+            <BookClosedIcon
+              fontSize="small"
+              sx={{ color: theme.palette.primary.main }}
+            />
             <Typography variant="body2" color="primary" fontWeight="medium">
               {KSA}
             </Typography>
@@ -94,17 +124,6 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
         }}
       >
         {title}
-      </TextMaxLine>
-      <TextMaxLine
-        TypographyProps={{
-          variant: "body2",
-        }}
-        sx={{
-          mt: 1.5,
-          flexGrow: 1,
-        }}
-      >
-        {description}
       </TextMaxLine>
       <Stack direction="row" alignItems="center" gap={0.5} sx={{ mt: 1.5 }}>
         {learnersCount === 0 ? (

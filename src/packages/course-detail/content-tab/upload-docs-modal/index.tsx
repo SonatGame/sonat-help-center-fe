@@ -50,8 +50,8 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
 
   useEffect(() => {
     if (!editingLesson) reset();
-    reset({ googleDocUrl: editingLesson?.googleDocUrl });
-  }, [editingLesson, reset]);
+    reset({ googleDocUrl: googleDocs.url });
+  }, [editingLesson, googleDocs, reset]);
 
   return (
     <ModalWrapper

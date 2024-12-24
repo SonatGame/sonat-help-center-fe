@@ -61,6 +61,9 @@ export default function Input(theme: any) {
               borderColor: theme.palette.action.disabledBackground,
             },
           },
+          "& .MuiInputBase-inputMultiline": {
+            padding: 0,
+          },
           backgroundColor: theme.palette.background.paper,
           borderColor: theme.palette.divider,
         },

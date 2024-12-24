@@ -4,9 +4,10 @@ import RHFTextField from "@/components/form/RHFTextField";
 import TextMaxLine from "@/components/TextMaxLine";
 import { EditIcon, TrashIcon } from "@/lib/constants/icons";
 import { ArrowForward, Verified } from "@mui/icons-material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { Button, Container, Stack, Typography, useTheme } from "@mui/material";
 import { useRouter } from "next/navigation";
-import useOverviewTab from "./hook";
+import useOverviewTab from "./hooks";
 
 export default function CourseOverview() {
   const theme = useTheme();
@@ -36,6 +37,8 @@ export default function CourseOverview() {
     setEdittingChapter,
     setEdittingLesson,
     setTabValue,
+    isLoadingOutcomes,
+    isLoadingDescription,
   } = useOverviewTab();
 
   return (
@@ -61,12 +64,13 @@ export default function CourseOverview() {
                     >
                       Hủy
                     </Button>
-                    <Button
+                    <LoadingButton
                       variant="contained"
                       onClick={handleChangeDescription}
+                      loading={isLoadingDescription}
                     >
                       Lưu
-                    </Button>
+                    </LoadingButton>
                   </Stack>
                 );
               if (!isEdittingDescription && !courseData?.description) return;
@@ -111,7 +115,7 @@ export default function CourseOverview() {
                 name="description"
                 TextFieldProps={{
                   multiline: true,
-                  rows: 10,
+                  rows: 6,
                   autoComplete: "off",
                 }}
               />
@@ -153,9 +157,13 @@ export default function CourseOverview() {
                     >
                       Hủy bỏ
                     </Button>
-                    <Button variant="contained" onClick={handleChangeOutcome}>
+                    <LoadingButton
+                      variant="contained"
+                      onClick={handleChangeOutcome}
+                      loading={isLoadingOutcomes}
+                    >
                       Lưu
-                    </Button>
+                    </LoadingButton>
                   </>
                 ) : (
                   <>

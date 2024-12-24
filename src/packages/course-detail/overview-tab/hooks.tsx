@@ -7,6 +7,8 @@ interface IForm {
   isEdittingDescription: boolean;
   isAddingOutcomes: boolean;
   isEditingOutcomes: boolean;
+  isLoadingOutcomes: boolean;
+  isLoadingDescription: boolean;
   description: string;
   outcomes: string[];
   isModalConfirmDeleteOutcomeOpen: boolean;
@@ -30,6 +32,8 @@ export default function useOverviewTab() {
       isAddingOutcomes: false,
       isEditingOutcomes: false,
       isModalConfirmDeleteOutcomeOpen: false,
+      isLoadingOutcomes: false,
+      isLoadingDescription: false,
     },
   });
   const editingOutcomeIndex = watch("editingOutcomeIndex");
@@ -38,6 +42,9 @@ export default function useOverviewTab() {
   const isEditingOutcomes = watch("isEditingOutcomes");
   const description = watch("description");
   const outcomes = watch("outcomes");
+  const isLoadingOutcomes = watch("isLoadingOutcomes");
+  const isLoadingDescription = watch("isLoadingDescription");
+
   const isModalConfirmDeleteOutcomeOpen = watch(
     "isModalConfirmDeleteOutcomeOpen"
   );
@@ -58,10 +65,12 @@ export default function useOverviewTab() {
 
   async function handleChangeDescription() {
     if (!courseData) return;
+    setValue("isLoadingDescription", true);
     await CourseApi.updateCourse(courseData._id, {
       description: description,
     });
     await mutate();
+    setValue("isLoadingDescription", false);
     handleCancelEditDescription();
   }
 
@@ -110,10 +119,12 @@ export default function useOverviewTab() {
 
   async function handleChangeOutcome() {
     if (!courseData) return;
+    setValue("isLoadingOutcomes", true);
     await CourseApi.updateCourse(courseData._id, {
       learningOutcomes: outcomes,
     });
     await mutate();
+    setValue("isLoadingOutcomes", false);
     handleCancelEditOutcome();
   }
 
@@ -150,5 +161,7 @@ export default function useOverviewTab() {
     setEdittingChapter,
     setEdittingLesson,
     setTabValue,
+    isLoadingOutcomes,
+    isLoadingDescription,
   };
 }

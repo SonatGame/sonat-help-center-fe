@@ -15,7 +15,7 @@ export default function LoginSection() {
     try {
       if (login !== undefined) await login();
     } catch (error) {
-      toast.error("Sign in failed");
+      toast.error("Sign in thất bại");
     }
   };
 
@@ -30,15 +30,15 @@ export default function LoginSection() {
         justifyContent="center"
       >
         <Typography variant="h2" paddingBottom={4}>
-          Welcome to Sonat Help Center
+          Chào mừng đến Sonat Help Center
         </Typography>
 
         <Typography variant="h4" paddingBottom={4}>
-          Made with love from Sonat BI team
+          Sản phẩm của team BI
         </Typography>
 
         <Button variant="contained" onClick={onSignIn} startIcon={<Google />}>
-          Sign in with Google
+          Đăng nhập bằng Google
         </Button>
       </Stack>
     </Box>

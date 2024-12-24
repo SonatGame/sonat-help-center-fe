@@ -15,7 +15,7 @@ import {
 import Image from "next/image";
 import CourseContent from "./content-tab";
 import CreateCourseModal from "./create-course-modal";
-import useCourseDetail from "./hook";
+import useCourseDetail from "./hooks";
 import CourseOverview from "./overview-tab";
 
 export default function CourseDetail() {

@@ -12,7 +12,7 @@ export default function AppTheme({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <ToastContainer hideProgressBar />
+      <ToastContainer pauseOnHover={false} hideProgressBar />
       {children}
     </ThemeProvider>
   );

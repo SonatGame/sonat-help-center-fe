@@ -8,8 +8,12 @@ export const teamOptions = [
     label: "Product",
   },
   {
-    value: "Business intelligent",
+    value: "Business Intelligent",
     label: "Business Intelligent",
+  },
+  {
+    value: "Marketing",
+    label: "Marketing",
   },
 ];
 
