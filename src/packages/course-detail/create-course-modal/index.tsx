@@ -15,7 +15,7 @@ export interface ICreateCourseModalProps {
   handleOpen: () => any;
   handleClose: () => any;
   isEditing?: boolean;
-  mutate?: any;
+  mutate?: () => any;
 }
 
 interface IForm {
