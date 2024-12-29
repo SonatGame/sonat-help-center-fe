@@ -170,7 +170,7 @@ export default function ModalWrapper(props: ModalWrapperProps) {
               disabled={isLoading || props.disableApplyButton}
               {...props.applyButtonProps}
             >
-              {isLoading ? <CircularProgress size={24} /> : "Áp dụng"}
+              {isLoading ? <CircularProgress size={24} /> : "Lưu"}
             </Button>
             {props?.extraButton?.map((item, index) => {
               return (

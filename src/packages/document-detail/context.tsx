@@ -1,12 +1,14 @@
 "use client";
 
-import { Document } from "@/lib/types/document";
+import { DocumentApi } from "@/api/DocumentApi";
+import { Resource } from "@/lib/types/document";
 import { useParams } from "next/navigation";
 import {
   createContext,
   Dispatch,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import useSWR, { KeyedMutator } from "swr";
@@ -16,41 +18,111 @@ interface ContextProps {
 }
 
 interface DocumentDetailContextProps {
-  documentData?: Document;
-  setDocumentData: Dispatch<SetStateAction<Document | undefined>>;
+  resourceData: Resource[];
+  setResourceData: Dispatch<SetStateAction<Resource[]>>;
   isLoading: boolean;
-  mutate: KeyedMutator<void>;
+  mutate: KeyedMutator<Resource[] | undefined>;
+  setSelectedResource: Dispatch<SetStateAction<Resource | undefined>>;
+  selectedResource: Resource | undefined;
+  showModalUpload: boolean;
+  handleOpenUploadDocsModal(): void;
+  handleCloseUploadDocsModal(): void;
+  googleDocs: {
+    title: string;
+    url: string;
+    htmlContent: string;
+  };
+  setGoogleDocs: Dispatch<
+    SetStateAction<{
+      title: string;
+      url: string;
+      htmlContent: string;
+    }>
+  >;
+  setIsCreatingResource: Dispatch<SetStateAction<boolean>>;
+  isCreatingResource: boolean;
 }
 
 const DocumentDetailContext = createContext<DocumentDetailContextProps>({
+  resourceData: [],
   isLoading: false,
   mutate: () => Promise.resolve(undefined),
-  setDocumentData: () => {},
+  setResourceData: () => {},
+  setSelectedResource: () => {},
+  selectedResource: undefined,
+  showModalUpload: false,
+  handleOpenUploadDocsModal: () => {},
+  handleCloseUploadDocsModal: () => {},
+  googleDocs: {
+    title: "",
+    url: "",
+    htmlContent: "",
+  },
+  setGoogleDocs: () => {},
+  setIsCreatingResource: () => {},
+  isCreatingResource: false,
 });
 
 const DocumentDetailProvider = ({ children }: ContextProps) => {
-  const { documentId } = useParams<{ documentId: string }>();
-  const [documentData, setDocumentData] = useState<Document>();
+  const { collectionId } = useParams<{ collectionId: string }>();
+  const [resourceData, setResourceData] = useState<Resource[]>([]);
+  const [selectedResource, setSelectedResource] = useState<Resource>();
+  const [isCreatingResource, setIsCreatingResource] = useState<boolean>(false);
 
-  const { data, isLoading, mutate } = useSWR(
-    ["get-document-detail", documentId],
-    () => {},
+  const [googleDocs, setGoogleDocs] = useState<{
+    title: string;
+    url: string;
+    htmlContent: string;
+  }>({
+    title: "",
+    url: "",
+    htmlContent: "",
+  });
+  const [showModalUpload, setShowModalUpload] = useState<boolean>(false);
+
+  const {
+    data = [],
+    isLoading,
+    mutate,
+  } = useSWR(
+    ["get-resources", collectionId],
+    () => {
+      if (!collectionId) return;
+      return DocumentApi.getResourcesOfCollection({ collection: collectionId });
+    },
     {
       refreshInterval: 0,
-      revalidateOnFocus: false,
     }
   );
 
-  // useEffect(() => {
-  //   setDocumentData(data);
-  // }, [data]);
+  function handleOpenUploadDocsModal() {
+    setShowModalUpload(true);
+  }
+
+  function handleCloseUploadDocsModal() {
+    setShowModalUpload(false);
+  }
+
+  useEffect(() => {
+    setResourceData(data);
+  }, [data]);
 
   return (
     <DocumentDetailContext.Provider
       value={{
         isLoading,
         mutate,
-        setDocumentData,
+        setResourceData,
+        resourceData,
+        selectedResource,
+        setSelectedResource,
+        showModalUpload,
+        handleOpenUploadDocsModal,
+        handleCloseUploadDocsModal,
+        googleDocs,
+        setGoogleDocs,
+        setIsCreatingResource,
+        isCreatingResource,
       }}
     >
       {children}

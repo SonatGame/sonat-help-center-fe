@@ -1,3 +1,4 @@
+import { DocumentApi } from "@/api/DocumentApi";
 import { RHFImagePicker } from "@/components/form/RHFImagePicker";
 import RHFTextField from "@/components/form/RHFTextField";
 import ModalWrapper from "@/components/modal";
@@ -16,7 +17,8 @@ export interface ICreateDocumentModalProps {
 interface IForm {
   title: string;
   description: string;
-  coverImage: File;
+  thumbnail: File;
+  sharedUsers: string[];
 }
 
 export default function CreateDocumentModal(props: ICreateDocumentModalProps) {
@@ -26,11 +28,20 @@ export default function CreateDocumentModal(props: ICreateDocumentModalProps) {
     defaultValues: {
       title: "",
       description: "",
+      sharedUsers: [],
     },
   });
 
   async function onSubmit(data: IForm) {
-    // const {} = data;
+    const { title, description, thumbnail, sharedUsers } = data;
+    await DocumentApi.createCollection({
+      title,
+      description,
+      thumbnail,
+      sharedUsers,
+    });
+    reset();
+    handleClose();
   }
 
   return (
@@ -86,18 +97,18 @@ export default function CreateDocumentModal(props: ICreateDocumentModalProps) {
           }}
         />
         <RHFImagePicker
-          label="Ảnh bìa"
-          name="coverImage"
+          label="Ảnh  "
+          name="thumbnail"
           control={control}
           required
-          // rules={
-          //   !false
-          //     ? {
-          //         required: "Vui lòng chọn ảnh bìa",
-          //       }
-          //     : undefined
-          // }
-          // imageUrl={editingDocument?.thumbnail}
+          rules={
+            !false
+              ? {
+                  required: "Vui lòng chọn ảnh bìa",
+                }
+              : undefined
+          }
+          imageUrl={""}
           sx={{ height: "100%" }}
         />
       </Stack>

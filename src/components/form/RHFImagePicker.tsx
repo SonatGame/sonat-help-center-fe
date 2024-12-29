@@ -19,6 +19,7 @@ import {
   FieldValues,
   Path,
 } from "react-hook-form";
+import { toast } from "react-toastify";
 import Asterisk from "./Asterisk";
 
 interface IRHFImagePickerProps<T extends FieldValues> {
@@ -170,10 +171,10 @@ export function RHFImagePicker<T extends FieldValues>({
                         color="primary"
                         fontWeight="bold"
                       >
-                        Ấn vào để đăng tải
+                        Ấn để tải lên
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        hoặc kéo và thả
+                        hoặc kéo và thả vào đây (Tối đa 5MB)
                       </Typography>
                     </Stack>
                   </Stack>
@@ -183,7 +184,15 @@ export function RHFImagePicker<T extends FieldValues>({
                     accept="image/*"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
+
                       if (file) {
+                        if (file.size > 5 * 1024 * 1024) {
+                          toast.error(
+                            "The file size exceeds 5MB. Please upload a smaller file."
+                          );
+                          return;
+                        }
+
                         field.onChange(file);
                         handleImageChange(file);
                       }
@@ -192,7 +201,6 @@ export function RHFImagePicker<T extends FieldValues>({
                 </label>
               )}
             </Stack>
-
             {!!error && (
               <FormHelperText error={!!error}>{error?.message}</FormHelperText>
             )}

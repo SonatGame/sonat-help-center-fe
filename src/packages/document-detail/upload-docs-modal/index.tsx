@@ -1,13 +1,13 @@
 import { CourseApi } from "@/api/CourseApi";
 import RHFTextField from "@/components/form/RHFTextField";
 import ModalWrapper from "@/components/modal";
-import { Lesson } from "@/lib/types/course";
+import { Resource } from "@/lib/types/document";
+import { getGoogleDocId } from "@/packages/course-detail/helper";
 import { Stack, Typography } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { getGoogleDocId } from "../../helper";
 
-export interface ICreateCourseModalProps {
+export interface ICreateDocumentModalProps {
   isModalOpen: boolean;
   handleClose: () => any;
   googleDocs: {
@@ -22,16 +22,21 @@ export interface ICreateCourseModalProps {
       htmlContent: string;
     }>
   >;
-  editingLesson?: Lesson;
+  editingResource?: Resource;
 }
 
 interface IForm {
   googleDocUrl: string;
 }
 
-export default function UploadDocsModal(props: ICreateCourseModalProps) {
-  const { isModalOpen, handleClose, googleDocs, setGoogleDocs, editingLesson } =
-    props;
+export default function UploadDocsModal(props: ICreateDocumentModalProps) {
+  const {
+    isModalOpen,
+    handleClose,
+    googleDocs,
+    setGoogleDocs,
+    editingResource,
+  } = props;
   const { control, handleSubmit, reset } = useForm<IForm>({
     defaultValues: {
       googleDocUrl: "",
@@ -49,9 +54,9 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
   }
 
   useEffect(() => {
-    if (!editingLesson) reset();
-    reset({ googleDocUrl: editingLesson?.googleDocUrl });
-  }, [editingLesson, googleDocs, reset]);
+    if (!editingResource) reset();
+    reset({ googleDocUrl: editingResource?.googleDocUrl });
+  }, [editingResource, googleDocs, reset]);
 
   return (
     <ModalWrapper

@@ -1,16 +1,58 @@
+import ButtonMenu from "@/components/button-menu";
 import { FileIcon, FolderIcon, SearchIcon } from "@/lib/constants/icons";
-import { ArrowBack } from "@mui/icons-material";
-import { Stack, TextField, Typography, useTheme } from "@mui/material";
-import { NodeRendererProps, Tree } from "react-arborist";
+import { AppRoutes } from "@/lib/constants/routesAndPermissions";
+import { Resource } from "@/lib/types/document";
+import { Add, ArrowBack } from "@mui/icons-material";
+import { Stack, styled, TextField, Typography, useTheme } from "@mui/material";
+import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
+import { TreeItem, treeItemClasses } from "@mui/x-tree-view/TreeItem";
+import { useRouter } from "next/navigation";
+import useDocumentDetail from "./hooks";
+import ResourceContent from "./resource-content";
+
+const CustomTreeItem = styled(TreeItem)(({ theme }) => ({
+  color: theme.palette.grey[500],
+  [`& .${treeItemClasses.selected}`]: {
+    backgroundColor: `${theme.palette.grey[100]} !important`,
+    color: `${theme.palette.grey[700]} !important`,
+  },
+  [`& .${treeItemClasses.content}`]: {
+    borderRadius: theme.spacing(1),
+    padding: theme.spacing(1, 0.5),
+    userSelect: "none",
+    [`& .${treeItemClasses.label}`]: {
+      fontSize: theme.typography.body2.fontSize,
+      fontWeight: theme.typography.fontWeightBold,
+    },
+    "&:hover": {
+      backgroundColor: theme.palette.grey[100],
+      color: theme.palette.grey[500],
+    },
+  },
+  [`& .${treeItemClasses.groupTransition}`]: {
+    // marginLeft: 15,
+    // paddingLeft: 18,
+  },
+}));
 
 export default function CourseContent() {
   const theme = useTheme();
-  // const {} = useDocumentDetail();
+  const router = useRouter();
+  const { isLoading, treeData, handleNodeClick, selectedResource } =
+    useDocumentDetail();
 
-  // const onCreate = ({ parentId, index, type }) => {};
-  // const onRename = ({ id, name }) => {};
-  // const onMove = ({ dragIds, parentId, index }) => {};
-  // const onDelete = ({ ids }) => {};
+  const renderTreeItems = (items: Resource[]) => {
+    return items.map((item) => (
+      <CustomTreeItem
+        key={item._id}
+        itemId={item._id}
+        label={item.title}
+        onClick={() => handleNodeClick(item)}
+      >
+        {item.children && renderTreeItems(item.children)}
+      </CustomTreeItem>
+    ));
+  };
 
   return (
     <Stack direction="row" sx={{ height: "100%" }}>
@@ -32,15 +74,16 @@ export default function CourseContent() {
               userSelect: "none",
               color: theme.palette.primary.main,
             }}
-            onClick={() => {}}
+            onClick={() => router.push(AppRoutes.DOCUMENT)}
           >
             <ArrowBack fontSize="small" />
             <Typography variant="body2" fontWeight="bold">
               Quay lại
             </Typography>
           </Stack>
+          <Typography variant="h6">{selectedResource?.title}</Typography>
           <TextField
-            placeholder="Search"
+            placeholder="Tìm kiếm"
             autoComplete="off"
             slotProps={{
               input: {
@@ -53,73 +96,62 @@ export default function CourseContent() {
               },
             }}
           />
-          <Stack>
-            <Typography variant="body2" fontWeight="bold">
-              Tài liệu test
-            </Typography>
-          </Stack>
-          <Typography variant="h6">Tài liệu test</Typography>
-          <Tree
-            initialData={data}
-            // onCreate={onCreate}
-            // onRename={onRename}
-            // onMove={onMove}
-            // onDelete={onDelete}
-            openByDefault={false}
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            sx={{ color: theme.palette.grey[500] }}
           >
-            {Node}
-          </Tree>
+            <Typography variant="body2" fontWeight="bold">
+              Mục lục
+            </Typography>
+            <ButtonMenu
+              usingIconButton
+              icon={<Add fontSize="small" />}
+              menuOptions={[
+                {
+                  label: (
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      gap={0.5}
+                      sx={{ py: 0.5, color: theme.palette.grey[500] }}
+                    >
+                      <FileIcon fontSize="small" />
+                      <Typography variant="body2">Tài liệu mới</Typography>
+                    </Stack>
+                  ),
+                  onClick: () => {},
+                },
+                {
+                  label: (
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      gap={0.5}
+                      sx={{ py: 0.5, color: theme.palette.grey[500] }}
+                    >
+                      <FolderIcon fontSize="small" />
+                      <Typography variant="body2">Thư mục mới</Typography>
+                    </Stack>
+                  ),
+                  onClick: () => {},
+                },
+              ]}
+              buttonProps={{
+                size: "small",
+              }}
+            />
+          </Stack>
+          <SimpleTreeView selectedItems={selectedResource?._id}>
+            {renderTreeItems(treeData)}
+          </SimpleTreeView>
         </Stack>
+      </Stack>
+      <Stack
+        sx={{ flexGrow: 1, backgroundColor: theme.palette.background.paper }}
+      >
+        <ResourceContent />
       </Stack>
     </Stack>
   );
 }
-
-function Node({ node, style, dragHandle }: NodeRendererProps<any>) {
-  const theme = useTheme();
-  return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      gap={0.5}
-      style={style}
-      sx={{
-        cursor: "pointer",
-        color: theme.palette.grey[500],
-      }}
-      ref={dragHandle}
-    >
-      {node.isLeaf ? (
-        <FileIcon fontSize="small" />
-      ) : (
-        <FolderIcon fontSize="small" />
-      )}
-      <Typography variant="body2" fontWeight="bold">
-        {node.data.name}
-      </Typography>
-    </Stack>
-  );
-}
-
-const data = [
-  { id: "1", name: "Unread" },
-  { id: "2", name: "Threads" },
-  {
-    id: "3",
-    name: "Chat Rooms",
-    children: [
-      { id: "c1", name: "General" },
-      { id: "c2", name: "Random" },
-      { id: "c3", name: "Open Source Projects" },
-    ],
-  },
-  {
-    id: "4",
-    name: "Direct Messages",
-    children: [
-      { id: "d1", name: "Alice" },
-      { id: "d2", name: "Bob" },
-      { id: "d3", name: "Charlie" },
-    ],
-  },
-];

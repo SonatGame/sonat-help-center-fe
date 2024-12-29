@@ -1,15 +1,16 @@
 import TextMaxLine from "@/components/TextMaxLine";
-import { Document } from "@/lib/types/document";
+import { AppRoutes } from "@/lib/constants/routesAndPermissions";
+import { Collection } from "@/lib/types/document";
 import { Box, Card, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export interface IDocumentCardProps {
-  documentData: Document;
+  documentData: Collection;
 }
 
 export default function DocumentCard({ documentData }: IDocumentCardProps) {
-  const { _id, title, description, coverImage } = documentData;
+  const { title, description, thumbnail, _id } = documentData;
   const theme = useTheme();
   const router = useRouter();
 
@@ -22,7 +23,7 @@ export default function DocumentCard({ documentData }: IDocumentCardProps) {
         flexDirection: "column",
         cursor: "pointer",
       }}
-      // onClick={() => router.push(`${AppRoutes.DOCUMENT}${_id}`)}
+      onClick={() => router.push(`${AppRoutes.DOCUMENT}${_id}`)}
     >
       <Box
         sx={{
@@ -33,7 +34,7 @@ export default function DocumentCard({ documentData }: IDocumentCardProps) {
         }}
       >
         <Image
-          src={coverImage}
+          src={thumbnail}
           alt="cover-image"
           width={600}
           height={248}
