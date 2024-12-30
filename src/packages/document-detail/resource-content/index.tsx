@@ -1,6 +1,11 @@
 import ButtonMenu from "@/components/button-menu";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
-import { FileIcon, FolderIcon, UploadCloudIcon } from "@/lib/constants/icons";
+import {
+  EditIcon,
+  FileIcon,
+  FolderIcon,
+  UploadCloudIcon,
+} from "@/lib/constants/icons";
 import { Resource, ResourseType } from "@/lib/types/document";
 import { Add, MoreHoriz, NavigateNext } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -10,6 +15,7 @@ import {
   Button,
   CircularProgress,
   Container,
+  IconButton,
   Stack,
   TextField,
   Typography,
@@ -32,6 +38,13 @@ export default function ResourceContent() {
     htmlContent,
     googleDocs,
     createResourceInResource,
+    isRenaming,
+    handleEnableRename,
+    handleCancelRename,
+    title,
+    setTitle,
+    loadingRename,
+    handleRename,
   } = useResourceContent();
 
   const breadcrumbs = useMemo(() => {
@@ -118,14 +131,50 @@ export default function ResourceContent() {
 
           return (
             <Stack gap={1.5}>
-              <Stack direction="row" alignItems="center" gap={1.5}>
-                <FolderIcon
-                  sx={{ color: theme.palette.grey[500], fontSize: 32 }}
-                />
-                <Typography fontSize={36} fontWeight="bold">
-                  {selectedResource?.title}
-                </Typography>
-              </Stack>
+              {!isRenaming ? (
+                <>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Stack direction="row" alignItems="center" gap={1.5}>
+                      <FolderIcon
+                        sx={{ color: theme.palette.grey[500], fontSize: 32 }}
+                      />
+                      <Typography fontSize={36} fontWeight="bold">
+                        {selectedResource?.title}
+                      </Typography>
+                    </Stack>
+                    <IconButton onClick={handleEnableRename}>
+                      <EditIcon />
+                    </IconButton>
+                  </Stack>
+                </>
+              ) : (
+                <Stack direction="row" alignItems="center" gap={1.5}>
+                  <TextField
+                    autoComplete="off"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    sx={{ flexGrow: 1 }}
+                  />
+                  <Button
+                    variant="outlined"
+                    sx={{ textWrap: "nowrap" }}
+                    onClick={handleCancelRename}
+                  >
+                    Hủy bỏ
+                  </Button>
+                  <LoadingButton
+                    variant="contained"
+                    onClick={handleRename}
+                    loading={loadingRename}
+                  >
+                    Lưu
+                  </LoadingButton>
+                </Stack>
+              )}
               <Stack>
                 {selectedResource?.children?.map((item, index) => {
                   return (

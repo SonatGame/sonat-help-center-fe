@@ -1,6 +1,6 @@
 import { CourseApi } from "@/api/CourseApi";
 import { getGoogleDocId } from "@/packages/course-detail/helper";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { useDocumentDetailContext } from "../context";
 
@@ -12,7 +12,11 @@ export default function useResourceContent() {
     googleDocs,
     resourceData,
     createResourceInResource,
+    updateResource,
   } = useDocumentDetailContext();
+  const [isRenaming, setIsRenaming] = useState<boolean>(false);
+  const [loadingRename, setLoadingRename] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
 
   const { data, isLoading } = useSWR(
     ["get-html-content", selectedResource?._id],
@@ -34,6 +38,29 @@ export default function useResourceContent() {
       : data?.htmlContent ?? "";
   }, [googleDocs, data]);
 
+  function handleEnableRename() {
+    setIsRenaming(true);
+  }
+
+  function handleCancelRename() {
+    setIsRenaming(false);
+  }
+
+  async function handleRename() {
+    if (!selectedResource) return;
+    setLoadingRename(true);
+    await updateResource(selectedResource._id, {
+      title: title,
+    });
+    setLoadingRename(false);
+    setIsRenaming(false);
+  }
+
+  useEffect(() => {
+    if (!selectedResource) return;
+    setTitle(selectedResource.title);
+  }, [selectedResource]);
+
   return {
     resourceData,
     selectedResource,
@@ -43,5 +70,12 @@ export default function useResourceContent() {
     googleDocs,
     setSelectedResource,
     createResourceInResource,
+    isRenaming,
+    handleEnableRename,
+    handleCancelRename,
+    title,
+    setTitle,
+    loadingRename,
+    handleRename,
   };
 }

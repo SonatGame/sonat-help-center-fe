@@ -12,7 +12,7 @@ import {
   useState,
 } from "react";
 import useSWR, { KeyedMutator } from "swr";
-import { convertResourcesToTree } from "./helper";
+import { convertResourcesToTree, getChildById } from "./helper";
 
 interface ContextProps {
   children?: React.ReactNode;
@@ -186,10 +186,9 @@ const DocumentDetailProvider = ({ children }: ContextProps) => {
     if (!resourceData) return;
     const newTreeData = convertResourcesToTree(resourceData);
     setTreeData(newTreeData);
-    const resource = resourceData.find(
-      (item) => item._id === selectedResource?._id
-    );
-    if (!resource) setSelectedResource(treeData[0]);
+    if (!selectedResource) return;
+    const childItem = getChildById(newTreeData, selectedResource?._id);
+    if (childItem) setSelectedResource(childItem);
   }, [resourceData]);
 
   return (
