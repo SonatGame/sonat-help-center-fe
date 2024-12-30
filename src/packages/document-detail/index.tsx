@@ -1,9 +1,79 @@
-import { ArrowBack } from "@mui/icons-material";
-import { Stack, Typography, useTheme } from "@mui/material";
+import ButtonMenu from "@/components/button-menu";
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
+import { FileIcon, FolderIcon, SearchIcon } from "@/lib/constants/icons";
+import { AppRoutes } from "@/lib/constants/routesAndPermissions";
+import { Resource, ResourseType } from "@/lib/types/document";
+import { Add, ArrowBack, MoreVert } from "@mui/icons-material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import {
+  Button,
+  Stack,
+  styled,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
+import {
+  TreeItem as MuiTreeItem,
+  treeItemClasses,
+} from "@mui/x-tree-view/TreeItem";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useDocumentDetailContext } from "./context";
+import useDocumentDetail from "./hooks";
+import ResourceContent from "./resource-content";
+
+const CustomTreeItem = styled(MuiTreeItem)(({ theme }) => ({
+  color: theme.palette.grey[500],
+  [`& .${treeItemClasses.selected}`]: {
+    backgroundColor: `${theme.palette.grey[100]} !important`,
+    color: `${theme.palette.grey[700]} !important`,
+  },
+  [`& .${treeItemClasses.content}`]: {
+    borderRadius: theme.spacing(1),
+    padding: theme.spacing(1, 0.5),
+    userSelect: "none",
+    [`& .${treeItemClasses.label}`]: {
+      fontSize: theme.typography.body2.fontSize,
+      fontWeight: theme.typography.fontWeightBold,
+    },
+    "&:hover": {
+      backgroundColor: theme.palette.grey[100],
+      color: theme.palette.grey[500],
+    },
+  },
+  [`& .${treeItemClasses.groupTransition}`]: {
+    // marginLeft: 15,
+    // paddingLeft: 18,
+  },
+}));
 
 export default function CourseContent() {
   const theme = useTheme();
-  // const {} = useDocumentDetail();
+  const router = useRouter();
+  const {
+    // collectionData,
+    collectionId,
+    loadingResources,
+    treeData,
+    handleNodeClick,
+    selectedResource,
+    createResourceInCollection,
+  } = useDocumentDetail();
+
+  const renderTreeItems = (items: Resource[]) => {
+    return items.map((item) => (
+      <CustomTreeItem
+        key={item._id}
+        itemId={item._id}
+        label={<TreeItem resource={item} />}
+        onClick={() => handleNodeClick(item)}
+      >
+        {item.children && renderTreeItems(item.children)}
+      </CustomTreeItem>
+    ));
+  };
 
   return (
     <Stack direction="row" sx={{ height: "100%" }}>
@@ -18,22 +88,341 @@ export default function CourseContent() {
         <Stack gap={1.5} sx={{ p: 3 }}>
           <Stack
             direction="row"
+            alignItems="center"
             gap={0.5}
             sx={{
               cursor: "pointer",
               userSelect: "none",
               color: theme.palette.primary.main,
             }}
-            onClick={() => {}}
+            onClick={() => router.push(AppRoutes.DOCUMENT)}
           >
             <ArrowBack fontSize="small" />
             <Typography variant="body2" fontWeight="bold">
               Quay lại
             </Typography>
           </Stack>
-          <Typography variant="h6">Nội dung khóa học</Typography>
+          {/* <Typography variant="h6">{collectionData?.title}</Typography> */}
+          <TextField
+            placeholder="Tìm kiếm"
+            autoComplete="off"
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <SearchIcon
+                    fontSize="small"
+                    sx={{ color: theme.palette.grey[500] }}
+                  />
+                ),
+              },
+            }}
+          />
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            sx={{ color: theme.palette.grey[500] }}
+          >
+            <Typography variant="body2" fontWeight="bold">
+              Mục lục
+            </Typography>
+            <ButtonMenu
+              usingIconButton
+              icon={<Add fontSize="small" />}
+              menuOptions={[
+                {
+                  label: (
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      gap={0.5}
+                      sx={{ py: 0.5, color: theme.palette.grey[500] }}
+                    >
+                      <FileIcon fontSize="small" />
+                      <Typography variant="body2">Tài liệu mới</Typography>
+                    </Stack>
+                  ),
+                  onClick: () =>
+                    createResourceInCollection(
+                      ResourseType.document,
+                      collectionId
+                    ),
+                },
+                {
+                  label: (
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      gap={0.5}
+                      sx={{ py: 0.5, color: theme.palette.grey[500] }}
+                    >
+                      <FolderIcon fontSize="small" />
+                      <Typography variant="body2">Thư mục mới</Typography>
+                    </Stack>
+                  ),
+                  onClick: () =>
+                    createResourceInCollection(
+                      ResourseType.folder,
+                      collectionId
+                    ),
+                },
+              ]}
+              buttonProps={{
+                size: "small",
+              }}
+            />
+          </Stack>
+          <SimpleTreeView selectedItems={selectedResource?._id}>
+            {renderTreeItems(treeData)}
+          </SimpleTreeView>
         </Stack>
       </Stack>
+      <Stack
+        sx={{ flexGrow: 1, backgroundColor: theme.palette.background.paper }}
+      >
+        <ResourceContent />
+      </Stack>
+    </Stack>
+  );
+}
+
+function TreeItem({ resource }: { resource: Resource }) {
+  const theme = useTheme();
+  const { createResourceInResource, updateResource, deleteResource } =
+    useDocumentDetailContext();
+  const [isHovering, setIsHovering] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [loadingRename, setLoadingRename] = useState<boolean>(false);
+  const [isRenaming, setIsRenaming] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
+
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  function handleEnableRename() {
+    setIsRenaming(true);
+  }
+
+  function handleCancelRename() {
+    setTitle(resource.title);
+    setIsRenaming(false);
+  }
+
+  async function handleRename() {
+    setLoadingRename(true);
+    await updateResource(resource._id, {
+      title: title,
+    });
+    setIsRenaming(false);
+    setLoadingRename(false);
+  }
+
+  function handleClose() {
+    setIsConfirmModalOpen(false);
+  }
+
+  function handleDelete() {
+    setIsConfirmModalOpen(true);
+  }
+
+  async function handleConfirmDelete() {
+    await deleteResource(resource._id);
+  }
+
+  useEffect(() => {
+    setTitle(resource.title);
+  }, [resource]);
+
+  useEffect(() => {
+    if (isRenaming) ref.current?.focus();
+  }, [isRenaming]);
+
+  if (isRenaming)
+    return (
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        gap={1}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <TextField
+          ref={ref}
+          size="small"
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
+          autoComplete="off"
+          sx={{ flexGrow: 1 }}
+        />
+        <Button
+          variant="outlined"
+          sx={{ textWrap: "nowrap" }}
+          onClick={handleCancelRename}
+        >
+          Hủy bỏ
+        </Button>
+        <LoadingButton
+          variant="contained"
+          onClick={handleRename}
+          loading={loadingRename}
+        >
+          Lưu
+        </LoadingButton>
+      </Stack>
+    );
+
+  return (
+    <Stack
+      direction="row"
+      justifyContent="space-between"
+      alignItems="center"
+      onMouseOver={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      sx={{
+        position: "relative",
+        width: "100%",
+        borderRadius: 1,
+        cursor: "pointer",
+        "&:hover": {
+          backgroundColor: theme.palette.grey[100],
+        },
+      }}
+    >
+      <Stack direction="row" alignItems="center" gap={1.5}>
+        {resource.type === ResourseType.document ? (
+          <FileIcon fontSize="small" sx={{ color: theme.palette.grey[500] }} />
+        ) : (
+          <FolderIcon
+            fontSize="small"
+            sx={{ color: theme.palette.grey[500] }}
+          />
+        )}
+        <Typography variant="body2" sx={{ color: theme.palette.grey[700] }}>
+          {resource?.title}
+        </Typography>
+      </Stack>
+      {isHovering && (
+        <Stack
+          direction="row"
+          alignItems="center"
+          sx={{
+            position: "absolute",
+            right: -4,
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+        >
+          <ButtonMenu
+            usingIconButton
+            icon={<MoreVert fontSize="small" />}
+            buttonProps={{
+              size: "small",
+            }}
+            menuOptions={[
+              {
+                label: (
+                  <Typography
+                    variant="body2"
+                    sx={{ color: theme.palette.grey[500] }}
+                  >
+                    Đổi tên
+                  </Typography>
+                ),
+                onClick: handleEnableRename,
+              },
+              // {
+              //   label: (
+              //     <Typography
+              //       variant="body2"
+              //       sx={{ color: theme.palette.grey[500] }}
+              //     >
+              //       Tạo bản sao
+              //     </Typography>
+              //   ),
+              //   onClick: () => {},
+              // },
+              // {
+              //   label: (
+              //     <Typography
+              //       variant="body2"
+              //       sx={{ color: theme.palette.grey[500] }}
+              //     >
+              //       Sao chép link
+              //     </Typography>
+              //   ),
+              //   onClick: () => {},
+              // },
+              {
+                label: (
+                  <Typography
+                    variant="body2"
+                    sx={{ color: theme.palette.grey[500] }}
+                  >
+                    Xoá
+                  </Typography>
+                ),
+                onClick: handleDelete,
+              },
+            ]}
+          />
+          {resource.type === ResourseType.folder && (
+            <ButtonMenu
+              usingIconButton
+              icon={<Add fontSize="small" />}
+              menuOptions={[
+                {
+                  label: (
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      gap={0.5}
+                      sx={{ py: 0.5, color: theme.palette.grey[500] }}
+                    >
+                      <FileIcon fontSize="small" />
+                      <Typography variant="body2">Tài liệu mới</Typography>
+                    </Stack>
+                  ),
+                  onClick: () =>
+                    createResourceInResource(
+                      ResourseType.document,
+                      resource._id
+                    ),
+                },
+                {
+                  label: (
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      gap={0.5}
+                      sx={{ py: 0.5, color: theme.palette.grey[500] }}
+                    >
+                      <FolderIcon fontSize="small" />
+                      <Typography variant="body2">Thư mục mới</Typography>
+                    </Stack>
+                  ),
+                  onClick: () =>
+                    createResourceInResource(ResourseType.folder, resource._id),
+                },
+              ]}
+              buttonProps={{
+                size: "small",
+              }}
+            />
+          )}
+        </Stack>
+      )}
+      <ConfirmDeleteModal
+        isOpen={isConfirmModalOpen}
+        title={
+          resource.type === ResourseType.folder ? "Xoá thư mục" : "Xoá tài liệu"
+        }
+        onApply={handleConfirmDelete}
+        onClose={handleClose}
+      >
+        <Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
+          Bạn có chắc muốn xoá{" "}
+          {resource.type === ResourseType.folder ? "thư mục" : "tài liệu"} này
+          không?
+        </Typography>
+      </ConfirmDeleteModal>
     </Stack>
   );
 }

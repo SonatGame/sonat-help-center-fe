@@ -15,7 +15,7 @@ export default function LoginSection() {
     try {
       if (login !== undefined) await login();
     } catch (error) {
-      toast.error("Sign in thất bại");
+      toast.error("Đăng nhập thất bại");
     }
   };
 

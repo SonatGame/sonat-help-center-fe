@@ -14,7 +14,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Fragment, ReactNode, useState } from "react";
+import { Fragment, MouseEvent, ReactNode, useState } from "react";
 
 type DialogProp = Omit<DialogProps, "open">;
 
@@ -45,6 +45,7 @@ interface ModalWrapperProps {
   dialogContentProps?: DialogContentProps;
   disableCloseOnApply?: boolean;
   isRawApply?: boolean;
+  applyButtonText?: string;
   applyButtonProps?: ButtonProps;
 }
 
@@ -59,7 +60,8 @@ export default function ModalWrapper(props: ModalWrapperProps) {
     props?.onOpen?.();
   };
 
-  const handleClose = () => {
+  const handleClose = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     if (typeof props.isOpen !== "boolean" || !props.onClose) {
       setOpen(false);
       if (props.onCancel) props.onCancel();
@@ -152,7 +154,8 @@ export default function ModalWrapper(props: ModalWrapperProps) {
             </Button>
             <Button
               variant="contained"
-              onClick={async () => {
+              onClick={async (e) => {
+                e.stopPropagation();
                 setIsLoading(true);
                 if (props.onApply) {
                   try {
@@ -164,13 +167,17 @@ export default function ModalWrapper(props: ModalWrapperProps) {
                 setIsLoading(false);
                 if (!props.disableCloseOnApply) {
                   if (props.isRawApply) setOpen(false);
-                  else handleClose();
+                  else handleClose(e);
                 }
               }}
               disabled={isLoading || props.disableApplyButton}
               {...props.applyButtonProps}
             >
-              {isLoading ? <CircularProgress size={24} /> : "Áp dụng"}
+              {isLoading ? (
+                <CircularProgress size={24} />
+              ) : (
+                props.applyButtonText ?? "Lưu"
+              )}
             </Button>
             {props?.extraButton?.map((item, index) => {
               return (
