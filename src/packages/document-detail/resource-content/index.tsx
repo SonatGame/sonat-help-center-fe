@@ -21,6 +21,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { Empty } from "antd";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDocumentDetailContext } from "../context";
 import { getParentList } from "../helper";
@@ -69,6 +70,13 @@ export default function ResourceContent() {
       );
     });
   }, [resourceData, selectedResource]);
+
+  if (resourceData.length === 0)
+    return (
+      <Stack justifyContent="center" alignItems="center" sx={{ flexGrow: 1 }}>
+        <Empty />
+      </Stack>
+    );
 
   return (
     <Stack gap={4} sx={{ flexGrow: 1 }}>
@@ -157,7 +165,18 @@ export default function ResourceContent() {
                     autoComplete="off"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    sx={{ flexGrow: 1 }}
+                    sx={{
+                      flexGrow: 1,
+                      "& .MuiInput-input": {
+                        py: 0,
+                        fontSize: 36,
+                        fontWeight: theme.typography.fontWeightBold,
+                        "::placeholder": {
+                          fontSize: 36,
+                          fontWeight: theme.typography.fontWeightBold,
+                        },
+                      },
+                    }}
                   />
                   <Button
                     variant="outlined"

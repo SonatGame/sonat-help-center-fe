@@ -13,6 +13,7 @@ export default function useResourceContent() {
     resourceData,
     createResourceInResource,
     updateResource,
+    setGoogleDocs,
   } = useDocumentDetailContext();
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
   const [loadingRename, setLoadingRename] = useState<boolean>(false);
@@ -20,23 +21,29 @@ export default function useResourceContent() {
 
   const { data, isLoading } = useSWR(
     ["get-html-content", selectedResource?._id],
-    () => {
+    async () => {
       if (!selectedResource?.googleDocUrl) return;
       const googleDocsId = getGoogleDocId(selectedResource.googleDocUrl);
       if (!googleDocsId) return;
-      return CourseApi.getHTMLContent(googleDocsId);
+      const docsContent = await CourseApi.getHTMLContent(googleDocsId);
+      setGoogleDocs({
+        url: selectedResource.googleDocUrl,
+        htmlContent: docsContent.htmlContent,
+      });
+      return docsContent;
     },
     {
       refreshInterval: 0,
     }
   );
 
-  const htmlContent = useMemo(() => {
-    if (!googleDocs) return;
-    return googleDocs.htmlContent.length > 0
-      ? googleDocs.htmlContent
-      : data?.htmlContent ?? "";
-  }, [googleDocs, data]);
+  const htmlContent = useMemo(
+    () =>
+      googleDocs.htmlContent.length > 0
+        ? googleDocs.htmlContent
+        : data?.htmlContent ?? "",
+    [googleDocs, data]
+  );
 
   function handleEnableRename() {
     setIsRenaming(true);

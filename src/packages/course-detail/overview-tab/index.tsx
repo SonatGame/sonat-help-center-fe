@@ -36,7 +36,7 @@ export default function CourseOverview() {
     setIsAddingLesson,
     setEdittingChapter,
     setEdittingLesson,
-    setTabValue,
+    handleChangeTab,
     isLoadingOutcomes,
     isLoadingDescription,
   } = useOverviewTab();
@@ -308,7 +308,7 @@ export default function CourseOverview() {
                             setIsAddingLesson(true);
                             setEdittingChapter(chapter);
                             setEdittingLesson(lesson);
-                            setTabValue("content");
+                            handleChangeTab("content");
                           }}
                         >
                           Chỉnh sửa

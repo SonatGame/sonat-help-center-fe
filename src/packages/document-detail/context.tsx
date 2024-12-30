@@ -9,6 +9,7 @@ import {
   SetStateAction,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import useSWR, { KeyedMutator } from "swr";
@@ -19,6 +20,7 @@ interface ContextProps {
 }
 
 interface DocumentDetailContextProps {
+  collectionResources: Resource[] | undefined;
   resourceData: Resource[];
   setResourceData: Dispatch<SetStateAction<Resource[]>>;
   isLoading: boolean;
@@ -29,13 +31,11 @@ interface DocumentDetailContextProps {
   handleOpenUploadDocsModal(): void;
   handleCloseUploadDocsModal(): void;
   googleDocs: {
-    title: string;
     url: string;
     htmlContent: string;
   };
   setGoogleDocs: Dispatch<
     SetStateAction<{
-      title: string;
       url: string;
       htmlContent: string;
     }>
@@ -57,9 +57,13 @@ interface DocumentDetailContextProps {
   ): Promise<void>;
   deleteResource(resourceId: string): Promise<void>;
   treeData: Resource[];
+  setInputValue: Dispatch<SetStateAction<string>>;
+  inputValue: string;
+  searchText: string;
 }
 
 const DocumentDetailContext = createContext<DocumentDetailContextProps>({
+  collectionResources: undefined,
   resourceData: [],
   isLoading: false,
   mutate: () => Promise.resolve(undefined),
@@ -70,7 +74,6 @@ const DocumentDetailContext = createContext<DocumentDetailContextProps>({
   handleOpenUploadDocsModal: () => {},
   handleCloseUploadDocsModal: () => {},
   googleDocs: {
-    title: "",
     url: "",
     htmlContent: "",
   },
@@ -80,6 +83,9 @@ const DocumentDetailContext = createContext<DocumentDetailContextProps>({
   updateResource: () => Promise.resolve(undefined),
   deleteResource: () => Promise.resolve(undefined),
   treeData: [],
+  setInputValue: () => {},
+  inputValue: "",
+  searchText: "",
 });
 
 const DocumentDetailProvider = ({ children }: ContextProps) => {
@@ -87,27 +93,30 @@ const DocumentDetailProvider = ({ children }: ContextProps) => {
   const [resourceData, setResourceData] = useState<Resource[]>([]);
   const [selectedResource, setSelectedResource] = useState<Resource>();
   const [treeData, setTreeData] = useState<Resource[]>([]);
+  const [searchText, setSearchText] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>("");
 
   const [googleDocs, setGoogleDocs] = useState<{
-    title: string;
     url: string;
     htmlContent: string;
   }>({
-    title: "",
     url: "",
     htmlContent: "",
   });
   const [showModalUpload, setShowModalUpload] = useState<boolean>(false);
 
   const {
-    data = [],
+    data: collectionResources,
     isLoading,
     mutate,
   } = useSWR(
-    ["get-resources", collectionId],
+    ["get-resources-of-collection", collectionId, searchText],
     () => {
       if (!collectionId) return;
-      return DocumentApi.getResourcesOfCollection({ collection: collectionId });
+      return DocumentApi.getResourcesOfCollection({
+        collection: collectionId,
+        title: searchText,
+      });
     },
     {
       refreshInterval: 0,
@@ -179,8 +188,15 @@ const DocumentDetailProvider = ({ children }: ContextProps) => {
   }
 
   useEffect(() => {
-    setResourceData(data);
-  }, [data]);
+    const delayDebounce = setTimeout(() => {
+      setSearchText(inputValue);
+    }, 200);
+    return () => clearTimeout(delayDebounce);
+  }, [inputValue]);
+
+  useEffect(() => {
+    if (collectionResources) setResourceData(collectionResources);
+  }, [collectionResources]);
 
   useEffect(() => {
     if (!resourceData) return;
@@ -188,30 +204,63 @@ const DocumentDetailProvider = ({ children }: ContextProps) => {
     setTreeData(newTreeData);
     if (!selectedResource) return;
     const childItem = getChildById(newTreeData, selectedResource?._id);
-    if (childItem) setSelectedResource(childItem);
+    if (childItem) {
+      setSelectedResource(childItem);
+    } else {
+      if (newTreeData.length > 0) setSelectedResource(newTreeData[0]);
+      setSelectedResource(undefined);
+    }
   }, [resourceData]);
 
+  const value = useMemo(
+    () => ({
+      collectionResources,
+      isLoading,
+      mutate,
+      setResourceData,
+      resourceData,
+      selectedResource,
+      setSelectedResource,
+      showModalUpload,
+      handleOpenUploadDocsModal,
+      handleCloseUploadDocsModal,
+      googleDocs,
+      setGoogleDocs,
+      createResourceInCollection,
+      createResourceInResource,
+      updateResource,
+      deleteResource,
+      treeData,
+      setInputValue,
+      inputValue,
+      searchText,
+    }),
+    [
+      collectionResources,
+      isLoading,
+      mutate,
+      setResourceData,
+      resourceData,
+      selectedResource,
+      setSelectedResource,
+      showModalUpload,
+      handleOpenUploadDocsModal,
+      handleCloseUploadDocsModal,
+      googleDocs,
+      setGoogleDocs,
+      createResourceInCollection,
+      createResourceInResource,
+      updateResource,
+      deleteResource,
+      treeData,
+      setInputValue,
+      inputValue,
+      searchText,
+    ]
+  );
+
   return (
-    <DocumentDetailContext.Provider
-      value={{
-        isLoading,
-        mutate,
-        setResourceData,
-        resourceData,
-        selectedResource,
-        setSelectedResource,
-        showModalUpload,
-        handleOpenUploadDocsModal,
-        handleCloseUploadDocsModal,
-        googleDocs,
-        setGoogleDocs,
-        createResourceInCollection,
-        createResourceInResource,
-        updateResource,
-        deleteResource,
-        treeData,
-      }}
-    >
+    <DocumentDetailContext.Provider value={value}>
       {children}
     </DocumentDetailContext.Provider>
   );
