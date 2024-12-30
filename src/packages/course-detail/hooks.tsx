@@ -6,7 +6,7 @@ import { useCourseDetailContext } from "./context";
 
 export default function useCourseDetail() {
   const {
-    handleChange,
+    handleChangeTab,
     value,
     isAddingLesson,
     courseData,
@@ -51,7 +51,7 @@ export default function useCourseDetail() {
     setAnchorEl(null);
   }
   return {
-    handleChange,
+    handleChangeTab,
     value,
     isAddingLesson,
     courseData,

@@ -1,13 +1,13 @@
 "use client";
 
 import { CourseApi } from "@/api/CourseApi";
+import { AppRoutes } from "@/lib/constants/routesAndPermissions";
 import { Chapter, Course, Lesson } from "@/lib/types/course";
-import { useParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
   createContext,
   Dispatch,
   SetStateAction,
-  SyntheticEvent,
   useContext,
   useEffect,
   useState,
@@ -20,8 +20,7 @@ interface ContextProps {
 
 interface CourseDetailContextProps {
   value: string;
-  setValue: (value: SetStateAction<string>) => void;
-  handleChange: (e: SyntheticEvent, newValue: string) => void;
+  handleChangeTab: (newValue: string) => void;
   courseData?: Course;
   setCourseData: Dispatch<SetStateAction<Course | undefined>>;
   isLoading: boolean;
@@ -36,8 +35,7 @@ interface CourseDetailContextProps {
 
 const CourseDetailContext = createContext<CourseDetailContextProps>({
   value: "",
-  setValue: () => {},
-  handleChange: () => {},
+  handleChangeTab: () => {},
   isAddingLesson: false,
   setIsAddingLesson: () => {},
   isLoading: false,
@@ -48,7 +46,10 @@ const CourseDetailContext = createContext<CourseDetailContextProps>({
 });
 
 const CourseDetailProvider = ({ children }: ContextProps) => {
+  const router = useRouter();
   const { courseId } = useParams<{ courseId: string }>();
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
   const [value, setValue] = useState("overview");
   const [isAddingLesson, setIsAddingLesson] = useState(false);
   const [editingChapter, setEdittingChapter] = useState<Chapter>();
@@ -64,20 +65,23 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
     }
   );
 
-  const handleChange = (e: SyntheticEvent, newValue: string) => {
-    setValue(newValue);
+  const handleChangeTab = (newValue: string) => {
+    router.push(`${AppRoutes.COURSE}${courseId}?tab=${newValue}`);
   };
 
   useEffect(() => {
     setCourseData(data);
   }, [data]);
 
+  useEffect(() => {
+    if (tab) setValue(tab);
+  }, [tab]);
+
   return (
     <CourseDetailContext.Provider
       value={{
         value,
-        setValue,
-        handleChange,
+        handleChangeTab,
         courseData,
         isLoading,
         mutate,

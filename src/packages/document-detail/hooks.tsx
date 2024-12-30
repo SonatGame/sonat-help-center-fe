@@ -4,12 +4,15 @@ import { useDocumentDetailContext } from "./context";
 
 export default function useDocumentDetail() {
   const {
-    resourceData,
+    collectionResources,
     isLoading: loadingResources,
     setSelectedResource,
     selectedResource,
     createResourceInCollection,
     treeData,
+    setInputValue,
+    inputValue,
+    searchText,
   } = useDocumentDetailContext();
   const { collectionId } = useParams<{ collectionId: string }>();
 
@@ -18,11 +21,15 @@ export default function useDocumentDetail() {
   };
 
   return {
+    collectionResources,
     collectionId,
     loadingResources,
     treeData,
     handleNodeClick,
     selectedResource,
     createResourceInCollection,
+    setInputValue,
+    inputValue,
+    searchText,
   };
 }

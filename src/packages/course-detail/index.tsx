@@ -21,7 +21,7 @@ import CourseOverview from "./overview-tab";
 export default function CourseDetail() {
   const theme = useTheme();
   const {
-    handleChange,
+    handleChangeTab,
     value,
     isAddingLesson,
     courseData,
@@ -146,7 +146,10 @@ export default function CourseDetail() {
             </Stack>
           </Stack>
           <Box sx={{ borderBottom: 1, borderColor: "divider", px: 4 }}>
-            <Tabs value={value} onChange={handleChange}>
+            <Tabs
+              value={value}
+              onChange={(_, value: string) => handleChangeTab(value)}
+            >
               {tabList.map((tab, index) => (
                 <Tab key={`tab-${index}`} value={tab.value} label={tab.label} />
               ))}

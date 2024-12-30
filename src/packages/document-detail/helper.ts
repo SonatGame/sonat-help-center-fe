@@ -59,18 +59,3 @@ export function getParentList(data: Resource[], childId: string): Resource[] {
   parents.reverse().push(idToNodeMap[childId]);
   return parents;
 }
-
-export function updateResource(
-  data: Resource[],
-  childId: string,
-  newData: Resource
-): Resource[] {
-  const temp = [...data];
-  for (let item of data) {
-    if (item._id === childId) {
-      item = { ...newData };
-      break;
-    }
-  }
-  return temp;
-}

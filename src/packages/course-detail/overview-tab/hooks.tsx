@@ -17,7 +17,7 @@ interface IForm {
 
 export default function useOverviewTab() {
   const {
-    setValue: setTabValue,
+    handleChangeTab,
     courseData,
     mutate,
     isLoading,
@@ -60,7 +60,7 @@ export default function useOverviewTab() {
   }
 
   function handleAddChapter() {
-    setTabValue("content");
+    handleChangeTab("content");
   }
 
   async function handleChangeDescription() {
@@ -160,7 +160,7 @@ export default function useOverviewTab() {
     setIsAddingLesson,
     setEdittingChapter,
     setEdittingLesson,
-    setTabValue,
+    handleChangeTab,
     isLoadingOutcomes,
     isLoadingDescription,
   };

@@ -64,7 +64,7 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
         flexDirection: "column",
         cursor: "pointer",
       }}
-      onClick={() => router.push(`${AppRoutes.COURSE}${_id}`)}
+      onClick={() => router.push(`${AppRoutes.COURSE}${_id}?tab=overview`)}
     >
       <Stack direction="row" spacing={0.5}>
         {teamData.icon}
