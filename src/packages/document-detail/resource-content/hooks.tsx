@@ -8,16 +8,14 @@ export default function useResourceContent() {
   const {
     setSelectedResource,
     selectedResource,
-    showModalUpload,
     handleOpenUploadDocsModal,
-    handleCloseUploadDocsModal,
     googleDocs,
-    setGoogleDocs,
-    isCreatingResource,
+    resourceData,
+    createResourceInResource,
   } = useDocumentDetailContext();
 
   const { data, isLoading } = useSWR(
-    ["get-html-content", selectedResource],
+    ["get-html-content", selectedResource?._id],
     () => {
       if (!selectedResource?.googleDocUrl) return;
       const googleDocsId = getGoogleDocId(selectedResource.googleDocUrl);
@@ -37,15 +35,13 @@ export default function useResourceContent() {
   }, [googleDocs, data]);
 
   return {
+    resourceData,
     selectedResource,
     handleOpenUploadDocsModal,
     isLoading,
     htmlContent,
-    showModalUpload,
-    setGoogleDocs,
     googleDocs,
-    handleCloseUploadDocsModal,
     setSelectedResource,
-    isCreatingResource,
+    createResourceInResource,
   };
 }

@@ -1,26 +1,28 @@
 import { Resource } from "@/lib/types/document";
-import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import { useDocumentDetailContext } from "./context";
-import { convertResourcesToTree } from "./helper";
 
 export default function useDocumentDetail() {
-  const { resourceData, isLoading, setSelectedResource, selectedResource } =
-    useDocumentDetailContext();
-  const [treeData, setTreeData] = useState<Resource[]>([]);
+  const {
+    resourceData,
+    isLoading: loadingResources,
+    setSelectedResource,
+    selectedResource,
+    createResourceInCollection,
+    treeData,
+  } = useDocumentDetailContext();
+  const { collectionId } = useParams<{ collectionId: string }>();
 
   const handleNodeClick = (data: Resource) => {
     setSelectedResource(data);
   };
 
-  useEffect(() => {
-    if (!resourceData) return;
-    setTreeData(convertResourcesToTree(resourceData));
-  }, [resourceData]);
-
   return {
-    isLoading,
+    collectionId,
+    loadingResources,
     treeData,
     handleNodeClick,
     selectedResource,
+    createResourceInCollection,
   };
 }

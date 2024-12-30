@@ -9,7 +9,7 @@ import {
 import { MouseEvent, ReactNode, useState } from "react";
 
 interface IButtonMenuProps {
-  buttonTitle?: string;
+  buttonTitle?: ReactNode;
   usingIconButton?: boolean;
   icon?: ReactNode;
   buttonProps?: ButtonProps;

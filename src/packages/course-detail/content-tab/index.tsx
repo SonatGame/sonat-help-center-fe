@@ -214,7 +214,7 @@ export default function CourseContent() {
                   />
                 </Stack>
               </Stack>
-              <Grid2 container spacing={3}>
+              <Grid2 container spacing={2}>
                 <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
                   <LessonCard
                     isEmpty
@@ -282,7 +282,7 @@ export default function CourseContent() {
               )}
             </Stack>
 
-            <Grid2 container spacing={3}>
+            <Grid2 container spacing={2}>
               <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
                 <LessonCard isEmpty onClick={() => handleAddLesson()} />
               </Grid2>

@@ -29,6 +29,7 @@ export default function ConfirmDeleteModal(props: IProps) {
         maxWidth: "sm",
         fullWidth: true,
       }}
+      applyButtonText="Xoá"
     >
       {children}
     </ModalWrapper>

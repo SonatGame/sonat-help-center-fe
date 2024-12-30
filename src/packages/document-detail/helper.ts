@@ -39,6 +39,7 @@ export function getParentList(data: Resource[], childId: string): Resource[] {
     currentNode = parentNode;
   }
 
+  parents.reverse().push(idToNodeMap[childId]);
   return parents;
 }
 

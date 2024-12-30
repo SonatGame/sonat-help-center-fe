@@ -73,12 +73,12 @@ async function createResourceInCollection(
   data: {
     title: string;
     googleDocUrl?: string;
-    detail: string;
     type: ResourseType;
   }
 ) {
-  return fetchOne({
-    functionName: "Tạo ",
+  return fetchOne<Resource>({
+    functionName:
+      data.type === ResourseType.document ? "Tạo tài liệu" : "Tạo thư mục",
     url: HOST + "resource/collection/" + collectionId,
     method: METHOD.POST,
     hasErrorMsg: true,
@@ -100,12 +100,12 @@ async function createResourceInResource(
   data: {
     title: string;
     googleDocUrl?: string;
-    detail: string;
     type: ResourseType;
   }
 ) {
-  return fetchOne({
-    functionName: "",
+  return fetchOne<Resource>({
+    functionName:
+      data.type === ResourseType.document ? "Tạo tài liệu" : "Tạo thư mục",
     url: HOST + `resource/${resourceId}/children`,
     method: METHOD.POST,
     hasErrorMsg: true,
@@ -117,7 +117,7 @@ async function createResourceInResource(
 async function deleteResource(resourceId: string) {
   return fetchOne({
     functionName: "Xóa tài liệu",
-    url: HOST + "resource/  " + resourceId,
+    url: HOST + "resource/" + resourceId,
     method: METHOD.DELETE,
     hasErrorMsg: true,
     hasSuccessfulMsg: true,
@@ -127,13 +127,12 @@ async function deleteResource(resourceId: string) {
 async function updateResource(
   resourceId: string,
   data: {
-    title: string;
+    title?: string;
     googleDocUrl?: string;
-    detail: string;
   }
 ) {
-  return fetchOne<Collection>({
-    functionName: "Cập nhật ",
+  return fetchOne<Resource>({
+    functionName: "Cập nhật",
     url: HOST + "resource/" + resourceId,
     method: METHOD.PATCH,
     hasErrorMsg: true,

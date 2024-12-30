@@ -101,13 +101,9 @@ export default function CreateDocumentModal(props: ICreateDocumentModalProps) {
           name="thumbnail"
           control={control}
           required
-          rules={
-            !false
-              ? {
-                  required: "Vui lòng chọn ảnh bìa",
-                }
-              : undefined
-          }
+          rules={{
+            required: "Vui lòng chọn ảnh bìa",
+          }}
           imageUrl={""}
           sx={{ height: "100%" }}
         />

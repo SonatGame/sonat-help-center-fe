@@ -1,42 +1,25 @@
 import { CourseApi } from "@/api/CourseApi";
 import RHFTextField from "@/components/form/RHFTextField";
 import ModalWrapper from "@/components/modal";
-import { Resource } from "@/lib/types/document";
 import { getGoogleDocId } from "@/packages/course-detail/helper";
 import { Stack, Typography } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-
-export interface ICreateDocumentModalProps {
-  isModalOpen: boolean;
-  handleClose: () => any;
-  googleDocs: {
-    title: string;
-    url: string;
-    htmlContent: string;
-  };
-  setGoogleDocs: Dispatch<
-    SetStateAction<{
-      title: string;
-      url: string;
-      htmlContent: string;
-    }>
-  >;
-  editingResource?: Resource;
-}
+import { useDocumentDetailContext } from "../context";
 
 interface IForm {
   googleDocUrl: string;
 }
 
-export default function UploadDocsModal(props: ICreateDocumentModalProps) {
+export default function UploadDocsModal() {
   const {
-    isModalOpen,
-    handleClose,
+    selectedResource: editingResource,
+    showModalUpload: isModalOpen,
+    handleCloseUploadDocsModal: handleClose,
     googleDocs,
     setGoogleDocs,
-    editingResource,
-  } = props;
+    updateResource,
+  } = useDocumentDetailContext();
   const { control, handleSubmit, reset } = useForm<IForm>({
     defaultValues: {
       googleDocUrl: "",
@@ -46,8 +29,11 @@ export default function UploadDocsModal(props: ICreateDocumentModalProps) {
   async function onSubmit(data: IForm) {
     const { googleDocUrl } = data;
     const googleDocsId = getGoogleDocId(googleDocUrl);
-    if (!googleDocsId) return;
+    if (!googleDocsId || !editingResource) return;
     const res = await CourseApi.getHTMLContent(googleDocsId);
+    await updateResource(editingResource._id, {
+      googleDocUrl,
+    });
     setGoogleDocs({ url: googleDocUrl, ...res });
     handleClose();
     reset();
