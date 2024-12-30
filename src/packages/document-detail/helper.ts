@@ -22,6 +22,23 @@ export function convertResourcesToTree(data: Resource[]): Resource[] {
   return tree;
 }
 
+export function getChildById(tree: Resource[], id: string): Resource | null {
+  function findNode(nodes: Resource[]): Resource | null {
+    for (const node of nodes) {
+      if (node._id === id) {
+        return node;
+      }
+      const foundInChildren = findNode(node.children || []);
+      if (foundInChildren) {
+        return foundInChildren;
+      }
+    }
+    return null;
+  }
+
+  return findNode(tree);
+}
+
 export function getParentList(data: Resource[], childId: string): Resource[] {
   const idToNodeMap: Record<string, Resource> = {};
   const parents: Resource[] = [];
