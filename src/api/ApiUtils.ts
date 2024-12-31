@@ -78,6 +78,8 @@ async function fetchData<T>(config: ApiRequest): Promise<T> {
     }
     const contentType = response.headers.get("content-type");
     if (contentType?.includes("text/html")) return (await response.text()) as T;
+    if (contentType?.includes("application/pdf"))
+      return (await response.blob()) as T;
     const body = config.isEmpty ? response : await response.json();
     return body as T;
   } catch (error) {
@@ -118,13 +120,11 @@ async function fetchOne<T>({
     hasErrorMsg &&
     (result?.error || (result?.statusCode && result?.statusCode >= 400))
   ) {
-    toast.error(
-      `${functionName} thất bại${result.message ? `: ${result.message}` : ""}`
-    );
+    toast.error(`${functionName} thất bại`);
     return undefined as T;
   }
   if (hasSuccessfulMsg && !result?.error) {
-    toast.success(`${functionName} thành công.`);
+    toast.success(`${functionName} thành công`);
   }
   return result;
 }
@@ -161,13 +161,11 @@ async function fetchList<T>({
     (result?.error || (result?.statusCode && result?.statusCode >= 400))
   ) {
     {
-      toast.error(
-        `${functionName} thất bại${result.message ? `: ${result.message}` : ""}`
-      );
+      toast.error(`${functionName} thất bại`);
     }
     return undefined as unknown as T[];
   } else if (hasSuccessfulMsg && !result?.error) {
-    toast.success(`${functionName} thành công.`);
+    toast.success(`${functionName} thành công`);
   }
   if (!Array.isArray(result)) return [] as T[];
   else return result as T[];
@@ -179,7 +177,6 @@ async function fetchFormData<T>(config: ApiRequest): Promise<T> {
   const url = new URL(config.url);
   const formData = new FormData();
 
-  // Helper function to append query parameters
   const appendParams = (params: Record<string, any>) => {
     Object.entries(params).forEach(([key, value]) => {
       if (Array.isArray(value)) {
@@ -193,7 +190,6 @@ async function fetchFormData<T>(config: ApiRequest): Promise<T> {
     });
   };
 
-  // Helper function to append form data
   const appendFormData = (body: Record<string, any>) => {
     Object.entries(body).forEach(([key, value]) => {
       if (Array.isArray(value)) {
@@ -211,20 +207,16 @@ async function fetchFormData<T>(config: ApiRequest): Promise<T> {
     });
   };
 
-  // Append parameters to URL
   if (config.params) {
     appendParams(config.params);
   }
 
-  // Append body to FormData
   if (config.body) {
     appendFormData(config.body);
   }
 
-  // Add Authorization header
   myHeaders.append("Authorization", `Bearer ${token}`);
 
-  // Request options
   const requestOptions: RequestInit = {
     method: config.method,
     mode: "cors",
@@ -251,49 +243,6 @@ async function fetchFormData<T>(config: ApiRequest): Promise<T> {
   } catch (error) {
     return { ...(error as Error), error: (error as Error).message } as T;
   }
-}
-
-async function fetchListFormData<T>({
-  functionName,
-  url,
-  method,
-  hasSuccessfulMsg,
-  hasErrorMsg,
-  body,
-  params,
-  showError,
-}: {
-  functionName: string;
-  url: string;
-  method: string;
-  hasSuccessfulMsg?: boolean;
-  hasErrorMsg?: boolean;
-  body?: Record<string, any>;
-  params?: Record<string, any>;
-  showError?: boolean;
-}): Promise<T[]> {
-  const result = await fetchFormData<ApiResponse<T[]>>({
-    url,
-    method,
-    body,
-    params,
-    showError,
-  });
-  if (
-    hasErrorMsg &&
-    (result?.error || (result?.statusCode && result?.statusCode >= 400))
-  ) {
-    {
-      toast.error(
-        `${functionName} thất bại${result.message ? `: ${result.message}` : ""}`
-      );
-    }
-    return undefined as unknown as T[];
-  } else if (hasSuccessfulMsg && !result?.error) {
-    toast.success(`${functionName} thành công.`);
-  }
-  if (!Array.isArray(result)) return [] as T[];
-  else return result as T[];
 }
 
 async function fetchOneFormData<T>({
@@ -327,13 +276,11 @@ async function fetchOneFormData<T>({
     (result?.error || (result?.statusCode && result?.statusCode >= 400))
   ) {
     {
-      toast.error(
-        `${functionName} thất bại${result.message ? `: ${result.message}` : ""}`
-      );
+      toast.error(`${functionName} thất bại`);
     }
     return undefined as unknown as T;
   } else if (hasSuccessfulMsg && !result?.error) {
-    toast.success(`${functionName} thành công.`);
+    toast.success(`${functionName} thành công`);
   }
   return result as T;
 }
@@ -347,6 +294,5 @@ export const ApiUtils = {
   fetchOne,
   fetchList,
   fetchFormData,
-  fetchListFormData,
   fetchOneFormData,
 };

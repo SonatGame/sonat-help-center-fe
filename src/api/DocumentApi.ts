@@ -3,11 +3,12 @@ import { ApiUtils } from "./ApiUtils";
 
 const { HOST, METHOD, fetchList, fetchOne, fetchOneFormData } = ApiUtils;
 
-async function getCollectionList() {
+async function getCollectionList(params: { title?: string }) {
   return await fetchList<Collection>({
     functionName: "Lấy danh sách tài liệu",
     url: HOST + "resource/collection",
     method: METHOD.GET,
+    params,
   });
 }
 

@@ -1,13 +1,13 @@
 import ButtonMenu from "@/components/button-menu";
-import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import {
+  ColoredFolderIcon,
   EditIcon,
   FileIcon,
   FolderIcon,
   UploadCloudIcon,
 } from "@/lib/constants/icons";
-import { Resource, ResourseType } from "@/lib/types/document";
-import { Add, MoreHoriz, NavigateNext } from "@mui/icons-material";
+import { ResourseType } from "@/lib/types/document";
+import { Add, NavigateNext } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {
   Box,
@@ -21,12 +21,18 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { Empty } from "antd";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useDocumentDetailContext } from "../context";
+import { useMemo } from "react";
+import { Document, Page, pdfjs } from "react-pdf";
+import FolderItem from "../folder-item";
 import { getParentList } from "../helper";
 import UploadDocsModal from "../upload-docs-modal";
 import useResourceContent from "./hooks";
+import "./styles.css";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
 export default function ResourceContent() {
   const theme = useTheme();
@@ -36,7 +42,7 @@ export default function ResourceContent() {
     selectedResource,
     handleOpenUploadDocsModal,
     isLoading,
-    htmlContent,
+    pdfUrl,
     googleDocs,
     createResourceInResource,
     isRenaming,
@@ -46,6 +52,8 @@ export default function ResourceContent() {
     setTitle,
     loadingRename,
     handleRename,
+    numPages,
+    onDocumentLoadSuccess,
   } = useResourceContent();
 
   const breadcrumbs = useMemo(() => {
@@ -59,14 +67,27 @@ export default function ResourceContent() {
           </Typography>
         );
       return (
-        <Typography
-          key={index}
-          variant="body2"
-          fontWeight="bold"
-          sx={{ color: theme.palette.primary.main }}
-        >
-          {item?.title}
-        </Typography>
+        <Stack key={index} direction="row" alignItems="center" gap={0.5}>
+          {item.type === ResourseType.folder ? (
+            <FolderIcon
+              fontSize="small"
+              sx={{ color: theme.palette.primary.main }}
+            />
+          ) : (
+            <FileIcon
+              fontSize="small"
+              sx={{ color: theme.palette.primary.main }}
+            />
+          )}
+          <Typography
+            key={index}
+            variant="body2"
+            fontWeight="bold"
+            sx={{ color: theme.palette.primary.main }}
+          >
+            {item?.title}
+          </Typography>
+        </Stack>
       );
     });
   }, [resourceData, selectedResource]);
@@ -74,12 +95,15 @@ export default function ResourceContent() {
   if (resourceData.length === 0)
     return (
       <Stack justifyContent="center" alignItems="center" sx={{ flexGrow: 1 }}>
-        <Empty />
+        <ColoredFolderIcon sx={{ fontSize: 200 }} />
+        <Typography variant="h4" sx={{ color: theme.palette.grey[700] }}>
+          Không có nội dung trong tài liệu này
+        </Typography>
       </Stack>
     );
 
   return (
-    <Stack gap={4} sx={{ flexGrow: 1 }}>
+    <Stack sx={{ flexGrow: 1 }}>
       {breadcrumbs.length > 0 && (
         <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>
           <Breadcrumbs separator={<NavigateNext fontSize="small" />}>
@@ -88,7 +112,7 @@ export default function ResourceContent() {
         </Box>
       )}
       {selectedResource?.type === ResourseType.document && (
-        <Stack alignItems="center">
+        <Stack alignItems="center" sx={{ mt: 4 }}>
           <Stack
             direction="row"
             gap={3}
@@ -132,10 +156,24 @@ export default function ResourceContent() {
               </Stack>
             );
 
-          if (selectedResource?.type === ResourseType.document)
+          if (selectedResource?.type === ResourseType.document) {
+            if (pdfUrl.length === 0) return;
             return (
-              <Box dangerouslySetInnerHTML={{ __html: htmlContent ?? "" }} />
+              <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
+                {numPages &&
+                  Array.from({ length: numPages }, (_, index) => (
+                    <Page
+                      key={`page_${index + 1}`}
+                      pageNumber={index + 1}
+                      renderMode="canvas"
+                      renderAnnotationLayer={false}
+                      renderTextLayer={false}
+                      width={900}
+                    />
+                  ))}
+              </Document>
             );
+          }
 
           return (
             <Stack gap={1.5}>
@@ -150,7 +188,13 @@ export default function ResourceContent() {
                       <FolderIcon
                         sx={{ color: theme.palette.grey[500], fontSize: 32 }}
                       />
-                      <Typography fontSize={36} fontWeight="bold">
+                      <Typography
+                        fontSize={36}
+                        fontWeight="bold"
+                        sx={{
+                          wordBreak: "break-word",
+                        }}
+                      >
                         {selectedResource?.title}
                       </Typography>
                     </Stack>
@@ -268,185 +312,6 @@ export default function ResourceContent() {
         })()}
       </Container>
       <UploadDocsModal />
-    </Stack>
-  );
-}
-
-function FolderItem({
-  onClick,
-  resource,
-}: {
-  onClick: () => void;
-  resource: Resource;
-}) {
-  const theme = useTheme();
-  const { updateResource, deleteResource } = useDocumentDetailContext();
-  const [isHovering, setIsHovering] = useState<boolean>(false);
-  const [isRenaming, setIsRenaming] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>("");
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
-  const [loadingRename, setLoadingRename] = useState<boolean>(false);
-
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  function handleEnableRename() {
-    setIsRenaming(true);
-  }
-
-  function handleCancelRename() {
-    setTitle(resource.title);
-    setIsRenaming(false);
-  }
-
-  async function handleRename() {
-    setLoadingRename(true);
-    await updateResource(resource._id, {
-      title: title,
-    });
-    setIsRenaming(false);
-    setLoadingRename(false);
-  }
-
-  function handleClose() {
-    setIsConfirmModalOpen(false);
-  }
-
-  function handleDelete() {
-    setIsConfirmModalOpen(true);
-  }
-
-  async function handleConfirmDelete() {
-    await deleteResource(resource._id);
-  }
-
-  useEffect(() => {
-    setTitle(resource.title);
-  }, [resource]);
-
-  useEffect(() => {
-    if (isRenaming) ref.current?.focus();
-  }, [isRenaming]);
-
-  if (isRenaming)
-    return (
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        gap={1}
-      >
-        <TextField
-          ref={ref}
-          size="small"
-          onClick={(e) => e.stopPropagation()}
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
-          autoComplete="off"
-          sx={{ flexGrow: 1 }}
-        />
-        <Button
-          variant="outlined"
-          sx={{ textWrap: "nowrap" }}
-          onClick={handleCancelRename}
-        >
-          Hủy bỏ
-        </Button>
-        <LoadingButton
-          variant="contained"
-          onClick={handleRename}
-          loading={loadingRename}
-        >
-          Lưu
-        </LoadingButton>
-      </Stack>
-    );
-
-  return (
-    <Stack
-      direction="row"
-      justifyContent="space-between"
-      alignItems="center"
-      onClick={onClick}
-      onMouseOver={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-      sx={{
-        position: "relative",
-        width: "100%",
-        p: 1.5,
-        borderRadius: 1,
-        cursor: "pointer",
-        "&:hover": {
-          backgroundColor: theme.palette.grey[100],
-        },
-      }}
-    >
-      <Stack direction="row" alignItems="center" gap={1.5}>
-        {resource.type === ResourseType.document ? (
-          <FileIcon fontSize="small" sx={{ color: theme.palette.grey[500] }} />
-        ) : (
-          <FolderIcon
-            fontSize="small"
-            sx={{ color: theme.palette.grey[500] }}
-          />
-        )}
-        <Typography variant="body2" sx={{ color: theme.palette.grey[700] }}>
-          {title}
-        </Typography>
-      </Stack>
-      {isHovering && (
-        <ButtonMenu
-          usingIconButton
-          icon={<MoreHoriz fontSize="small" />}
-          buttonProps={{
-            size: "small",
-            sx: {
-              position: "absolute",
-              right: 12,
-              top: "50%",
-              transform: "translateY(-50%)",
-            },
-          }}
-          menuOptions={[
-            {
-              label: (
-                <Typography
-                  variant="body2"
-                  sx={{ color: theme.palette.grey[500] }}
-                >
-                  Đổi tên
-                </Typography>
-              ),
-              onClick: handleEnableRename,
-            },
-            {
-              label: (
-                <Typography
-                  variant="body2"
-                  sx={{ color: theme.palette.grey[500] }}
-                >
-                  Xoá
-                </Typography>
-              ),
-              onClick: handleDelete,
-            },
-          ]}
-        />
-      )}
-
-      <ConfirmDeleteModal
-        isOpen={isConfirmModalOpen}
-        title={
-          resource.type === ResourseType.folder ? "Xoá thư mục" : "Xoá tài liệu"
-        }
-        onApply={handleConfirmDelete}
-        onClose={handleClose}
-      >
-        <Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
-          Bạn có chắc muốn xoá{" "}
-          {resource.type === ResourseType.folder ? "thư mục" : "tài liệu"} này
-          không?
-        </Typography>
-      </ConfirmDeleteModal>
     </Stack>
   );
 }

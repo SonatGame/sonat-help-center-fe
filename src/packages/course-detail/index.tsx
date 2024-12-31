@@ -1,18 +1,11 @@
+import ButtonMenu from "@/components/button-menu";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
 import Tag from "@/components/Tag";
-import { MoreVert } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  Menu,
-  MenuItem,
-  Stack,
-  Tab,
-  Tabs,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { AppRoutes } from "@/lib/constants/routesAndPermissions";
+import { ArrowBack, MoreVert } from "@mui/icons-material";
+import { Box, Stack, Tab, Tabs, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import CourseContent from "./content-tab";
 import CreateCourseModal from "./create-course-modal";
 import useCourseDetail from "./hooks";
@@ -20,6 +13,7 @@ import CourseOverview from "./overview-tab";
 
 export default function CourseDetail() {
   const theme = useTheme();
+  const router = useRouter();
   const {
     handleChangeTab,
     value,
@@ -73,12 +67,29 @@ export default function CourseDetail() {
         <>
           <Stack
             direction="row"
+            alignItems="center"
+            gap={0.5}
+            sx={{
+              mt: 3,
+              px: 4,
+              cursor: "pointer",
+              userSelect: "none",
+              color: theme.palette.primary.main,
+            }}
+            onClick={() => router.push(AppRoutes.COURSE)}
+          >
+            <ArrowBack fontSize="small" />
+            <Typography variant="body2" fontWeight="bold">
+              Quay lại
+            </Typography>
+          </Stack>
+          <Stack
+            direction="row"
             justifyContent="space-between"
             alignItems="center"
             sx={{
               px: 4,
-              pt: 3,
-              pb: 1.5,
+              py: 1.5,
             }}
           >
             <Stack
@@ -90,12 +101,12 @@ export default function CourseDetail() {
               <Image
                 src={courseData?.thumbnail ?? ""}
                 alt="course-thumbnail"
-                width={300}
-                height={300}
+                width={200}
+                height={200}
                 style={{
                   objectFit: "cover",
-                  width: 96,
-                  height: 96,
+                  width: 72,
+                  height: 72,
                   borderRadius: 16,
                 }}
               />
@@ -136,13 +147,42 @@ export default function CourseDetail() {
                 isEditing
                 mutate={mutateCourse}
               />
-              <Button
-                variant="outlined"
-                sx={{ minWidth: "fit-content", px: 1 }}
-                onClick={handleClick}
-              >
-                <MoreVert fontSize="small" />
-              </Button>
+              <ButtonMenu
+                buttonTitle={<MoreVert fontSize="small" />}
+                buttonProps={{
+                  variant: "outlined",
+                  sx: {
+                    minWidth: "fit-content",
+                    px: 1,
+                  },
+                }}
+                menuOptions={[
+                  {
+                    label: (
+                      <Typography
+                        variant="body2"
+                        sx={{ color: theme.palette.grey[500] }}
+                      >
+                        Tạo bản sao
+                      </Typography>
+                    ),
+                    onClick: () => {},
+                  },
+                  {
+                    label: (
+                      <Typography variant="body2">Xoá khoá học</Typography>
+                    ),
+                    onClick: handleOpenModalConfirm,
+                    sx: {
+                      color: theme.palette.error.main,
+                      ":hover": {
+                        backgroundColor: theme.palette.error[100],
+                        color: theme.palette.error.main,
+                      },
+                    },
+                  },
+                ]}
+              />
             </Stack>
           </Stack>
           <Box sx={{ borderBottom: 1, borderColor: "divider", px: 4 }}>
@@ -151,7 +191,12 @@ export default function CourseDetail() {
               onChange={(_, value: string) => handleChangeTab(value)}
             >
               {tabList.map((tab, index) => (
-                <Tab key={`tab-${index}`} value={tab.value} label={tab.label} />
+                <Tab
+                  key={`tab-${index}`}
+                  value={tab.value}
+                  label={tab.label}
+                  sx={{ textTransform: "none" }}
+                />
               ))}
             </Tabs>
           </Box>
@@ -169,38 +214,6 @@ export default function CourseDetail() {
           {value === tab.value && tab.component}
         </Box>
       ))}
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        onClick={(e) => e.stopPropagation()}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-        sx={{
-          "& .MuiList-root": {
-            py: 0,
-          },
-          "& .MuiMenuItem-root": {
-            fontSize: 14,
-          },
-        }}
-      >
-        <MenuItem sx={{ color: theme.palette.grey[500] }}>Tạo bản sao</MenuItem>
-        <MenuItem
-          sx={{
-            color: theme.palette.error.main,
-            ":hover": {
-              background: theme.palette.error[100],
-              color: theme.palette.error.main,
-            },
-          }}
-          onClick={handleOpenModalConfirm}
-        >
-          Xoá khoá học
-        </MenuItem>
-      </Menu>
 
       <ConfirmDeleteModal
         title="Xóa khóa học"

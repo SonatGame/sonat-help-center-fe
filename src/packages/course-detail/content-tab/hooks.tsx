@@ -1,9 +1,12 @@
 import { CourseApi } from "@/api/CourseApi";
 import { Chapter, Lesson } from "@/lib/types/course";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useCourseDetailContext } from "../context";
 
 export default function useContentTab() {
+  const router = useRouter();
+  const { courseId } = useParams<{ courseId: string }>();
   const {
     courseData,
     setCourseData,
@@ -14,19 +17,17 @@ export default function useContentTab() {
     setEdittingChapter,
     editingLesson,
     setEdittingLesson,
+    setIsEditingChapterTitle,
+    setChapterTitle,
+    setGoogleDocs,
+    chapterTitle,
+    isEditingChapterTitle,
   } = useCourseDetailContext();
 
-  const [isEditingChapterTitle, setIsEditingChapterTitle] =
-    useState<boolean>(false);
-  const [chapterTitle, setChapterTitle] = useState<string>("");
   const [showModalUpload, setShowModalUpload] = useState<boolean>(false);
   const [showConfirmDeleteChapterModal, setShowConfirmDeleteChapterModal] =
     useState<boolean>(false);
-  const [googleDocs, setGoogleDocs] = useState({
-    title: "",
-    url: "",
-    htmlContent: "",
-  });
+
   const inputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({
     new: null,
   });
@@ -61,7 +62,7 @@ export default function useContentTab() {
     setGoogleDocs({
       title: "",
       url: "",
-      htmlContent: "",
+      pdf: "",
     });
   }
 
@@ -125,7 +126,9 @@ export default function useContentTab() {
         !inputRefs.current[editingChapter._id]?.contains(e.target as Node)
       ) {
         const temp = { ...courseData };
-        for (const chapter of temp.modules) {
+        for (let i = 0; i < temp.modules.length; i++) {
+          const chapter = temp.modules[i];
+          if (editingChapter._id === chapter._id) console.log(chapter._id);
           if (
             editingChapter._id === chapter._id &&
             chapter.title !== chapterTitle
@@ -145,7 +148,7 @@ export default function useContentTab() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isEditingChapterTitle]);
+  }, [editingChapter, courseData, isEditingChapterTitle, chapterTitle]);
 
   return {
     courseData,
@@ -162,8 +165,6 @@ export default function useContentTab() {
     handleOpenConfirmDeleteChapterModal,
     handleCloseConfirmDeleteChapterModal,
     handleConfirmDeleteChapter,
-    googleDocs,
-    setGoogleDocs,
     handleEditChapter,
     handleCancelEditChapter,
     isEditingChapterTitle,

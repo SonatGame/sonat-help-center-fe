@@ -36,7 +36,7 @@ export default function CourseList() {
       </Stack>
       <Grid2 container spacing={2}>
         {data?.data?.map((course) => (
-          <Grid2 key={course._id} size={{ xs: 12, sm: 6, lg: 4, xl: 3 }}>
+          <Grid2 key={course._id} size={{ xs: 12, sm: 6, lg: 4, xxl: 3 }}>
             <CourseCard courseData={course} />
           </Grid2>
         ))}

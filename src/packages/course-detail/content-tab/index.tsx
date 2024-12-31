@@ -25,8 +25,6 @@ export default function CourseContent() {
     handleOpenConfirmDeleteChapterModal,
     handleCloseConfirmDeleteChapterModal,
     handleConfirmDeleteChapter,
-    googleDocs,
-    setGoogleDocs,
     handleEditChapter,
     handleCancelEditChapter,
     isEditingChapterTitle,
@@ -291,19 +289,13 @@ export default function CourseContent() {
         </Stack>
       ) : (
         <LessonDetail
-          editingChapter={editingChapter}
-          editingLesson={editingLesson}
           handleGoBack={handleCancel}
           handleOpenUploadDocsModal={handleOpenUploadDocsModal}
-          googleDocs={googleDocs}
         />
       )}
       <UploadDocsModal
         isModalOpen={showModalUpload}
         handleClose={handleCloseUploadDocsModal}
-        googleDocs={googleDocs}
-        setGoogleDocs={setGoogleDocs}
-        editingLesson={editingLesson}
       />
       <ConfirmDeleteModal
         title="Xác nhận xóa chương"

@@ -28,8 +28,16 @@ export interface ICourseCardProps {
 }
 
 export default function CourseCard({ courseData }: ICourseCardProps) {
-  const { team, _id, thumbnail, KSA, title, modules, learnersCount } =
-    courseData;
+  const {
+    team,
+    _id,
+    thumbnail,
+    KSA,
+    title,
+    modules,
+    learnersCount,
+    totalLessons,
+  } = courseData;
   const theme = useTheme();
   const router = useRouter();
 
@@ -95,11 +103,7 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
       <Stack direction="row" spacing={1} sx={{ mt: 1.5 }}>
         <Tag>
           <Typography variant="body2" color="primary" fontWeight="medium">
-            {modules?.reduce(
-              (accumulator, currentValue) =>
-                accumulator + (currentValue.lessons?.length ?? 0),
-              0
-            ) ?? 0}
+            {totalLessons}
             &nbsp;bài học
           </Typography>
         </Tag>
@@ -126,7 +130,7 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
         {title}
       </TextMaxLine>
       <Stack direction="row" alignItems="center" gap={0.5} sx={{ mt: 1.5 }}>
-        {learnersCount === 0 ? (
+        {learnersCount !== 0 ? (
           <>
             <AvatarGroup
               spacing={8}

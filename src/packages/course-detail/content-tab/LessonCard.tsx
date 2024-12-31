@@ -1,17 +1,9 @@
 import { CourseApi } from "@/api/CourseApi";
+import ButtonMenu from "@/components/button-menu";
 import TextMaxLine from "@/components/TextMaxLine";
 import { Lesson } from "@/lib/types/course";
 import { AddRounded, ArrowForwardRounded, MoreVert } from "@mui/icons-material";
-import {
-  Box,
-  Card,
-  IconButton,
-  Menu,
-  MenuItem,
-  Stack,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Card, Stack, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
 import ConfirmDeleteLessonModal from "../confirm-delete-modal";
 import { useCourseDetailContext } from "../context";
@@ -29,18 +21,6 @@ export default function LessonCard(props: IProps) {
   const { mutate: mutateCourse } = useCourseDetailContext();
   const [hovering, setHovering] = useState(false);
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    setAnchorEl(null);
-  };
 
   const handleOpenModalConfirm = () => {
     setIsOpenConfirmModal(true);
@@ -114,7 +94,7 @@ export default function LessonCard(props: IProps) {
                 <DragIndicator
                   fontSize="small"
                   sx={{ color: theme.palette.grey[500] }}
-                />
+                /> 
               </IconButton>
             )} */}
             <TextMaxLine
@@ -126,18 +106,50 @@ export default function LessonCard(props: IProps) {
               {lessonData?.title}
             </TextMaxLine>
             {hovering && (
-              <IconButton
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                size="small"
-                onClick={handleClick}
-              >
-                <MoreVert
-                  fontSize="small"
-                  sx={{ color: theme.palette.grey[500] }}
-                />
-              </IconButton>
+              <ButtonMenu
+                usingIconButton
+                icon={
+                  <MoreVert
+                    fontSize="small"
+                    sx={{ color: theme.palette.grey[500] }}
+                  />
+                }
+                buttonProps={{
+                  size: "small",
+                }}
+                menuOptions={[
+                  {
+                    label: (
+                      <Typography
+                        variant="body2"
+                        sx={{ color: theme.palette.grey[500] }}
+                      >
+                        Chỉnh sửa
+                      </Typography>
+                    ),
+                    onClick: onClick,
+                  },
+                  // {
+                  //   label: "Chỉnh sửa",
+                  //   onClick: onClick,
+                  // },
+                  // {
+                  //   label: "Chỉnh sửa",
+                  //   onClick: onClick,
+                  // },
+                  {
+                    label: <Typography variant="body2">Xoá bài học</Typography>,
+                    onClick: handleOpenModalConfirm,
+                    sx: {
+                      color: theme.palette.error.main,
+                      ":hover": {
+                        backgroundColor: theme.palette.error[100],
+                        color: theme.palette.error.main,
+                      },
+                    },
+                  },
+                ]}
+              />
             )}
           </Stack>
           <TextMaxLine
@@ -168,46 +180,6 @@ export default function LessonCard(props: IProps) {
         handleClose={handleCloseModalConfirm}
         handleDelete={handleDeleteLesson}
       />
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        onClick={(e) => e.stopPropagation()}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-        sx={{
-          "& .MuiList-root": {
-            py: 0,
-          },
-          "& .MuiMenuItem-root": {
-            fontSize: 14,
-          },
-        }}
-      >
-        <MenuItem sx={{ color: theme.palette.grey[500] }} onClick={onClick}>
-          Chỉnh sửa
-        </MenuItem>
-        <MenuItem sx={{ color: theme.palette.grey[500] }}>
-          Thay đổi link
-        </MenuItem>
-        <MenuItem sx={{ color: theme.palette.grey[500] }}>
-          Sao chép link
-        </MenuItem>
-        <MenuItem
-          sx={{
-            color: theme.palette.error.main,
-            ":hover": {
-              background: theme.palette.error[100],
-              color: theme.palette.error.main,
-            },
-          }}
-          onClick={handleOpenModalConfirm}
-        >
-          Xoá bài học
-        </MenuItem>
-      </Menu>
     </Card>
   );
 }
