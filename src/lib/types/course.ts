@@ -50,6 +50,7 @@ export type Course = {
     count: number;
   };
   learnersCount: number;
+  totalLessons: number;
 };
 
 export type CourseRes = {

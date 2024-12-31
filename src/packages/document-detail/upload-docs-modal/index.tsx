@@ -30,11 +30,15 @@ export default function UploadDocsModal() {
     const { googleDocUrl } = data;
     const googleDocsId = getGoogleDocId(googleDocUrl);
     if (!googleDocsId || !editingResource) return;
-    const res = await CourseApi.getHTMLContent(googleDocsId);
+    const pdfBlob = await CourseApi.getPDFFile(googleDocsId);
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    setGoogleDocs({
+      url: googleDocUrl,
+      pdf: pdfUrl,
+    });
     await updateResource(editingResource._id, {
       googleDocUrl,
     });
-    setGoogleDocs({ url: googleDocUrl, ...res });
     handleClose();
     reset();
   }

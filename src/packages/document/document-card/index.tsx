@@ -1,7 +1,9 @@
+import ButtonMenu from "@/components/button-menu";
 import TextMaxLine from "@/components/TextMaxLine";
 import { AppRoutes } from "@/lib/constants/routesAndPermissions";
 import { Collection } from "@/lib/types/document";
-import { Box, Card, useTheme } from "@mui/material";
+import { MoreVert } from "@mui/icons-material";
+import { Box, Card, Stack, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -29,7 +31,6 @@ export default function DocumentCard({ documentData }: IDocumentCardProps) {
         sx={{
           borderTopLeftRadius: 10,
           borderTopRightRadius: 10,
-          mt: 1.5,
           overflow: "hidden",
         }}
       >
@@ -37,26 +38,67 @@ export default function DocumentCard({ documentData }: IDocumentCardProps) {
           src={thumbnail}
           alt="cover-image"
           width={600}
-          height={248}
+          height={156}
           style={{ objectFit: "cover" }}
         />
       </Box>
-      <TextMaxLine
-        TypographyProps={{
-          variant: "h6",
-        }}
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="start"
         sx={{
-          mt: 1.5,
+          mt: 1,
         }}
       >
-        {title}
-      </TextMaxLine>
+        <TextMaxLine
+          TypographyProps={{
+            variant: "h6",
+          }}
+        >
+          {title}
+        </TextMaxLine>
+        <ButtonMenu
+          usingIconButton
+          icon={<MoreVert fontSize="small" />}
+          menuOptions={[
+            {
+              label: (
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  gap={0.5}
+                  sx={{ py: 0.5, color: theme.palette.grey[500] }}
+                >
+                  <Typography variant="body2">Chỉnh sửa</Typography>
+                </Stack>
+              ),
+              onClick: () => {},
+            },
+            {
+              label: (
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  gap={0.5}
+                  sx={{ py: 0.5, color: theme.palette.grey[500] }}
+                >
+                  <Typography variant="body2">Xoá tài liệu</Typography>
+                </Stack>
+              ),
+              onClick: () => {},
+            },
+          ]}
+          buttonProps={{
+            size: "small",
+          }}
+        ></ButtonMenu>
+      </Stack>
       <TextMaxLine
         TypographyProps={{
           variant: "body2",
         }}
         sx={{
-          mt: 1.5,
+          mt: 1,
           flexGrow: 1,
         }}
       >

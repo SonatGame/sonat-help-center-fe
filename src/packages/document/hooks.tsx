@@ -1,15 +1,18 @@
 import { DocumentApi } from "@/api/DocumentApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 
 export default function useDocumentSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchText, setSearchText] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>("");
 
   const { data, isLoading, mutate } = useSWR(
-    "get-document",
-    () => DocumentApi.getCollectionList(),
+    ["get-collection", searchText],
+    () => DocumentApi.getCollectionList({ title: searchText }),
     {
       refreshInterval: 0,
+      revalidateOnFocus: false,
     }
   );
 
@@ -20,6 +23,13 @@ export default function useDocumentSection() {
     setIsModalOpen(false);
   }
 
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      setSearchText(inputValue);
+    }, 200);
+    return () => clearTimeout(delayDebounce);
+  }, [inputValue]);
+
   return {
     isModalOpen,
     handleOpen,
@@ -27,5 +37,7 @@ export default function useDocumentSection() {
     data,
     isLoading,
     mutate,
+    inputValue,
+    setInputValue,
   };
 }

@@ -31,6 +31,22 @@ interface CourseDetailContextProps {
   setEdittingChapter: Dispatch<SetStateAction<Chapter | undefined>>;
   editingLesson?: Lesson;
   setEdittingLesson: Dispatch<SetStateAction<Lesson | undefined>>;
+  setIsEditingChapterTitle: Dispatch<SetStateAction<boolean>>;
+  isEditingChapterTitle: boolean;
+  setChapterTitle: Dispatch<SetStateAction<string>>;
+  chapterTitle: string;
+  setGoogleDocs: Dispatch<
+    SetStateAction<{
+      title: string;
+      url: string;
+      pdf: string;
+    }>
+  >;
+  googleDocs: {
+    title: string;
+    url: string;
+    pdf: string;
+  };
 }
 
 const CourseDetailContext = createContext<CourseDetailContextProps>({
@@ -43,6 +59,16 @@ const CourseDetailContext = createContext<CourseDetailContextProps>({
   setEdittingChapter: () => {},
   setEdittingLesson: () => {},
   setCourseData: () => {},
+  setIsEditingChapterTitle: () => {},
+  isEditingChapterTitle: false,
+  setChapterTitle: () => {},
+  chapterTitle: "",
+  setGoogleDocs: () => {},
+  googleDocs: {
+    title: "",
+    url: "",
+    pdf: "",
+  },
 });
 
 const CourseDetailProvider = ({ children }: ContextProps) => {
@@ -55,6 +81,14 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
   const [editingChapter, setEdittingChapter] = useState<Chapter>();
   const [editingLesson, setEdittingLesson] = useState<Lesson>();
   const [courseData, setCourseData] = useState<Course>();
+  const [isEditingChapterTitle, setIsEditingChapterTitle] =
+    useState<boolean>(false);
+  const [chapterTitle, setChapterTitle] = useState<string>("");
+  const [googleDocs, setGoogleDocs] = useState({
+    title: "",
+    url: "",
+    pdf: "",
+  });
 
   const { data, isLoading, mutate } = useSWR(
     ["get-course-detail", courseId],
@@ -92,6 +126,12 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
         editingLesson,
         setEdittingLesson,
         setCourseData,
+        setIsEditingChapterTitle,
+        isEditingChapterTitle,
+        setChapterTitle,
+        chapterTitle,
+        setGoogleDocs,
+        googleDocs,
       }}
     >
       {children}

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  swcMinify: true,
+  swcMinify: false,
   trailingSlash: true,
   env: {
     HOST: process.env.HOST,
@@ -25,6 +25,10 @@ const nextConfig = {
         hostname: "storage-apis.sonatgame.com",
       },
     ],
+  },
+  webpack: (config) => {
+    config.resolve.alias.canvas = false;
+    return config;
   },
 };
 

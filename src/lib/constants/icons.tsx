@@ -824,13 +824,13 @@ export const CareIcon = (props: SvgIconProps) => {
             y2="18.3095"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#F294FF" />
-            <stop offset="0.093" stop-color="#F489E7" />
-            <stop offset="0.32" stop-color="#F870B2" />
-            <stop offset="0.531" stop-color="#FB5D88" />
-            <stop offset="0.722" stop-color="#FD4F6A" />
-            <stop offset="0.884" stop-color="#FF4658" />
-            <stop offset="1" stop-color="#FF4351" />
+            <stop stopColor="#F294FF" />
+            <stop offset="0.093" stopColor="#F489E7" />
+            <stop offset="0.32" stopColor="#F870B2" />
+            <stop offset="0.531" stopColor="#FB5D88" />
+            <stop offset="0.722" stopColor="#FD4F6A" />
+            <stop offset="0.884" stopColor="#FF4658" />
+            <stop offset="1" stopColor="#FF4351" />
           </linearGradient>
         </defs>
       </svg>
@@ -871,11 +871,11 @@ export const BIIcon = (props: SvgIconProps) => {
             y2="18.3095"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#9B8DFF" />
-            <stop offset="0.252" stop-color="#7D79FD" />
-            <stop offset="0.555" stop-color="#5F65FB" />
-            <stop offset="0.815" stop-color="#4D58F9" />
-            <stop offset="1" stop-color="#4654F9" />
+            <stop stopColor="#9B8DFF" />
+            <stop offset="0.252" stopColor="#7D79FD" />
+            <stop offset="0.555" stopColor="#5F65FB" />
+            <stop offset="0.815" stopColor="#4D58F9" />
+            <stop offset="1" stopColor="#4654F9" />
           </linearGradient>
         </defs>
       </svg>
@@ -912,12 +912,12 @@ export const ProductIcon = (props: SvgIconProps) => {
             y2="18.3095"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#8CC63F" />
-            <stop offset="0.217" stop-color="#60B641" />
-            <stop offset="0.459" stop-color="#37A643" />
-            <stop offset="0.679" stop-color="#199B44" />
-            <stop offset="0.867" stop-color="#079445" />
-            <stop offset="1" stop-color="#009245" />
+            <stop stopColor="#8CC63F" />
+            <stop offset="0.217" stopColor="#60B641" />
+            <stop offset="0.459" stopColor="#37A643" />
+            <stop offset="0.679" stopColor="#199B44" />
+            <stop offset="0.867" stopColor="#079445" />
+            <stop offset="1" stopColor="#009245" />
           </linearGradient>
         </defs>
       </svg>
@@ -958,11 +958,11 @@ export const MarketingIcon = (props: SvgIconProps) => {
             y2="18.3095"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#F9D53D" />
-            <stop offset="0.234" stop-color="#FBBA37" />
-            <stop offset="0.544" stop-color="#FD9C30" />
-            <stop offset="0.81" stop-color="#FF8A2C" />
-            <stop offset="1" stop-color="#FF832A" />
+            <stop stopColor="#F9D53D" />
+            <stop offset="0.234" stopColor="#FBBA37" />
+            <stop offset="0.544" stopColor="#FD9C30" />
+            <stop offset="0.81" stopColor="#FF8A2C" />
+            <stop offset="1" stopColor="#FF832A" />
           </linearGradient>
         </defs>
       </svg>
@@ -1029,6 +1029,163 @@ export const SearchIcon = (props: SvgIconProps) => {
           stroke-linecap="round"
           stroke-linejoin="round"
         />
+      </svg>
+    </SvgIcon>
+  );
+};
+
+export const ColoredFolderIcon = (props: SvgIconProps) => {
+  return (
+    <SvgIcon {...props}>
+      <svg
+        width="201"
+        height="152"
+        viewBox="0 0 201 152"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M186.712 151.138H54.1349C50.6282 151.138 47.7856 148.295 47.7856 144.789V17.0312C47.7853 7.68555 55.3614 0.109375 64.7071 0.109375H183.578C192.924 0.109375 200.5 7.68555 200.5 17.0312V137.35C200.5 144.966 194.328 151.138 186.712 151.138Z"
+          fill="url(#paint0_linear_2840_27680)"
+        />
+        <path
+          d="M54.1348 151.138H186.712C194.328 151.138 200.5 144.964 200.5 137.35V28.227L187.315 15.0422C185.162 12.6387 182.035 11.125 178.555 11.125H48.8477C48.1436 13.0146 47.7837 15.0151 47.7852 17.0316V144.789C47.7852 148.296 50.6281 151.139 54.1348 151.139V151.138Z"
+          fill="url(#paint1_linear_2840_27680)"
+        />
+        <path
+          d="M54.9513 12.4637C57.2856 19.791 64.0927 24.7652 71.7833 24.7652H118.667C118.048 24.7652 117.434 24.7301 116.827 24.666L97.7931 5.64453C94.5325 2.22344 89.9532 0.162109 85.0048 0.162109H65.0493C59.6552 0.162109 54.8274 2.58359 51.5884 6.39531C53.1001 8.17545 54.2432 10.2382 54.9513 12.4637Z"
+          fill="url(#paint2_linear_2840_27680)"
+        />
+        <path
+          d="M178.555 151.138H24.0567C17.5625 151.138 12.2981 145.873 12.2981 139.379V22.8816C12.2981 16.3875 17.5625 11.123 24.0567 11.123H178.555C185.049 11.123 190.313 16.3875 190.313 22.8816V139.379C190.313 145.873 185.049 151.137 178.555 151.137V151.138Z"
+          fill="url(#paint3_linear_2840_27680)"
+        />
+        <path
+          d="M173.95 30.3078C170.73 26.8977 166.169 24.7656 161.108 24.7656H12.2981V139.379C12.2981 145.873 17.5625 151.137 24.0567 151.137H178.555C185.049 151.137 190.313 145.873 190.313 139.379V46.6715L173.95 30.3078Z"
+          fill="url(#paint4_linear_2840_27680)"
+        />
+        <path
+          d="M54.9512 12.4645C57.2856 19.7918 64.0926 24.766 71.7833 24.766H118.667C118.048 24.766 117.434 24.7309 116.827 24.6668L103.275 11.123H54.4583C54.6379 11.5625 54.8059 12.0066 54.9512 12.4645Z"
+          fill="url(#paint5_linear_2840_27680)"
+        />
+        <path
+          d="M120.152 29.2191V24.7652H118.667C110.978 24.7652 104.171 19.791 101.837 12.4637C99.502 5.13594 92.6954 0.162109 85.0047 0.162109H65.0493C55.2942 0.162109 47.384 8.0707 47.384 17.827V29.2191H120.152Z"
+          fill="url(#paint6_linear_2840_27680)"
+        />
+        <path
+          d="M54.9512 12.4637C52.6164 5.13594 45.8094 0.162109 38.1207 0.162109H18.1652C8.40859 0.162109 0.5 8.0707 0.5 17.827V133.692C0.5 143.326 8.31094 151.137 17.9453 151.137H183.596C180.932 151.137 178.773 148.978 178.773 146.314V42.4305C178.773 32.6754 170.864 24.7652 161.108 24.7652H71.7828C64.0926 24.7652 57.2855 19.791 54.9508 12.4637H54.9512Z"
+          fill="url(#paint7_linear_2840_27680)"
+        />
+        <defs>
+          <linearGradient
+            id="paint0_linear_2840_27680"
+            x1="158.764"
+            y1="-16.0004"
+            x2="122.862"
+            y2="80.3445"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#FFD00D" />
+            <stop offset="0.238" stopColor="#FFCB0E" />
+            <stop offset="0.535" stopColor="#FFBB11" />
+            <stop offset="0.863" stopColor="#FFA215" />
+            <stop offset="1" stopColor="#FF9517" />
+          </linearGradient>
+          <linearGradient
+            id="paint1_linear_2840_27680"
+            x1="161.026"
+            y1="124.693"
+            x2="95.5754"
+            y2="59.243"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#FF9517" stopOpacity="0" />
+            <stop offset="0.307" stopColor="#EE8421" stopOpacity="0.306" />
+            <stop offset="0.678" stopColor="#E07728" stopOpacity="0.678" />
+            <stop offset="1" stopColor="#DB722B" />
+          </linearGradient>
+          <linearGradient
+            id="paint2_linear_2840_27680"
+            x1="110.785"
+            y1="43.9844"
+            x2="59.9466"
+            y2="-6.85391"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#FF9517" stopOpacity="0" />
+            <stop offset="0.307" stopColor="#EE8421" stopOpacity="0.306" />
+            <stop offset="0.678" stopColor="#E07728" stopOpacity="0.678" />
+            <stop offset="1" stopColor="#DB722B" />
+          </linearGradient>
+          <linearGradient
+            id="paint3_linear_2840_27680"
+            x1="101.306"
+            y1="-38.6824"
+            x2="101.306"
+            y2="152.616"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#FFFCF8" />
+            <stop offset="0.188" stopColor="#FAF8F6" />
+            <stop offset="0.404" stopColor="#ECEEF2" />
+            <stop offset="0.635" stopColor="#D5DCEA" />
+            <stop offset="0.875" stopColor="#B5C4DF" />
+            <stop offset="1" stopColor="#A1B5D8" />
+          </linearGradient>
+          <linearGradient
+            id="paint4_linear_2840_27680"
+            x1="189.111"
+            y1="97.0633"
+            x2="139.315"
+            y2="92.3563"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#A1B5D8" stopOpacity="0" />
+            <stop offset="0.67" stopColor="#8190A4" stopOpacity="0.671" />
+            <stop offset="1" stopColor="#748290" />
+          </linearGradient>
+          <linearGradient
+            id="paint5_linear_2840_27680"
+            x1="110.276"
+            y1="43.4762"
+            x2="64.0032"
+            y2="-2.79687"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#A1B5D8" stopOpacity="0" />
+            <stop offset="0.67" stopColor="#8190A4" stopOpacity="0.671" />
+            <stop offset="1" stopColor="#748290" />
+          </linearGradient>
+          <linearGradient
+            id="paint6_linear_2840_27680"
+            x1="83.7688"
+            y1="4.13789"
+            x2="83.7688"
+            y2="24.6672"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#FF4974" />
+            <stop offset="0.228" stopColor="#FD4571" />
+            <stop offset="0.466" stopColor="#F93867" />
+            <stop offset="0.71" stopColor="#F12358" />
+            <stop offset="0.955" stopColor="#E60642" />
+            <stop offset="1" stopColor="#E4003D" />
+          </linearGradient>
+          <linearGradient
+            id="paint7_linear_2840_27680"
+            x1="92.048"
+            y1="77.2363"
+            x2="92.048"
+            y2="159.693"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#FFD00D" />
+            <stop offset="0.238" stopColor="#FFCB0E" />
+            <stop offset="0.535" stopColor="#FFBB11" />
+            <stop offset="0.863" stopColor="#FFA215" />
+            <stop offset="1" stopColor="#FF9517" />
+          </linearGradient>
+        </defs>
       </svg>
     </SvgIcon>
   );

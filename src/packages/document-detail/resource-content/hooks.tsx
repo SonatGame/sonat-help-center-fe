@@ -13,37 +13,35 @@ export default function useResourceContent() {
     resourceData,
     createResourceInResource,
     updateResource,
-    setGoogleDocs,
   } = useDocumentDetailContext();
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
   const [loadingRename, setLoadingRename] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
+  const [numPages, setNumPages] = useState<number | null>(null);
 
   const { data, isLoading } = useSWR(
-    ["get-html-content", selectedResource?._id],
+    ["get-pdf-file", selectedResource?._id],
     async () => {
       if (!selectedResource?.googleDocUrl) return;
       const googleDocsId = getGoogleDocId(selectedResource.googleDocUrl);
       if (!googleDocsId) return;
-      const docsContent = await CourseApi.getHTMLContent(googleDocsId);
-      setGoogleDocs({
-        url: selectedResource.googleDocUrl,
-        htmlContent: docsContent.htmlContent,
-      });
-      return docsContent;
+      const pdfBlob = await CourseApi.getPDFFile(googleDocsId);
+      return URL.createObjectURL(pdfBlob);
     },
     {
       refreshInterval: 0,
+      revalidateOnFocus: false,
     }
   );
 
-  const htmlContent = useMemo(
-    () =>
-      googleDocs.htmlContent.length > 0
-        ? googleDocs.htmlContent
-        : data?.htmlContent ?? "",
+  const pdfUrl = useMemo(
+    () => (googleDocs.pdf.length > 0 ? googleDocs.pdf : data ?? ""),
     [googleDocs, data]
   );
+
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }): void => {
+    setNumPages(numPages);
+  };
 
   function handleEnableRename() {
     setIsRenaming(true);
@@ -73,7 +71,7 @@ export default function useResourceContent() {
     selectedResource,
     handleOpenUploadDocsModal,
     isLoading,
-    htmlContent,
+    pdfUrl,
     googleDocs,
     setSelectedResource,
     createResourceInResource,
@@ -84,5 +82,7 @@ export default function useResourceContent() {
     setTitle,
     loadingRename,
     handleRename,
+    numPages,
+    onDocumentLoadSuccess,
   };
 }

@@ -32,7 +32,7 @@ const SideBarItem: React.FC<IProps> = ({ item, isSidebarOpen }) => {
               justifyContent: "flex-start",
               borderRadius: theme.shape.borderRadius / 6,
             }}
-            selected={pathname === item.key}
+            selected={pathname.includes(item.key)}
           >
             <Stack gap={0.5} flexDirection="row" alignItems="center">
               <ListItemIcon

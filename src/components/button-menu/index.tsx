@@ -4,6 +4,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  SxProps,
   useTheme,
 } from "@mui/material";
 import { MouseEvent, ReactNode, useState } from "react";
@@ -15,7 +16,8 @@ interface IButtonMenuProps {
   buttonProps?: ButtonProps;
   menuOptions: {
     label: ReactNode;
-    onClick: () => void;
+    onClick?: () => void;
+    sx?: SxProps;
   }[];
 }
 
@@ -66,9 +68,10 @@ export default function ButtonMenu({
           <MenuItem
             key={index}
             onClick={(e) => {
-              item.onClick();
+              if (item.onClick) item.onClick();
               handleClose(e);
             }}
+            sx={item.sx}
           >
             {item.label}
           </MenuItem>
