@@ -69,6 +69,9 @@ const AuthenticationProvider = ({ children }: ProviderProps) => {
 
   const login = useCallback(async () => {
     const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({
+      prompt: "select_account",
+    });
     const data = await signInWithPopup(auth, provider);
     router.push(AppRoutes.HOME);
     return data;

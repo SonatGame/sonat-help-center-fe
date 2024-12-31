@@ -1,28 +1,15 @@
 import { CourseApi } from "@/api/CourseApi";
 import RHFTextField from "@/components/form/RHFTextField";
 import ModalWrapper from "@/components/modal";
-import { Lesson } from "@/lib/types/course";
 import { Stack, Typography } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useCourseDetailContext } from "../../context";
 import { getGoogleDocId } from "../../helper";
 
 export interface ICreateCourseModalProps {
   isModalOpen: boolean;
   handleClose: () => any;
-  googleDocs: {
-    title: string;
-    url: string;
-    htmlContent: string;
-  };
-  setGoogleDocs: Dispatch<
-    SetStateAction<{
-      title: string;
-      url: string;
-      htmlContent: string;
-    }>
-  >;
-  editingLesson?: Lesson;
 }
 
 interface IForm {
@@ -30,8 +17,8 @@ interface IForm {
 }
 
 export default function UploadDocsModal(props: ICreateCourseModalProps) {
-  const { isModalOpen, handleClose, googleDocs, setGoogleDocs, editingLesson } =
-    props;
+  const { isModalOpen, handleClose } = props;
+  const { editingLesson, googleDocs, setGoogleDocs } = useCourseDetailContext();
   const { control, handleSubmit, reset } = useForm<IForm>({
     defaultValues: {
       googleDocUrl: "",
@@ -43,12 +30,19 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
     const googleDocsId = getGoogleDocId(googleDocUrl);
     if (!googleDocsId) return;
     const res = await CourseApi.getHTMLContent(googleDocsId);
-    setGoogleDocs({ url: googleDocUrl, ...res });
+    const pdfBlob = await CourseApi.getPDFFile(googleDocsId);
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    setGoogleDocs({
+      title: res.title,
+      url: googleDocUrl,
+      pdf: pdfUrl,
+    });
     handleClose();
     reset();
   }
 
   useEffect(() => {
+    console.log(googleDocs);
     if (!editingLesson) reset();
     reset({ googleDocUrl: editingLesson?.googleDocUrl });
   }, [editingLesson, googleDocs, reset]);

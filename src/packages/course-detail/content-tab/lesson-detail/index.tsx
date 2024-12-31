@@ -1,10 +1,8 @@
 import { CourseApi } from "@/api/CourseApi";
 import { ClipboardPlusIcon, UploadCloudIcon } from "@/lib/constants/icons";
-import { Chapter, Lesson } from "@/lib/types/course";
 import { KeyboardArrowRight } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {
-  Box,
   Button,
   CircularProgress,
   Container,
@@ -14,35 +12,35 @@ import {
   useTheme,
 } from "@mui/material";
 import { useMemo, useState } from "react";
+import { Document, Page, pdfjs } from "react-pdf";
 import useSWR from "swr";
 import { useCourseDetailContext } from "../../context";
 import { getGoogleDocId } from "../../helper";
 import useCourseDetail from "../../hooks";
+import "./styles.css";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
 interface IProps {
-  editingChapter?: Chapter;
-  editingLesson?: Lesson;
   handleGoBack: () => void;
   handleOpenUploadDocsModal: () => void;
-  googleDocs: {
-    title: string;
-    url: string;
-    htmlContent: string;
-  };
 }
 
 export default function LessonDetail(props: IProps) {
+  const { handleGoBack, handleOpenUploadDocsModal } = props;
+  const { courseData } = useCourseDetail();
   const {
+    mutate: mutateCourse,
     editingChapter,
     editingLesson,
-    handleGoBack,
-    handleOpenUploadDocsModal,
     googleDocs,
-  } = props;
-  const { courseData } = useCourseDetail();
-  const { mutate: mutateCourse } = useCourseDetailContext();
+  } = useCourseDetailContext();
   const theme = useTheme();
   const [isSaving, setIsSaving] = useState(false);
+  const [numPages, setNumPages] = useState<number | null>(null);
 
   const {
     data: lessonData,
@@ -56,27 +54,33 @@ export default function LessonDetail(props: IProps) {
     },
     {
       refreshInterval: 0,
+      revalidateOnFocus: false,
     }
   );
 
   const { data, isLoading } = useSWR(
-    ["get-html-content", lessonData],
-    () => {
+    ["get-pdf-file", lessonData?._id],
+    async () => {
       if (!lessonData) return;
       const googleDocsId = getGoogleDocId(lessonData?.googleDocUrl);
       if (!googleDocsId) return;
-      return CourseApi.getHTMLContent(googleDocsId);
+
+      const pdfBlob = await CourseApi.getPDFFile(googleDocsId);
+      return URL.createObjectURL(pdfBlob);
     },
     {
       refreshInterval: 0,
+      revalidateOnFocus: false,
     }
   );
 
-  const htmlContent = useMemo(() => {
-    return googleDocs.htmlContent.length > 0
-      ? googleDocs.htmlContent
-      : data?.htmlContent ?? "";
+  const pdfUrl = useMemo(() => {
+    return googleDocs.pdf.length > 0 ? googleDocs.pdf : data ?? "";
   }, [googleDocs, data]);
+
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }): void => {
+    setNumPages(numPages);
+  };
 
   async function handleCreateLesson() {
     setIsSaving(true);
@@ -109,7 +113,7 @@ export default function LessonDetail(props: IProps) {
   }
 
   return (
-    <Stack gap={4} sx={{ flexGrow: 1 }}>
+    <Stack sx={{ flexGrow: 1 }}>
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -143,7 +147,7 @@ export default function LessonDetail(props: IProps) {
           </LoadingButton>
         </Stack>
       </Stack>
-      <Stack alignItems="center">
+      <Stack alignItems="center" sx={{ mt: 4 }}>
         <Stack
           direction="row"
           gap={3}
@@ -183,7 +187,7 @@ export default function LessonDetail(props: IProps) {
           </Stack>
         </Stack>
       </Stack>
-      <Container sx={{ flexGrow: 1 }}>
+      <Container maxWidth="md" sx={{ flexGrow: 1 }}>
         {isLoadingLesson || isLoading ? (
           <Stack
             justifyContent="center"
@@ -193,7 +197,19 @@ export default function LessonDetail(props: IProps) {
             <CircularProgress />
           </Stack>
         ) : (
-          <Box dangerouslySetInnerHTML={{ __html: htmlContent }} />
+          <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
+            {numPages &&
+              Array.from({ length: numPages }, (_, index) => (
+                <Page
+                  key={`page_${index + 1}`}
+                  pageNumber={index + 1}
+                  renderMode="canvas"
+                  renderAnnotationLayer={false}
+                  renderTextLayer={false}
+                  width={900}
+                />
+              ))}
+          </Document>
         )}
       </Container>
     </Stack>

@@ -32,12 +32,12 @@ interface DocumentDetailContextProps {
   handleCloseUploadDocsModal(): void;
   googleDocs: {
     url: string;
-    htmlContent: string;
+    pdf: string;
   };
   setGoogleDocs: Dispatch<
     SetStateAction<{
       url: string;
-      htmlContent: string;
+      pdf: string;
     }>
   >;
   createResourceInCollection(
@@ -75,7 +75,7 @@ const DocumentDetailContext = createContext<DocumentDetailContextProps>({
   handleCloseUploadDocsModal: () => {},
   googleDocs: {
     url: "",
-    htmlContent: "",
+    pdf: "",
   },
   setGoogleDocs: () => {},
   createResourceInCollection: () => Promise.resolve(undefined),
@@ -98,10 +98,10 @@ const DocumentDetailProvider = ({ children }: ContextProps) => {
 
   const [googleDocs, setGoogleDocs] = useState<{
     url: string;
-    htmlContent: string;
+    pdf: string;
   }>({
     url: "",
-    htmlContent: "",
+    pdf: "",
   });
   const [showModalUpload, setShowModalUpload] = useState<boolean>(false);
 
@@ -120,6 +120,7 @@ const DocumentDetailProvider = ({ children }: ContextProps) => {
     },
     {
       refreshInterval: 0,
+      revalidateOnFocus: false,
     }
   );
 

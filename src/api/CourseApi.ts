@@ -177,6 +177,15 @@ async function getHTMLContent(googleDocId: string) {
   });
 }
 
+async function getPDFFile(googleDocId: string) {
+  return fetchOne<Blob>({
+    functionName: "Tải file pdf",
+    url: HOST + "google/pdf",
+    method: METHOD.GET,
+    params: { googleDocId },
+  });
+}
+
 export const CourseApi = {
   getCourseList,
   getCourse,
@@ -191,4 +200,5 @@ export const CourseApi = {
   updateLesson,
   deleteLesson,
   getHTMLContent,
+  getPDFFile,
 };
