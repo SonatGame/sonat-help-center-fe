@@ -124,7 +124,7 @@ export default function CourseSection() {
               key={document._id}
               size={{ xs: 12, sm: 6, md: 4, xl: 3, xxl: 2.4 }}
             >
-              <DocumentCard documentData={document} />
+              <DocumentCard documentData={document} mutate={mutate} />
             </Grid2>
           ))}
         </Grid2>

@@ -57,7 +57,6 @@ export default function CreateCourseModal(props: ICreateCourseModalProps) {
         thumbnail,
         coverImage,
       });
-    console.log(res);
     if (res && mutate) {
       await mutate();
       reset();

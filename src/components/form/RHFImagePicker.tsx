@@ -2,6 +2,7 @@ import { CloudIcon } from "@/lib/constants/icons";
 import { Close } from "@mui/icons-material";
 import {
   CardMedia,
+  CircularProgress,
   FormControl,
   FormHelperText,
   IconButton,
@@ -44,7 +45,16 @@ export function RHFImagePicker<T extends FieldValues>({
   const theme = useTheme();
   const [image, setImage] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const handleImageLoad = () => {
+    setLoading(false);
+  };
 
+  const handleImageError = () => {
+    setLoading(false);
+    setError(true);
+  };
   const handleImageChange = (file: File) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -123,7 +133,10 @@ export function RHFImagePicker<T extends FieldValues>({
                     }}
                     image={image}
                     alt="Selected Image"
+                    onLoad={handleImageLoad}
+                    onError={handleImageError}
                   />
+                  {loading ? <CircularProgress size={20} /> : null}
                   <IconButton
                     onClick={() => {
                       handleRemoveImage(field);

@@ -41,6 +41,7 @@ export default function CreateDocumentModal(props: ICreateDocumentModalProps) {
       sharedUsers,
     });
     reset();
+    mutate();
     handleClose();
   }
 
