@@ -34,7 +34,7 @@ export default function LessonCard(props: IProps) {
     setEdittingLesson(lessonData);
     setLessonData({
       title: lessonData?.title ?? "",
-      description: lessonData?.detail ?? "",
+      description: lessonData?.description ?? "",
       url: lessonData?.googleDocUrl ?? "",
       pdf: "",
     });
@@ -157,7 +157,7 @@ export default function LessonCard(props: IProps) {
               wordBreak: "break-word",
             }}
           >
-            {lessonData?.detail}
+            {lessonData?.description}
           </TextMaxLine>
         </Box>
         <Stack

@@ -76,6 +76,7 @@ export default function useContentTab() {
     setIsEditLesson(false);
     setEdittingChapter(undefined);
     setEdittingLesson(undefined);
+    router.push(pathname + "?tab=content");
   }
 
   function handleCreateLesson(chapter?: Chapter) {
