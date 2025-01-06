@@ -129,7 +129,7 @@ async function createLesson(
   chapterId: string,
   data: {
     title: string;
-    detail: string;
+    description: string;
     googleDocUrl: string;
   }
 ) {
@@ -147,7 +147,7 @@ async function updateLesson(
   lessonId: string,
   data: {
     title?: string;
-    detail?: string;
+    description?: string;
     googleDocUrl?: string;
   }
 ) {

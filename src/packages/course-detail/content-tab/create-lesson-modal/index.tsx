@@ -55,7 +55,7 @@ export default function CreateLessonModal() {
     const lessonPayload = {
       title: newTitle,
       googleDocUrl,
-      detail: newDescription,
+      description: newDescription,
     };
 
     if (!editingChapter && !editingLesson) {
