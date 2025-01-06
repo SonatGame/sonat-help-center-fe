@@ -122,7 +122,7 @@ export default function CourseSection() {
           {data?.map((document) => (
             <Grid2
               key={document._id}
-              size={{ xs: 12, sm: 6, lg: 4, xl: 3, xxl: 2.4 }}
+              size={{ xs: 12, sm: 6, md: 4, xl: 3, xxl: 2.4 }}
             >
               <DocumentCard documentData={document} />
             </Grid2>

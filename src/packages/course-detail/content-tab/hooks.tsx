@@ -78,12 +78,9 @@ export default function useContentTab() {
     setEdittingLesson(undefined);
   }
 
-  function handleOpenCreateLessonModal() {
+  function handleCreateLesson(chapter?: Chapter) {
+    setEdittingChapter(chapter);
     setShowModalCreate(true);
-  }
-
-  function handleCloseCreateLessonModal() {
-    setShowModalCreate(false);
   }
 
   function handleOpenConfirmDeleteChapterModal(chapter: Chapter) {
@@ -162,8 +159,7 @@ export default function useContentTab() {
     editingChapter,
     isEditLesson,
     handleCancel,
-    handleOpenCreateLessonModal,
-    handleCloseCreateLessonModal,
+    handleCreateLesson,
     showConfirmDeleteChapterModal,
     handleOpenConfirmDeleteChapterModal,
     handleConfirmDeleteChapter,
