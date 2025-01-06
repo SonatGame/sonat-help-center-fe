@@ -1,28 +1,29 @@
 import { CourseApi } from "@/api/CourseApi";
 import { Chapter, Lesson } from "@/lib/types/course";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useCourseDetailContext } from "../context";
 
 export default function useContentTab() {
   const router = useRouter();
-  const { courseId } = useParams<{ courseId: string }>();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const {
     courseData,
     setCourseData,
-    setIsAddingLesson,
-    isAddingLesson,
+    setIsEditLesson,
+    isEditLesson,
     mutate: mutateCourse,
     editingChapter,
     setEdittingChapter,
     setEdittingLesson,
     setIsEditingChapterTitle,
     setChapterTitle,
-    setGoogleDocs,
     chapterTitle,
     isEditingChapterTitle,
     setShowModalCreate,
-    showModalCreate,
+    editingLesson,
   } = useCourseDetailContext();
 
   const [showConfirmDeleteChapterModal, setShowConfirmDeleteChapterModal] =
@@ -31,6 +32,16 @@ export default function useContentTab() {
   const inputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({
     new: null,
   });
+
+  const createQueryString = useCallback(
+    (data: { name: string; value: string }[]) => {
+      const params = new URLSearchParams(searchParams.toString());
+      data.forEach((item) => params.set(item.name, item.value));
+
+      return params.toString();
+    },
+    [searchParams]
+  );
 
   function handleEditChapter(chapter?: Chapter) {
     if (chapter) {
@@ -47,19 +58,22 @@ export default function useContentTab() {
     setChapterTitle("");
   }
 
-  function handleAddLesson(chapter?: Chapter, lesson?: Lesson) {
+  function handleSelectLesson(chapter: Chapter, lesson: Lesson) {
+    router.push(
+      pathname +
+        "?" +
+        createQueryString([
+          { name: "chapterId", value: chapter._id },
+          { name: "lessonId", value: lesson._id },
+        ])
+    );
     setEdittingChapter(chapter);
     setEdittingLesson(lesson);
-    setIsAddingLesson(true);
-    setGoogleDocs({
-      title: "",
-      url: "",
-      pdf: "",
-    });
+    setIsEditLesson(true);
   }
 
   function handleCancel() {
-    setIsAddingLesson(false);
+    setIsEditLesson(false);
     setEdittingChapter(undefined);
     setEdittingLesson(undefined);
   }
@@ -146,15 +160,12 @@ export default function useContentTab() {
   return {
     courseData,
     editingChapter,
-    handleAddLesson,
-    isAddingLesson,
+    isEditLesson,
     handleCancel,
-    showModalCreate,
     handleOpenCreateLessonModal,
     handleCloseCreateLessonModal,
     showConfirmDeleteChapterModal,
     handleOpenConfirmDeleteChapterModal,
-    handleCloseConfirmDeleteChapterModal,
     handleConfirmDeleteChapter,
     handleEditChapter,
     handleCancelEditChapter,
@@ -162,5 +173,8 @@ export default function useContentTab() {
     inputRefs,
     setChapterTitle,
     chapterTitle,
+    handleSelectLesson,
+    handleCloseConfirmDeleteChapterModal,
+    editingLesson,
   };
 }

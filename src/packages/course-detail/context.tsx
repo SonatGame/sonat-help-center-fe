@@ -25,8 +25,8 @@ interface CourseDetailContextProps {
   setCourseData: Dispatch<SetStateAction<Course | undefined>>;
   isLoading: boolean;
   mutate: KeyedMutator<Course>;
-  isAddingLesson: boolean;
-  setIsAddingLesson: Dispatch<SetStateAction<boolean>>;
+  isEditLesson: boolean;
+  setIsEditLesson: Dispatch<SetStateAction<boolean>>;
   editingChapter?: Chapter;
   setEdittingChapter: Dispatch<SetStateAction<Chapter | undefined>>;
   editingLesson?: Lesson;
@@ -35,15 +35,17 @@ interface CourseDetailContextProps {
   isEditingChapterTitle: boolean;
   setChapterTitle: Dispatch<SetStateAction<string>>;
   chapterTitle: string;
-  setGoogleDocs: Dispatch<
+  setLessonData: Dispatch<
     SetStateAction<{
       title: string;
+      description: string;
       url: string;
       pdf: string;
     }>
   >;
-  googleDocs: {
+  lessonData: {
     title: string;
+    description: string;
     url: string;
     pdf: string;
   };
@@ -54,8 +56,8 @@ interface CourseDetailContextProps {
 const CourseDetailContext = createContext<CourseDetailContextProps>({
   value: "",
   handleChangeTab: () => {},
-  isAddingLesson: false,
-  setIsAddingLesson: () => {},
+  isEditLesson: false,
+  setIsEditLesson: () => {},
   isLoading: false,
   mutate: () => Promise.resolve(undefined),
   setEdittingChapter: () => {},
@@ -65,9 +67,10 @@ const CourseDetailContext = createContext<CourseDetailContextProps>({
   isEditingChapterTitle: false,
   setChapterTitle: () => {},
   chapterTitle: "",
-  setGoogleDocs: () => {},
-  googleDocs: {
+  setLessonData: () => {},
+  lessonData: {
     title: "",
+    description: "",
     url: "",
     pdf: "",
   },
@@ -80,22 +83,29 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
   const { courseId } = useParams<{ courseId: string }>();
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
+  const chapterId = searchParams.get("chapterId");
+  const lessonId = searchParams.get("lessonId");
   const [value, setValue] = useState("overview");
-  const [isAddingLesson, setIsAddingLesson] = useState(false);
+  const [isEditLesson, setIsEditLesson] = useState(false);
   const [editingChapter, setEdittingChapter] = useState<Chapter>();
   const [editingLesson, setEdittingLesson] = useState<Lesson>();
   const [courseData, setCourseData] = useState<Course>();
   const [isEditingChapterTitle, setIsEditingChapterTitle] =
     useState<boolean>(false);
   const [chapterTitle, setChapterTitle] = useState<string>("");
-  const [googleDocs, setGoogleDocs] = useState({
+  const [lessonData, setLessonData] = useState({
     title: "",
+    description: "",
     url: "",
     pdf: "",
   });
   const [showModalCreate, setShowModalCreate] = useState<boolean>(false);
 
-  const { data, isLoading, mutate } = useSWR(
+  const {
+    data,
+    isLoading = true,
+    mutate,
+  } = useSWR(
     ["get-course-detail", courseId],
     () => CourseApi.getCourse(courseId),
     {
@@ -116,6 +126,18 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
     if (tab) setValue(tab);
   }, [tab]);
 
+  useEffect(() => {
+    if (data && chapterId && lessonId) {
+      const chapter = data?.modules?.find((item) => item._id === chapterId);
+      const lesson = chapter?.lessons?.find((item) => item._id === lessonId);
+      if (chapter && lesson) {
+        setEdittingChapter(chapter);
+        setEdittingLesson(lesson);
+        setIsEditLesson(true);
+      }
+    }
+  }, [data, chapterId, lessonId]);
+
   return (
     <CourseDetailContext.Provider
       value={{
@@ -124,8 +146,8 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
         courseData,
         isLoading,
         mutate,
-        isAddingLesson,
-        setIsAddingLesson,
+        isEditLesson,
+        setIsEditLesson,
         editingChapter,
         setEdittingChapter,
         editingLesson,
@@ -135,8 +157,8 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
         isEditingChapterTitle,
         setChapterTitle,
         chapterTitle,
-        setGoogleDocs,
-        googleDocs,
+        setLessonData,
+        lessonData,
         setShowModalCreate,
         showModalCreate,
       }}

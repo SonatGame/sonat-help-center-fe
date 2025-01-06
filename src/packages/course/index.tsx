@@ -1,4 +1,4 @@
-import { Grid2, Stack, Typography } from "@mui/material";
+import { CircularProgress, Grid2, Stack, Typography } from "@mui/material";
 import { BookSettingIcon } from "../../lib/constants/icons";
 import CreateCourseModal from "../course-detail/create-course-modal";
 import CourseCard from "../home/components/course-list/CourseCard";
@@ -7,6 +7,19 @@ import useCourseSection from "./hooks";
 export default function CourseSection() {
   const { isModalOpen, handleOpen, handleClose, data, isLoading, mutate } =
     useCourseSection();
+
+  if (isLoading)
+    return (
+      <Stack
+        justifyContent="center"
+        alignItems="center"
+        sx={{
+          height: "100%",
+        }}
+      >
+        <CircularProgress />
+      </Stack>
+    );
 
   return !data || data.data.length === 0 ? (
     <Stack

@@ -13,15 +13,11 @@ export default function CourseContent() {
   const {
     courseData,
     editingChapter,
-    handleAddLesson,
-    isAddingLesson,
+    isEditLesson,
     handleCancel,
-    showModalCreate,
     handleOpenCreateLessonModal,
-    handleCloseCreateLessonModal,
     showConfirmDeleteChapterModal,
     handleOpenConfirmDeleteChapterModal,
-    handleCloseConfirmDeleteChapterModal,
     handleConfirmDeleteChapter,
     handleEditChapter,
     handleCancelEditChapter,
@@ -29,6 +25,9 @@ export default function CourseContent() {
     inputRefs,
     setChapterTitle,
     chapterTitle,
+    handleSelectLesson,
+    handleCloseConfirmDeleteChapterModal,
+    editingLesson,
   } = useContentTab();
 
   return (
@@ -42,7 +41,7 @@ export default function CourseContent() {
         }}
       >
         <Stack gap={1.5} sx={{ p: 3 }}>
-          {isAddingLesson && (
+          {isEditLesson && (
             <Stack
               direction="row"
               gap={0.5}
@@ -65,7 +64,7 @@ export default function CourseContent() {
             fontWeight="medium"
             sx={{ color: theme.palette.grey[500] }}
           >
-            {courseData?.modules.reduce(
+            {courseData?.modules?.reduce(
               (accumulator, currentValue) =>
                 accumulator + (currentValue.lessons?.length ?? 0),
               0
@@ -115,12 +114,21 @@ export default function CourseContent() {
                             i < (chapter.lessons?.length ?? 0) - 1
                               ? `1px solid ${theme.palette.divider}`
                               : undefined,
+                          cursor: "pointer",
                         }}
+                        onClick={() => handleSelectLesson(chapter, lesson)}
                       >
                         <Typography
                           variant="body2"
                           sx={{
-                            color: theme.palette.grey[700],
+                            color:
+                              editingLesson?._id === lesson._id
+                                ? theme.palette.primary.main
+                                : theme.palette.grey[700],
+                            fontWeight:
+                              editingLesson?._id === lesson._id
+                                ? "bold"
+                                : undefined,
                           }}
                         >
                           {lesson.title}
@@ -134,7 +142,7 @@ export default function CourseContent() {
           })}
         </Stack>
       </Stack>
-      {!isAddingLesson ? (
+      {!isEditLesson ? (
         <Stack
           gap={5}
           sx={{
@@ -207,9 +215,7 @@ export default function CourseContent() {
                   <TrashIcon
                     fontSize="small"
                     sx={{ cursor: "pointer" }}
-                    onClick={() => {
-                      handleOpenConfirmDeleteChapterModal(chapter);
-                    }}
+                    onClick={() => handleOpenConfirmDeleteChapterModal(chapter)}
                   />
                 </Stack>
               </Stack>
@@ -217,7 +223,8 @@ export default function CourseContent() {
                 <Grid2 size={{ sm: 12, md: 6, lg: 4, xl: 3 }}>
                   <LessonCard
                     isEmpty
-                    onClick={() => handleAddLesson(chapter)}
+                    chapterData={chapter}
+                    onClick={handleOpenCreateLessonModal}
                   />
                 </Grid2>
                 {chapter.lessons?.map((lesson) => (
@@ -227,8 +234,9 @@ export default function CourseContent() {
                   >
                     <LessonCard
                       isAdmin
+                      chapterData={chapter}
                       lessonData={lesson}
-                      onClick={() => handleAddLesson(chapter, lesson)}
+                      onClick={() => handleSelectLesson(chapter, lesson)}
                     />
                   </Grid2>
                 ))}
@@ -286,15 +294,15 @@ export default function CourseContent() {
 
             <Grid2 container spacing={2}>
               <Grid2 size={{ sm: 12, md: 6, lg: 4, xl: 3 }}>
-                <LessonCard isEmpty onClick={() => handleAddLesson()} />
+                <LessonCard isEmpty onClick={handleOpenCreateLessonModal} />
               </Grid2>
             </Grid2>
           </Stack>
         </Stack>
       ) : (
-        <LessonDetail handleGoBack={handleCancel} />
+        <LessonDetail />
       )}
-      <CreateLessonModal isModalOpen={showModalCreate} />
+      <CreateLessonModal />
       <ConfirmDeleteModal
         title="Xác nhận xóa chương"
         isOpen={showConfirmDeleteChapterModal}

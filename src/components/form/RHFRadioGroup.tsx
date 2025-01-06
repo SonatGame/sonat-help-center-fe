@@ -9,6 +9,7 @@ import {
   RadioProps,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import Asterisk from "./Asterisk";
 
@@ -41,6 +42,7 @@ export default function RHFRadioGroup({
   RadioProps,
   sx,
 }: IRHFRadioGroupProps) {
+  const theme = useTheme();
   const { onChange, ...rest } = RadioGroupProps || {};
 
   return (
@@ -72,8 +74,16 @@ export default function RHFRadioGroup({
                 <FormControlLabel
                   key={option.value}
                   value={option.value}
-                  control={<Radio {...RadioProps} />}
+                  control={<Radio size="small" {...RadioProps} />}
                   label={option.label}
+                  slotProps={{
+                    typography: {
+                      variant: "body2",
+                      sx: {
+                        color: theme.palette.grey[500],
+                      },
+                    },
+                  }}
                 />
 
                 {!!option?.description && (

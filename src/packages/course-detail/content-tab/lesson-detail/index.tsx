@@ -1,12 +1,10 @@
 import { CourseApi } from "@/api/CourseApi";
 import { ClipboardPlusIcon, EditIcon } from "@/lib/constants/icons";
 import { KeyboardArrowRight } from "@mui/icons-material";
-import LoadingButton from "@mui/lab/LoadingButton";
 import {
   Button,
   CircularProgress,
   Container,
-  Divider,
   Stack,
   Typography,
   useTheme,
@@ -16,7 +14,6 @@ import { Document, Page, pdfjs } from "react-pdf";
 import useSWR from "swr";
 import { useCourseDetailContext } from "../../context";
 import { getGoogleDocId } from "../../helper";
-import useCourseDetail from "../../hooks";
 import "./styles.css";
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -24,52 +21,30 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-interface IProps {
-  handleGoBack: () => void;
-}
-
-export default function LessonDetail(props: IProps) {
-  const { handleGoBack } = props;
+export default function LessonDetail() {
   const theme = useTheme();
-  const { courseData } = useCourseDetail();
   const {
-    mutate: mutateCourse,
     editingChapter,
     editingLesson,
-    googleDocs,
-    setGoogleDocs,
+    setLessonData,
+    lessonData,
     setShowModalCreate,
   } = useCourseDetailContext();
-  const [isSaving, setIsSaving] = useState(false);
   const [numPages, setNumPages] = useState<number | null>(null);
 
-  const {
-    data: lessonData,
-    isLoading: isLoadingLesson,
-    mutate: mutateLesson,
-  } = useSWR(
-    ["get-lesson-detail", editingLesson],
+  const { data: pdfData, isLoading: loadingPdf } = useSWR(
+    ["get-pdf-file", editingLesson],
     async () => {
       if (!editingLesson) return;
-      return await CourseApi.getLessonById(editingLesson?._id);
-    },
-    {
-      refreshInterval: 0,
-      revalidateOnFocus: false,
-      onSuccess: (data) => {
-        if (!data) return;
-        setGoogleDocs({ ...googleDocs, url: data.googleDocUrl });
-      },
-    }
-  );
-
-  const { data, isLoading } = useSWR(
-    ["get-pdf-file", lessonData?._id],
-    async () => {
-      if (!lessonData) return;
-      const googleDocsId = getGoogleDocId(lessonData?.googleDocUrl);
+      const lessonDetail = await CourseApi.getLessonById(editingLesson._id);
+      setLessonData({
+        title: lessonDetail.title,
+        description: lessonDetail.detail,
+        url: lessonDetail.googleDocUrl,
+        pdf: "",
+      });
+      const googleDocsId = getGoogleDocId(lessonDetail.googleDocUrl);
       if (!googleDocsId) return;
-
       const pdfBlob = await CourseApi.getPDFFile(googleDocsId);
       return URL.createObjectURL(pdfBlob);
     },
@@ -80,42 +55,12 @@ export default function LessonDetail(props: IProps) {
   );
 
   const pdfUrl = useMemo(() => {
-    return googleDocs.pdf.length > 0 ? googleDocs.pdf : data ?? "";
-  }, [googleDocs, data]);
+    return lessonData.pdf.length > 0 ? lessonData.pdf : pdfData ?? "";
+  }, [lessonData, pdfData]);
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }): void => {
     setNumPages(numPages);
   };
-
-  async function handleCreateLesson() {
-    setIsSaving(true);
-    if (!editingChapter && !editingLesson) {
-      if (!courseData) return;
-      await CourseApi.createChapter(courseData?._id, {
-        title: "Chương không có tiêu đề",
-        lessons: [
-          {
-            title: googleDocs.title,
-            googleDocUrl: googleDocs.url,
-          },
-        ],
-      });
-    } else if (editingLesson)
-      await CourseApi.updateLesson(editingLesson._id, {
-        title: googleDocs.title,
-        googleDocUrl: googleDocs.url,
-      });
-    else if (editingChapter) {
-      await CourseApi.createLesson(editingChapter._id, {
-        title: googleDocs.title,
-        googleDocUrl: googleDocs.url,
-      });
-    }
-    await mutateCourse();
-    await mutateLesson();
-    handleGoBack();
-    setIsSaving(false);
-  }
 
   return (
     <Stack sx={{ flexGrow: 1 }}>
@@ -139,59 +84,25 @@ export default function LessonDetail(props: IProps) {
           </Typography>
         </Stack>
         <Stack direction="row" gap={1.5}>
-          <Button variant="outlined" onClick={handleGoBack} sx={{ width: 96 }}>
-            Hủy
-          </Button>
-          <LoadingButton
-            variant="contained"
-            sx={{ width: 96 }}
-            onClick={handleCreateLesson}
-            loading={isSaving}
-          >
-            Lưu
-          </LoadingButton>
-        </Stack>
-      </Stack>
-      <Stack alignItems="center" sx={{ mt: 4 }}>
-        <Stack
-          direction="row"
-          gap={3}
-          sx={{
-            p: 1.5,
-            border: 1,
-            borderColor: theme.palette.grey[200],
-            borderRadius: 1,
-            color: theme.palette.primary.main,
-          }}
-        >
-          <Stack
-            direction="row"
-            alignItems="center"
-            gap={1}
-            sx={{ cursor: "pointer", userSelect: "none" }}
+          <Button
+            variant="outlined"
+            startIcon={<EditIcon sx={{ fill: theme.palette.primary.main }} />}
             onClick={() => setShowModalCreate(true)}
           >
-            <EditIcon sx={{ fill: theme.palette.primary.main }} />
-            <Typography variant="body2" fontWeight="bold">
-              {!editingLesson ? "Đăng tải tài liệu docs" : "Chỉnh sửa bài học"}
-            </Typography>
-          </Stack>
-          <Divider orientation="vertical" flexItem />
-          <Stack
-            direction="row"
-            alignItems="center"
-            gap={1}
-            sx={{ cursor: "pointer", userSelect: "none" }}
+            Chỉnh sửa bài học
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={
+              <ClipboardPlusIcon sx={{ fill: theme.palette.primary.main }} />
+            }
           >
-            <ClipboardPlusIcon />
-            <Typography variant="body2" fontWeight="bold">
-              Tạo mini test
-            </Typography>
-          </Stack>
+            Tạo mini test
+          </Button>
         </Stack>
       </Stack>
-      <Container maxWidth="md" sx={{ flexGrow: 1 }}>
-        {isLoadingLesson || isLoading ? (
+      <Container maxWidth="md" sx={{ flexGrow: 1, mt: 4 }}>
+        {loadingPdf ? (
           <Stack
             justifyContent="center"
             alignItems="center"
@@ -209,7 +120,7 @@ export default function LessonDetail(props: IProps) {
                   renderMode="canvas"
                   renderAnnotationLayer={false}
                   renderTextLayer={false}
-                  width={900}
+                  width={800}
                 />
               ))}
           </Document>

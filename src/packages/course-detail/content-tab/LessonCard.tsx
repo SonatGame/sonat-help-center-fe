@@ -1,7 +1,7 @@
 import { CourseApi } from "@/api/CourseApi";
 import ButtonMenu from "@/components/button-menu";
 import TextMaxLine from "@/components/TextMaxLine";
-import { Lesson } from "@/lib/types/course";
+import { Chapter, Lesson } from "@/lib/types/course";
 import { AddRounded, ArrowForwardRounded, MoreVert } from "@mui/icons-material";
 import { Box, Card, Stack, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
@@ -9,6 +9,7 @@ import ConfirmDeleteLessonModal from "../confirm-delete-modal";
 import { useCourseDetailContext } from "../context";
 
 interface IProps {
+  chapterData?: Chapter;
   lessonData?: Lesson;
   isEmpty?: boolean;
   onClick?: () => any;
@@ -17,10 +18,28 @@ interface IProps {
 
 export default function LessonCard(props: IProps) {
   const theme = useTheme();
-  const { isEmpty = false, lessonData, onClick, isAdmin } = props;
-  const { mutate: mutateCourse } = useCourseDetailContext();
+  const { isEmpty = false, chapterData, lessonData, onClick, isAdmin } = props;
+  const {
+    mutate: mutateCourse,
+    setEdittingChapter,
+    setEdittingLesson,
+    setShowModalCreate,
+    setLessonData,
+  } = useCourseDetailContext();
   const [hovering, setHovering] = useState(false);
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState(false);
+
+  const handleEditLesson = () => {
+    setEdittingChapter(chapterData);
+    setEdittingLesson(lessonData);
+    setLessonData({
+      title: lessonData?.title ?? "",
+      description: lessonData?.detail ?? "",
+      url: lessonData?.googleDocUrl ?? "",
+      pdf: "",
+    });
+    setShowModalCreate(true);
+  };
 
   const handleOpenModalConfirm = () => {
     setIsOpenConfirmModal(true);
@@ -84,19 +103,6 @@ export default function LessonCard(props: IProps) {
             alignItems="start"
             gap={1}
           >
-            {/* {hovering && (
-              <IconButton
-                size="small"
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                <DragIndicator
-                  fontSize="small"
-                  sx={{ color: theme.palette.grey[500] }}
-                /> 
-              </IconButton>
-            )} */}
             <TextMaxLine
               TypographyProps={{ fontWeight: "bold" }}
               sx={{
@@ -127,16 +133,8 @@ export default function LessonCard(props: IProps) {
                         Chỉnh sửa
                       </Typography>
                     ),
-                    onClick: onClick,
+                    onClick: handleEditLesson,
                   },
-                  // {
-                  //   label: "Chỉnh sửa",
-                  //   onClick: onClick,
-                  // },
-                  // {
-                  //   label: "Chỉnh sửa",
-                  //   onClick: onClick,
-                  // },
                   {
                     label: <Typography variant="body2">Xoá bài học</Typography>,
                     onClick: handleOpenModalConfirm,
