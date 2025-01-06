@@ -1,5 +1,5 @@
 import { CourseApi } from "@/api/CourseApi";
-import { ClipboardPlusIcon, UploadCloudIcon } from "@/lib/constants/icons";
+import { ClipboardPlusIcon, EditIcon } from "@/lib/constants/icons";
 import { KeyboardArrowRight } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import {
@@ -26,19 +26,20 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 interface IProps {
   handleGoBack: () => void;
-  handleOpenUploadDocsModal: () => void;
 }
 
 export default function LessonDetail(props: IProps) {
-  const { handleGoBack, handleOpenUploadDocsModal } = props;
+  const { handleGoBack } = props;
+  const theme = useTheme();
   const { courseData } = useCourseDetail();
   const {
     mutate: mutateCourse,
     editingChapter,
     editingLesson,
     googleDocs,
+    setGoogleDocs,
+    setShowModalCreate,
   } = useCourseDetailContext();
-  const theme = useTheme();
   const [isSaving, setIsSaving] = useState(false);
   const [numPages, setNumPages] = useState<number | null>(null);
 
@@ -55,6 +56,10 @@ export default function LessonDetail(props: IProps) {
     {
       refreshInterval: 0,
       revalidateOnFocus: false,
+      onSuccess: (data) => {
+        if (!data) return;
+        setGoogleDocs({ ...googleDocs, url: data.googleDocUrl });
+      },
     }
   );
 
@@ -164,13 +169,11 @@ export default function LessonDetail(props: IProps) {
             alignItems="center"
             gap={1}
             sx={{ cursor: "pointer", userSelect: "none" }}
-            onClick={() => handleOpenUploadDocsModal()}
+            onClick={() => setShowModalCreate(true)}
           >
-            <UploadCloudIcon />
+            <EditIcon sx={{ fill: theme.palette.primary.main }} />
             <Typography variant="body2" fontWeight="bold">
-              {!editingLesson
-                ? "Đăng tải tài liệu docs"
-                : "Thay đổi tài liệu docs"}
+              {!editingLesson ? "Đăng tải tài liệu docs" : "Chỉnh sửa bài học"}
             </Typography>
           </Stack>
           <Divider orientation="vertical" flexItem />
@@ -196,7 +199,7 @@ export default function LessonDetail(props: IProps) {
           >
             <CircularProgress />
           </Stack>
-        ) : (
+        ) : pdfUrl.length > 0 ? (
           <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
             {numPages &&
               Array.from({ length: numPages }, (_, index) => (
@@ -210,6 +213,8 @@ export default function LessonDetail(props: IProps) {
                 />
               ))}
           </Document>
+        ) : (
+          <></>
         )}
       </Container>
     </Stack>

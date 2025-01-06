@@ -173,7 +173,10 @@ export default function CourseOverview() {
                     <Stack direction="row" gap={1}>
                       <EditIcon
                         fontSize="small"
-                        sx={{ cursor: "pointer" }}
+                        sx={{
+                          cursor: "pointer",
+                          fill: theme.palette.grey[500],
+                        }}
                         onClick={() => handleEditOutcome(i)}
                       />
                       <TrashIcon

@@ -1,7 +1,8 @@
 import { CourseApi } from "@/api/CourseApi";
+import RHFRadioGroup from "@/components/form/RHFRadioGroup";
 import RHFTextField from "@/components/form/RHFTextField";
 import ModalWrapper from "@/components/modal";
-import { Stack, Typography } from "@mui/material";
+import { Stack, Typography, useTheme } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useCourseDetailContext } from "../../context";
@@ -9,19 +10,26 @@ import { getGoogleDocId } from "../../helper";
 
 export interface ICreateCourseModalProps {
   isModalOpen: boolean;
-  handleClose: () => any;
 }
 
 interface IForm {
+  title: string;
+  description: string;
+  importFromFile: string;
   googleDocUrl: string;
 }
 
-export default function UploadDocsModal(props: ICreateCourseModalProps) {
-  const { isModalOpen, handleClose } = props;
-  const { editingLesson, googleDocs, setGoogleDocs } = useCourseDetailContext();
+export default function CreateLessonModal(props: ICreateCourseModalProps) {
+  const { isModalOpen } = props;
+  const theme = useTheme();
+  const { googleDocs, setGoogleDocs, setShowModalCreate } =
+    useCourseDetailContext();
   const { control, handleSubmit, reset } = useForm<IForm>({
     defaultValues: {
       googleDocUrl: "",
+      title: "",
+      description: "",
+      importFromFile: "docs",
     },
   });
 
@@ -37,15 +45,13 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
       url: googleDocUrl,
       pdf: pdfUrl,
     });
-    handleClose();
+    setShowModalCreate(false);
     reset();
   }
 
   useEffect(() => {
-    console.log(googleDocs);
-    if (!editingLesson) reset();
-    reset({ googleDocUrl: editingLesson?.googleDocUrl });
-  }, [editingLesson, googleDocs, reset]);
+    reset({ googleDocUrl: googleDocs.url });
+  }, [googleDocs, reset]);
 
   return (
     <ModalWrapper
@@ -56,7 +62,7 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
       }}
       usingActions
       isOpen={isModalOpen}
-      onClose={handleClose}
+      onClose={() => setShowModalCreate(false)}
       onApply={handleSubmit(onSubmit)}
       disableCloseOnApply
     >
@@ -70,14 +76,57 @@ export default function UploadDocsModal(props: ICreateCourseModalProps) {
             required: "Vui lòng nhập đường dẫn tới google docs",
           }}
           TextFieldProps={{
-            placeholder: "Nhập đường dẫn ",
+            placeholder: "Nhập đường dẫn",
             autoComplete: "off",
           }}
         />
-        <Typography variant="caption" sx={{ wordBreak: "break-all" }}>
+        <Typography
+          variant="caption"
+          sx={{ color: theme.palette.grey[500], wordBreak: "break-all" }}
+        >
           Vui lòng chia sẻ tài liệu của bạn với email:
           docs-922@sonat-help-center-be-dev.iam.gserviceaccount.com
         </Typography>
+        <RHFRadioGroup
+          name="importFromFile"
+          control={control}
+          options={[
+            {
+              label: "Nhập tên tài liệu và mô tả từ docs",
+              value: "docs",
+            },
+            {
+              label: "Tự ",
+              value: "custom",
+            },
+          ]}
+        />
+        <RHFTextField
+          label="Tên bài học"
+          name="title"
+          control={control}
+          required
+          rules={{
+            required: "Vui lòng nhập tên bài học",
+          }}
+          TextFieldProps={{
+            placeholder: "Nhập tên bài học",
+            autoComplete: "off",
+          }}
+        />
+        <RHFTextField
+          label="Mô tả"
+          name="description"
+          control={control}
+          required
+          rules={{
+            required: "Vui lòng nhập mô tả",
+          }}
+          TextFieldProps={{
+            placeholder: "Nhập mô tả",
+            autoComplete: "off",
+          }}
+        />
       </Stack>
     </ModalWrapper>
   );

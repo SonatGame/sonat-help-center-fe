@@ -44,16 +44,16 @@ export default function CourseDetail() {
       value: "content",
       component: <CourseContent />,
     },
-    {
-      label: "Đánh giá của học viên",
-      value: "rating",
-      component: "",
-    },
-    {
-      label: "Làm test",
-      value: "test",
-      component: "",
-    },
+    // {
+    //   label: "Đánh giá của học viên",
+    //   value: "rating",
+    //   component: "",
+    // },
+    // {
+    //   label: "Làm test",
+    //   value: "test",
+    //   component: "",
+    // },
   ];
 
   return (
