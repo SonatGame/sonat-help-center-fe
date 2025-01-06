@@ -1,4 +1,10 @@
-import { Stack, TextField, TextFieldProps, Typography } from "@mui/material";
+import {
+  Stack,
+  TextField,
+  TextFieldProps,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { ReactNode } from "react";
 import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
 import Asterisk from "./Asterisk";
@@ -26,6 +32,7 @@ export default function RHFTextField<T extends FieldValues>({
   TextFieldProps,
   sx = {},
 }: IRHFTextFieldProps<T>) {
+  const theme = useTheme();
   const { label: textFieldLabel, onChange, ...rest } = TextFieldProps || {};
 
   const commonLabel = label || textFieldLabel;
@@ -33,7 +40,7 @@ export default function RHFTextField<T extends FieldValues>({
   return (
     <Stack spacing={0.5} width="100%" sx={{ ...sx }}>
       {typeof commonLabel === "string" ? (
-        <Typography variant="body2">
+        <Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
           {commonLabel}&nbsp;
           {required && <Asterisk />}
         </Typography>

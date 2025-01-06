@@ -199,7 +199,7 @@ export default function ResourceContent() {
                       </Typography>
                     </Stack>
                     <IconButton onClick={handleEnableRename}>
-                      <EditIcon />
+                      <EditIcon sx={{ fill: theme.palette.grey[500] }} />
                     </IconButton>
                   </Stack>
                 </>

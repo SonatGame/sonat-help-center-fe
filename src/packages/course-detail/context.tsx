@@ -47,6 +47,8 @@ interface CourseDetailContextProps {
     url: string;
     pdf: string;
   };
+  setShowModalCreate: Dispatch<SetStateAction<boolean>>;
+  showModalCreate: boolean;
 }
 
 const CourseDetailContext = createContext<CourseDetailContextProps>({
@@ -69,6 +71,8 @@ const CourseDetailContext = createContext<CourseDetailContextProps>({
     url: "",
     pdf: "",
   },
+  setShowModalCreate: () => {},
+  showModalCreate: false,
 });
 
 const CourseDetailProvider = ({ children }: ContextProps) => {
@@ -89,6 +93,7 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
     url: "",
     pdf: "",
   });
+  const [showModalCreate, setShowModalCreate] = useState<boolean>(false);
 
   const { data, isLoading, mutate } = useSWR(
     ["get-course-detail", courseId],
@@ -132,6 +137,8 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
         chapterTitle,
         setGoogleDocs,
         googleDocs,
+        setShowModalCreate,
+        showModalCreate,
       }}
     >
       {children}

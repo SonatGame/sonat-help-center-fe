@@ -15,30 +15,22 @@ export default function useContentTab() {
     mutate: mutateCourse,
     editingChapter,
     setEdittingChapter,
-    editingLesson,
     setEdittingLesson,
     setIsEditingChapterTitle,
     setChapterTitle,
     setGoogleDocs,
     chapterTitle,
     isEditingChapterTitle,
+    setShowModalCreate,
+    showModalCreate,
   } = useCourseDetailContext();
 
-  const [showModalUpload, setShowModalUpload] = useState<boolean>(false);
   const [showConfirmDeleteChapterModal, setShowConfirmDeleteChapterModal] =
     useState<boolean>(false);
 
   const inputRefs = useRef<{ [key: string]: HTMLDivElement | null }>({
     new: null,
   });
-
-  async function handleAddChapter() {
-    if (!courseData) return;
-    await CourseApi.createChapter(courseData?._id, {
-      title: "",
-      lessons: [],
-    });
-  }
 
   function handleEditChapter(chapter?: Chapter) {
     if (chapter) {
@@ -72,12 +64,12 @@ export default function useContentTab() {
     setEdittingLesson(undefined);
   }
 
-  function handleOpenUploadDocsModal() {
-    setShowModalUpload(true);
+  function handleOpenCreateLessonModal() {
+    setShowModalCreate(true);
   }
 
-  function handleCloseUploadDocsModal() {
-    setShowModalUpload(false);
+  function handleCloseCreateLessonModal() {
+    setShowModalCreate(false);
   }
 
   function handleOpenConfirmDeleteChapterModal(chapter: Chapter) {
@@ -154,14 +146,12 @@ export default function useContentTab() {
   return {
     courseData,
     editingChapter,
-    editingLesson,
     handleAddLesson,
     isAddingLesson,
     handleCancel,
-    handleAddChapter,
-    showModalUpload,
-    handleOpenUploadDocsModal,
-    handleCloseUploadDocsModal,
+    showModalCreate,
+    handleOpenCreateLessonModal,
+    handleCloseCreateLessonModal,
     showConfirmDeleteChapterModal,
     handleOpenConfirmDeleteChapterModal,
     handleCloseConfirmDeleteChapterModal,

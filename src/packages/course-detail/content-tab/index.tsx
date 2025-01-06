@@ -4,23 +4,21 @@ import { EditIcon, TrashIcon } from "@/lib/constants/icons";
 import { ArrowBack } from "@mui/icons-material";
 import { Grid2, Stack, TextField, Typography, useTheme } from "@mui/material";
 import LessonCard from "./LessonCard";
+import CreateLessonModal from "./create-lesson-modal";
 import useContentTab from "./hooks";
 import LessonDetail from "./lesson-detail";
-import UploadDocsModal from "./upload-docs-modal";
 
 export default function CourseContent() {
   const theme = useTheme();
   const {
     courseData,
     editingChapter,
-    editingLesson,
     handleAddLesson,
     isAddingLesson,
     handleCancel,
-    handleAddChapter,
-    showModalUpload,
-    handleOpenUploadDocsModal,
-    handleCloseUploadDocsModal,
+    showModalCreate,
+    handleOpenCreateLessonModal,
+    handleCloseCreateLessonModal,
     showConfirmDeleteChapterModal,
     handleOpenConfirmDeleteChapterModal,
     handleCloseConfirmDeleteChapterModal,
@@ -75,7 +73,7 @@ export default function CourseContent() {
             &nbsp;bài học
           </Typography>
         </Stack>
-        <Stack gap={1.5} sx={{ px: 2, pb: 2 }}>
+        <Stack gap={1.5} sx={{ px: 2, pb: 2, overflow: "auto" }}>
           {courseData?.modules?.map((chapter) => {
             return (
               <StyledAccordion
@@ -187,7 +185,10 @@ export default function CourseContent() {
                       <Typography variant="h5">{chapter.title}</Typography>
                       <EditIcon
                         fontSize="small"
-                        sx={{ cursor: "pointer" }}
+                        sx={{
+                          cursor: "pointer",
+                          fill: theme.palette.grey[500],
+                        }}
                         onClick={() => {
                           handleEditChapter(chapter);
                         }}
@@ -213,14 +214,17 @@ export default function CourseContent() {
                 </Stack>
               </Stack>
               <Grid2 container spacing={2}>
-                <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
+                <Grid2 size={{ sm: 12, md: 6, lg: 4, xl: 3 }}>
                   <LessonCard
                     isEmpty
                     onClick={() => handleAddLesson(chapter)}
                   />
                 </Grid2>
                 {chapter.lessons?.map((lesson) => (
-                  <Grid2 key={lesson._id} size={{ md: 6, lg: 4, xl: 3 }}>
+                  <Grid2
+                    key={lesson._id}
+                    size={{ sm: 12, md: 6, lg: 4, xl: 3 }}
+                  >
                     <LessonCard
                       isAdmin
                       lessonData={lesson}
@@ -271,7 +275,7 @@ export default function CourseContent() {
                   </Typography>
                   <EditIcon
                     fontSize="small"
-                    sx={{ cursor: "pointer" }}
+                    sx={{ cursor: "pointer", fill: theme.palette.grey[500] }}
                     onClick={() => {
                       handleEditChapter();
                     }}
@@ -281,22 +285,16 @@ export default function CourseContent() {
             </Stack>
 
             <Grid2 container spacing={2}>
-              <Grid2 size={{ md: 6, lg: 4, xl: 3 }}>
+              <Grid2 size={{ sm: 12, md: 6, lg: 4, xl: 3 }}>
                 <LessonCard isEmpty onClick={() => handleAddLesson()} />
               </Grid2>
             </Grid2>
           </Stack>
         </Stack>
       ) : (
-        <LessonDetail
-          handleGoBack={handleCancel}
-          handleOpenUploadDocsModal={handleOpenUploadDocsModal}
-        />
+        <LessonDetail handleGoBack={handleCancel} />
       )}
-      <UploadDocsModal
-        isModalOpen={showModalUpload}
-        handleClose={handleCloseUploadDocsModal}
-      />
+      <CreateLessonModal isModalOpen={showModalCreate} />
       <ConfirmDeleteModal
         title="Xác nhận xóa chương"
         isOpen={showConfirmDeleteChapterModal}
