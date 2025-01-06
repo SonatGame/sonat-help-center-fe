@@ -15,7 +15,7 @@ export default function CourseContent() {
     editingChapter,
     isEditLesson,
     handleCancel,
-    handleOpenCreateLessonModal,
+    handleCreateLesson,
     showConfirmDeleteChapterModal,
     handleOpenConfirmDeleteChapterModal,
     handleConfirmDeleteChapter,
@@ -224,7 +224,7 @@ export default function CourseContent() {
                   <LessonCard
                     isEmpty
                     chapterData={chapter}
-                    onClick={handleOpenCreateLessonModal}
+                    onClick={() => handleCreateLesson(chapter)}
                   />
                 </Grid2>
                 {chapter.lessons?.map((lesson) => (
@@ -294,7 +294,7 @@ export default function CourseContent() {
 
             <Grid2 container spacing={2}>
               <Grid2 size={{ sm: 12, md: 6, lg: 4, xl: 3 }}>
-                <LessonCard isEmpty onClick={handleOpenCreateLessonModal} />
+                <LessonCard isEmpty onClick={() => handleCreateLesson()} />
               </Grid2>
             </Grid2>
           </Stack>

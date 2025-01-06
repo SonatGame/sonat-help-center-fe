@@ -37,7 +37,7 @@ export default function CreateLessonModal() {
     },
   });
   const importSource = watch("importSource");
-  console.log(lessonData);
+
   async function onSubmit(data: IForm) {
     const { googleDocUrl, title, description, importSource } = data;
     const googleDocsId = getGoogleDocId(googleDocUrl);
