@@ -8,15 +8,13 @@ export default function useCourseDetail() {
   const {
     handleChangeTab,
     value,
-    isAddingLesson,
+    isEditLesson,
     courseData,
     mutate: mutateCourse,
   } = useCourseDetailContext();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
 
   function handleOpenModalEdit() {
     setIsModalOpen(true);
@@ -41,27 +39,14 @@ export default function useCourseDetail() {
     handleCloseModalConfirm();
   }
 
-  function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
-    e.stopPropagation();
-    setAnchorEl(e.currentTarget);
-  }
-
-  function handleClose(e: React.MouseEvent<HTMLButtonElement>) {
-    e.stopPropagation();
-    setAnchorEl(null);
-  }
   return {
     handleChangeTab,
     value,
-    isAddingLesson,
+    isEditLesson,
     courseData,
     isModalOpen,
     handleOpenModalEdit,
     handleCloseModalEdit,
-    anchorEl,
-    open,
-    handleClick,
-    handleClose,
     mutateCourse,
     isModalConfirmOpen,
     handleOpenModalConfirm,

@@ -129,6 +129,7 @@ async function createLesson(
   chapterId: string,
   data: {
     title: string;
+    detail: string;
     googleDocUrl: string;
   }
 ) {
@@ -146,6 +147,7 @@ async function updateLesson(
   lessonId: string,
   data: {
     title?: string;
+    detail?: string;
     googleDocUrl?: string;
   }
 ) {
@@ -169,8 +171,8 @@ async function deleteLesson(lessonId: string) {
   });
 }
 
-async function getHTMLContent(googleDocId: string) {
-  return fetchOne<{ title: string; htmlContent: string }>({
+async function getDocsContent(googleDocId: string) {
+  return fetchOne<{ title: string; description: string; htmlContent: string }>({
     functionName: "Lấy nội dung HTML",
     url: HOST + "course/google-doc/" + googleDocId,
     method: METHOD.GET,
@@ -199,6 +201,6 @@ export const CourseApi = {
   createLesson,
   updateLesson,
   deleteLesson,
-  getHTMLContent,
+  getDocsContent,
   getPDFFile,
 };

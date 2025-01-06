@@ -28,16 +28,8 @@ export interface ICourseCardProps {
 }
 
 export default function CourseCard({ courseData }: ICourseCardProps) {
-  const {
-    team,
-    _id,
-    thumbnail,
-    KSA,
-    title,
-    modules,
-    learnersCount,
-    totalLessons,
-  } = courseData;
+  const { team, _id, thumbnail, KSA, title, learnersCount, totalLessons } =
+    courseData;
   const theme = useTheme();
   const router = useRouter();
 

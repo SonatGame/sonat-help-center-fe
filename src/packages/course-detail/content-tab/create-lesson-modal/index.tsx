@@ -7,51 +7,91 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useCourseDetailContext } from "../../context";
 import { getGoogleDocId } from "../../helper";
-
-export interface ICreateCourseModalProps {
-  isModalOpen: boolean;
-}
-
 interface IForm {
   title: string;
   description: string;
-  importFromFile: string;
+  importSource: string;
   googleDocUrl: string;
 }
 
-export default function CreateLessonModal(props: ICreateCourseModalProps) {
-  const { isModalOpen } = props;
+export default function CreateLessonModal() {
   const theme = useTheme();
-  const { googleDocs, setGoogleDocs, setShowModalCreate } =
-    useCourseDetailContext();
-  const { control, handleSubmit, reset } = useForm<IForm>({
+  const {
+    courseData,
+    setLessonData,
+    lessonData,
+    setShowModalCreate,
+    showModalCreate,
+    editingChapter,
+    editingLesson,
+    mutate: mutateCourse,
+    isEditLesson,
+  } = useCourseDetailContext();
+
+  const { control, handleSubmit, reset, watch } = useForm<IForm>({
     defaultValues: {
       googleDocUrl: "",
       title: "",
       description: "",
-      importFromFile: "docs",
+      importSource: "docs",
     },
   });
-
+  const importSource = watch("importSource");
+  console.log(lessonData);
   async function onSubmit(data: IForm) {
-    const { googleDocUrl } = data;
+    const { googleDocUrl, title, description, importSource } = data;
     const googleDocsId = getGoogleDocId(googleDocUrl);
     if (!googleDocsId) return;
-    const res = await CourseApi.getHTMLContent(googleDocsId);
-    const pdfBlob = await CourseApi.getPDFFile(googleDocsId);
+    const [res, pdfBlob] = await Promise.all([
+      CourseApi.getDocsContent(googleDocsId),
+      isEditLesson ? CourseApi.getPDFFile(googleDocsId) : new Blob(),
+    ]);
+
     const pdfUrl = URL.createObjectURL(pdfBlob);
-    setGoogleDocs({
+    const newTitle = importSource === "docs" ? res.title : title;
+    const newDescription =
+      importSource === "docs" ? res.description : description;
+
+    const lessonPayload = {
+      title: newTitle,
+      googleDocUrl,
+      detail: newDescription,
+    };
+
+    if (!editingChapter && !editingLesson) {
+      if (!courseData) return;
+      await CourseApi.createChapter(courseData._id, {
+        title: "Chương không có tiêu đề",
+        lessons: [lessonPayload],
+      });
+    } else if (editingLesson) {
+      await CourseApi.updateLesson(editingLesson._id, lessonPayload);
+    } else if (editingChapter) {
+      await CourseApi.createLesson(editingChapter._id, lessonPayload);
+    }
+
+    await mutateCourse();
+    setLessonData({
       title: res.title,
+      description: res.description,
       url: googleDocUrl,
       pdf: pdfUrl,
     });
+    handleCloseModal();
+  }
+
+  function handleCloseModal() {
     setShowModalCreate(false);
     reset();
   }
 
   useEffect(() => {
-    reset({ googleDocUrl: googleDocs.url });
-  }, [googleDocs, reset]);
+    reset({
+      googleDocUrl: lessonData.url,
+      title: lessonData.title,
+      description: lessonData.description,
+    });
+  }, [lessonData, reset]);
 
   return (
     <ModalWrapper
@@ -61,8 +101,8 @@ export default function CreateLessonModal(props: ICreateCourseModalProps) {
         fullWidth: true,
       }}
       usingActions
-      isOpen={isModalOpen}
-      onClose={() => setShowModalCreate(false)}
+      isOpen={showModalCreate}
+      onClose={handleCloseModal}
       onApply={handleSubmit(onSubmit)}
       disableCloseOnApply
     >
@@ -88,45 +128,50 @@ export default function CreateLessonModal(props: ICreateCourseModalProps) {
           docs-922@sonat-help-center-be-dev.iam.gserviceaccount.com
         </Typography>
         <RHFRadioGroup
-          name="importFromFile"
+          name="importSource"
           control={control}
+          defaultValue={"docs"}
           options={[
             {
-              label: "Nhập tên tài liệu và mô tả từ docs",
+              label: "Nhập tiêu đề và mô tả từ docs",
               value: "docs",
             },
             {
-              label: "Tự ",
+              label: "Tự nhập tiêu đề và mô tả",
               value: "custom",
             },
           ]}
         />
-        <RHFTextField
-          label="Tên bài học"
-          name="title"
-          control={control}
-          required
-          rules={{
-            required: "Vui lòng nhập tên bài học",
-          }}
-          TextFieldProps={{
-            placeholder: "Nhập tên bài học",
-            autoComplete: "off",
-          }}
-        />
-        <RHFTextField
-          label="Mô tả"
-          name="description"
-          control={control}
-          required
-          rules={{
-            required: "Vui lòng nhập mô tả",
-          }}
-          TextFieldProps={{
-            placeholder: "Nhập mô tả",
-            autoComplete: "off",
-          }}
-        />
+        {importSource === "custom" && (
+          <>
+            <RHFTextField
+              label="Tên bài học"
+              name="title"
+              control={control}
+              required
+              rules={{
+                required: "Vui lòng nhập tên bài học",
+              }}
+              TextFieldProps={{
+                placeholder: "Nhập tên bài học",
+                autoComplete: "off",
+              }}
+            />
+            <RHFTextField
+              label="Mô tả"
+              name="description"
+              control={control}
+              required
+              rules={{
+                required: "Vui lòng nhập mô tả",
+              }}
+              TextFieldProps={{
+                placeholder: "Nhập mô tả",
+                autoComplete: "off",
+              }}
+            />
+          </>
+        )}
       </Stack>
     </ModalWrapper>
   );

@@ -17,15 +17,11 @@ export default function CourseDetail() {
   const {
     handleChangeTab,
     value,
-    isAddingLesson,
+    isEditLesson,
     courseData,
     isModalOpen,
     handleOpenModalEdit,
     handleCloseModalEdit,
-    anchorEl,
-    open,
-    handleClick,
-    handleClose,
     mutateCourse,
     isModalConfirmOpen,
     handleOpenModalConfirm,
@@ -63,7 +59,7 @@ export default function CourseDetail() {
         backgroundColor: theme.palette.background.paper,
       }}
     >
-      {!isAddingLesson && (
+      {!isEditLesson && (
         <>
           <Stack
             direction="row"

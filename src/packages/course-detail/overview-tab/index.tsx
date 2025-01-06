@@ -22,6 +22,7 @@ export default function CourseOverview() {
     handleCancelEditOutcome,
     handleAddChapter,
     control,
+    description,
     outcomes,
     handleChangeDescription,
     handleAddOutcome,
@@ -33,7 +34,7 @@ export default function CourseOverview() {
     handleDeleteOutcome,
     handleCancelDeleteOutcome,
     handleConfirmDeleteOutcome,
-    setIsAddingLesson,
+    setIsEditLesson,
     setEdittingChapter,
     setEdittingLesson,
     handleChangeTab,
@@ -68,6 +69,7 @@ export default function CourseOverview() {
                       variant="contained"
                       onClick={handleChangeDescription}
                       loading={isLoadingDescription}
+                      disabled={description.length === 0}
                     >
                       Lưu
                     </LoadingButton>
@@ -161,6 +163,7 @@ export default function CourseOverview() {
                       variant="contained"
                       onClick={handleChangeOutcome}
                       loading={isLoadingOutcomes}
+                      disabled={outcomes[i].length === 0}
                     >
                       Lưu
                     </LoadingButton>
@@ -208,9 +211,14 @@ export default function CourseOverview() {
                 >
                   Hủy bỏ
                 </Button>
-                <Button variant="contained" onClick={handleChangeOutcome}>
+                <LoadingButton
+                  variant="contained"
+                  onClick={handleChangeOutcome}
+                  loading={isLoadingOutcomes}
+                  disabled={outcomes[outcomes.length - 1].length === 0}
+                >
                   Lưu
-                </Button>
+                </LoadingButton>
               </Stack>
             )}
           </Stack>
@@ -308,7 +316,7 @@ export default function CourseOverview() {
                           color="primary"
                           sx={{ cursor: "pointer", userSelect: "none" }}
                           onClick={() => {
-                            setIsAddingLesson(true);
+                            setIsEditLesson(true);
                             setEdittingChapter(chapter);
                             setEdittingLesson(lesson);
                             handleChangeTab("content");
