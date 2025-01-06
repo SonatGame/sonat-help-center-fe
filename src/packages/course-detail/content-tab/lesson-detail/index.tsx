@@ -39,7 +39,7 @@ export default function LessonDetail() {
       const lessonDetail = await CourseApi.getLessonById(editingLesson._id);
       setLessonData({
         title: lessonDetail.title,
-        description: lessonDetail.detail,
+        description: lessonDetail.description,
         url: lessonDetail.googleDocUrl,
         pdf: "",
       });
