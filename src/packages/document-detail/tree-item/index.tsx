@@ -5,7 +5,7 @@ import { Resource, ResourseType } from "@/lib/types/document";
 import { Add, MoreVert } from "@mui/icons-material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { Button, Stack, TextField, Typography, useTheme } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDocumentDetailContext } from "../context";
 
 export default function TreeItem({ resource }: { resource: Resource }) {
@@ -17,8 +17,6 @@ export default function TreeItem({ resource }: { resource: Resource }) {
   const [loadingRename, setLoadingRename] = useState<boolean>(false);
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
-
-  const ref = useRef<HTMLDivElement | null>(null);
 
   function handleEnableRename() {
     setIsRenaming(true);
@@ -55,10 +53,6 @@ export default function TreeItem({ resource }: { resource: Resource }) {
     setTitle(resource.title);
   }, [resource]);
 
-  useEffect(() => {
-    if (isRenaming) ref.current?.focus();
-  }, [isRenaming]);
-
   if (isRenaming)
     return (
       <Stack
@@ -69,7 +63,6 @@ export default function TreeItem({ resource }: { resource: Resource }) {
         onClick={(e) => e.stopPropagation()}
       >
         <TextField
-          ref={ref}
           size="small"
           onChange={(e) => setTitle(e.target.value)}
           value={title}
@@ -78,6 +71,7 @@ export default function TreeItem({ resource }: { resource: Resource }) {
         />
         <Button
           variant="outlined"
+          size="small"
           sx={{ textWrap: "nowrap" }}
           onClick={handleCancelRename}
         >
@@ -85,6 +79,7 @@ export default function TreeItem({ resource }: { resource: Resource }) {
         </Button>
         <LoadingButton
           variant="contained"
+          size="small"
           onClick={handleRename}
           loading={loadingRename}
         >
