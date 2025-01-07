@@ -62,7 +62,9 @@ export default function CourseContent() {
         key={item._id}
         itemId={item._id}
         label={<TreeItem resource={item} />}
-        onClick={() => handleNodeClick(item)}
+        onClick={() => {
+          handleNodeClick(item);
+        }}
       >
         {item.children && renderTreeItems(item.children)}
       </CustomTreeItem>
