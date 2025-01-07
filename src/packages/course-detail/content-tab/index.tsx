@@ -129,6 +129,9 @@ export default function CourseContent() {
                               editingLesson?._id === lesson._id
                                 ? "bold"
                                 : undefined,
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
                           }}
                         >
                           {lesson.title}

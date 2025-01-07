@@ -101,11 +101,7 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
   });
   const [showModalCreate, setShowModalCreate] = useState<boolean>(false);
 
-  const {
-    data,
-    isLoading = true,
-    mutate,
-  } = useSWR(
+  const { data, isLoading, mutate } = useSWR(
     ["get-course-detail", courseId],
     () => CourseApi.getCourse(courseId),
     {
@@ -113,7 +109,7 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
       revalidateOnFocus: false,
     }
   );
-
+  console.log(isLoading);
   const handleChangeTab = (newValue: string) => {
     router.push(`${AppRoutes.COURSE}${courseId}?tab=${newValue}`);
   };
@@ -127,6 +123,7 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
   }, [tab]);
 
   useEffect(() => {
+    if (isLoading) return;
     if (data && chapterId && lessonId) {
       const chapter = data?.modules?.find((item) => item._id === chapterId);
       const lesson = chapter?.lessons?.find((item) => item._id === lessonId);
@@ -136,7 +133,12 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
         setIsEditLesson(true);
       }
     }
-  }, [data, chapterId, lessonId]);
+    if (!chapterId && !lessonId) {
+      setEdittingChapter(undefined);
+      setEdittingLesson(undefined);
+      setIsEditLesson(false);
+    }
+  }, [isLoading, data, chapterId, lessonId]);
 
   return (
     <CourseDetailContext.Provider

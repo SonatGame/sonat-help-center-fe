@@ -26,7 +26,6 @@ export default function LessonCard(props: IProps) {
     setShowModalCreate,
     setLessonData,
   } = useCourseDetailContext();
-  const [hovering, setHovering] = useState(false);
   const [isOpenConfirmModal, setIsOpenConfirmModal] = useState(false);
 
   const handleEditLesson = () => {
@@ -92,8 +91,6 @@ export default function LessonCard(props: IProps) {
         p: 2,
       }}
       onClick={onClick}
-      onMouseOver={() => setHovering(true)}
-      onMouseLeave={() => setHovering(false)}
     >
       <Stack justifyContent="space-between" sx={{ height: "100%" }}>
         <Box>
@@ -111,44 +108,42 @@ export default function LessonCard(props: IProps) {
             >
               {lessonData?.title}
             </TextMaxLine>
-            {hovering && (
-              <ButtonMenu
-                usingIconButton
-                icon={
-                  <MoreVert
-                    fontSize="small"
-                    sx={{ color: theme.palette.grey[500] }}
-                  />
-                }
-                buttonProps={{
-                  size: "small",
-                }}
-                menuOptions={[
-                  {
-                    label: (
-                      <Typography
-                        variant="body2"
-                        sx={{ color: theme.palette.grey[500] }}
-                      >
-                        Chỉnh sửa
-                      </Typography>
-                    ),
-                    onClick: handleEditLesson,
-                  },
-                  {
-                    label: <Typography variant="body2">Xoá bài học</Typography>,
-                    onClick: handleOpenModalConfirm,
-                    sx: {
+            <ButtonMenu
+              usingIconButton
+              icon={
+                <MoreVert
+                  fontSize="small"
+                  sx={{ color: theme.palette.grey[500] }}
+                />
+              }
+              buttonProps={{
+                size: "small",
+              }}
+              menuOptions={[
+                {
+                  label: (
+                    <Typography
+                      variant="body2"
+                      sx={{ color: theme.palette.grey[500] }}
+                    >
+                      Chỉnh sửa
+                    </Typography>
+                  ),
+                  onClick: handleEditLesson,
+                },
+                {
+                  label: <Typography variant="body2">Xoá bài học</Typography>,
+                  onClick: handleOpenModalConfirm,
+                  sx: {
+                    color: theme.palette.error.main,
+                    ":hover": {
+                      backgroundColor: theme.palette.error[100],
                       color: theme.palette.error.main,
-                      ":hover": {
-                        backgroundColor: theme.palette.error[100],
-                        color: theme.palette.error.main,
-                      },
                     },
                   },
-                ]}
-              />
-            )}
+                },
+              ]}
+            />
           </Stack>
           <TextMaxLine
             TypographyProps={{ variant: "body2" }}

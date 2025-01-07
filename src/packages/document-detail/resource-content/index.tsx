@@ -59,6 +59,7 @@ export default function ResourceContent() {
   const breadcrumbs = useMemo(() => {
     if (!selectedResource) return [];
     const parents = getParentList(resourceData, selectedResource?._id);
+
     return parents.map((item, index) => {
       if (index < parents.length - 1)
         return (
@@ -141,7 +142,7 @@ export default function ResourceContent() {
           </Stack>
         </Stack>
       )}
-      <Container maxWidth="md" sx={{ flexGrow: 1 }}>
+      <Container maxWidth="md" sx={{ flexGrow: 1, mt: 4 }}>
         {(() => {
           if (!selectedResource) return;
 
