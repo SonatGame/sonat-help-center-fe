@@ -38,6 +38,7 @@ export default function CourseContent() {
           borderRight: 1,
           borderColor: theme.palette.divider,
           minWidth: 350,
+          maxWidth: 350,
         }}
       >
         <Stack gap={1.5} sx={{ p: 3 }}>
@@ -161,7 +162,7 @@ export default function CourseContent() {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Stack direction="row" alignItems="center" gap={1.5}>
+                <Stack direction="row" alignItems="center" gap={1}>
                   {editingChapter?._id === chapter._id &&
                   isEditingChapterTitle ? (
                     <TextField
@@ -199,6 +200,7 @@ export default function CourseContent() {
                         sx={{
                           cursor: "pointer",
                           fill: theme.palette.grey[500],
+                          mr: 2,
                         }}
                         onClick={() => {
                           handleEditChapter(chapter);
@@ -211,7 +213,7 @@ export default function CourseContent() {
                   <Typography
                     variant="body2"
                     fontWeight="medium"
-                    sx={{ color: theme.palette.grey[500] }}
+                    sx={{ color: theme.palette.grey[500], textWrap: "nowrap" }}
                   >
                     {chapter.lessons?.length ?? 0}&nbsp;bài học
                   </Typography>

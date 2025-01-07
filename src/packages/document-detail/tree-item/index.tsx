@@ -26,8 +26,6 @@ export default function TreeItem({ resource }: { resource: Resource }) {
   const [isRenaming, setIsRenaming] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
 
-  const ref = useRef<HTMLDivElement | null>(null);
-
   function handleEnableRename() {
     setIsRenaming(true);
   }
@@ -63,10 +61,6 @@ export default function TreeItem({ resource }: { resource: Resource }) {
     setTitle(resource.title);
   }, [resource]);
 
-  useEffect(() => {
-    if (isRenaming) ref.current?.focus();
-  }, [isRenaming]);
-
   if (isRenaming)
     return (
       <Stack
@@ -82,7 +76,6 @@ export default function TreeItem({ resource }: { resource: Resource }) {
         }}
       >
         <TextField
-          ref={ref}
           size="small"
           onChange={(e) => setTitle(e.target.value)}
           value={title}
