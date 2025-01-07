@@ -5,11 +5,32 @@ import TextMaxLine from "@/components/TextMaxLine";
 import { AppRoutes } from "@/lib/constants/routesAndPermissions";
 import { Collection } from "@/lib/types/document";
 import { MoreVert } from "@mui/icons-material";
-import { Box, Card, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Card,
+  Stack,
+  styled,
+  Tooltip,
+  tooltipClasses,
+  TooltipProps,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import EditDocumentModal from "../edit-document-modal";
+
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: theme.palette.grey[500],
+    boxShadow: theme.shadows[1],
+    fontSize: theme.typography.caption.fontSize,
+  },
+}));
 
 export interface IDocumentCardProps {
   documentData: Collection;
@@ -79,13 +100,17 @@ export default function DocumentCard({
             mt: 1,
           }}
         >
-          <TextMaxLine
-            TypographyProps={{
-              variant: "h6",
-            }}
-          >
-            {title}
-          </TextMaxLine>
+          <LightTooltip placement="top" title={title}>
+            <Box>
+              <TextMaxLine
+                TypographyProps={{
+                  variant: "h6",
+                }}
+              >
+                {title}
+              </TextMaxLine>
+            </Box>
+          </LightTooltip>
           <ButtonMenu
             usingIconButton
             icon={<MoreVert fontSize="small" />}

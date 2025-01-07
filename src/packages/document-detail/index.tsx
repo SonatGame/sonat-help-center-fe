@@ -3,7 +3,14 @@ import { FileIcon, FolderIcon, SearchIcon } from "@/lib/constants/icons";
 import { AppRoutes } from "@/lib/constants/routesAndPermissions";
 import { Resource, ResourseType } from "@/lib/types/document";
 import { Add, ArrowBack } from "@mui/icons-material";
-import { Stack, styled, TextField, Typography, useTheme } from "@mui/material";
+import {
+  CircularProgress,
+  Stack,
+  styled,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
 import {
   TreeItem as MuiTreeItem,
@@ -169,31 +176,59 @@ export default function CourseContent() {
             }}
           />
         </Stack>
-        {treeItems.length !== 0 ? (
-          <SimpleTreeView
-            selectedItems={selectedResource?._id}
-            expandedItems={
-              collectionResources && searchText.length > 0
-                ? collectionResources.map((item) => item._id)
-                : undefined
-            }
-          >
-            {treeItems}
-          </SimpleTreeView>
-        ) : (
-          <Stack
-            justifyContent="center"
-            alignItems="center"
-            sx={{ flexGrow: 1 }}
-          >
-            <Empty />
-          </Stack>
-        )}
+        {(() => {
+          if (loadingResources)
+            return (
+              <Stack
+                justifyContent="center"
+                alignItems="center"
+                sx={{ flexGrow: 1 }}
+              >
+                <CircularProgress />
+              </Stack>
+            );
+
+          if (treeItems.length !== 0)
+            return (
+              <SimpleTreeView
+                selectedItems={selectedResource?._id}
+                expandedItems={
+                  collectionResources && searchText.length > 0
+                    ? collectionResources.map((item) => item._id)
+                    : undefined
+                }
+              >
+                {treeItems}
+              </SimpleTreeView>
+            );
+
+          return (
+            <Stack
+              justifyContent="center"
+              alignItems="center"
+              sx={{ flexGrow: 1 }}
+            >
+              <Empty />
+            </Stack>
+          );
+        })()}
       </Stack>
       <Stack
         sx={{ flexGrow: 1, backgroundColor: theme.palette.background.paper }}
       >
-        <ResourceContent />
+        {(() => {
+          if (loadingResources)
+            return (
+              <Stack
+                justifyContent="center"
+                alignItems="center"
+                sx={{ flexGrow: 1 }}
+              >
+                <CircularProgress />
+              </Stack>
+            );
+          return <ResourceContent />;
+        })()}
       </Stack>
     </Stack>
   );
