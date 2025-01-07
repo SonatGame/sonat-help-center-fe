@@ -8,6 +8,8 @@ async function getCourseList(params?: {
   page?: number;
   take?: number;
   title?: string;
+  team?: string;
+  ksa?: string;
 }) {
   return await fetchOne<CourseRes>({
     functionName: "Lấy danh sách khóa học",
