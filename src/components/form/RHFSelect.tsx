@@ -7,6 +7,7 @@ import {
   Select,
   SelectProps,
   Stack,
+  SxProps,
   Typography,
 } from "@mui/material";
 import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
@@ -28,14 +29,14 @@ interface IRHFSelect<T extends FieldValues> {
   options: Array<
     | string
     | {
-        value: string | number;
-        label: string | number;
+        value: string;
+        label: string;
         disabled?: boolean;
         icon?: React.ReactElement;
       }
   >;
   SelectProps?: SelectProps;
-  sx?: any;
+  sx?: SxProps;
 }
 
 export default function RHFSelect<T extends FieldValues>({
@@ -48,9 +49,7 @@ export default function RHFSelect<T extends FieldValues>({
   SelectProps = {},
   sx = {},
 }: IRHFSelect<T>) {
-  const { label: selectLabel = "", onChange, ...rest } = SelectProps || {};
-
-  const commonLabel = label || selectLabel;
+  const { onChange, ...rest } = SelectProps || {};
 
   const formattedOptions = React.useMemo(
     () =>
@@ -101,9 +100,9 @@ export default function RHFSelect<T extends FieldValues>({
 
   return (
     <Stack spacing={0.5} width="100%" sx={{ ...sx }}>
-      {commonLabel && (
+      {label && (
         <Typography variant="body2">
-          {commonLabel}&nbsp;
+          {label}&nbsp;
           {required && <Asterisk />}
         </Typography>
       )}

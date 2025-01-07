@@ -3,7 +3,7 @@ import ButtonMenu from "@/components/button-menu";
 import TextMaxLine from "@/components/TextMaxLine";
 import { Chapter, Lesson } from "@/lib/types/course";
 import { AddRounded, ArrowForwardRounded, MoreVert } from "@mui/icons-material";
-import { Box, Card, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Card, Stack, Tooltip, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
 import ConfirmDeleteLessonModal from "../confirm-delete-modal";
 import { useCourseDetailContext } from "../context";
@@ -100,14 +100,18 @@ export default function LessonCard(props: IProps) {
             alignItems="start"
             gap={1}
           >
-            <TextMaxLine
-              TypographyProps={{ fontWeight: "bold" }}
-              sx={{
-                color: theme.palette.grey[700],
-              }}
-            >
-              {lessonData?.title}
-            </TextMaxLine>
+            <Tooltip title={lessonData?.title}>
+              <Box>
+                <TextMaxLine
+                  TypographyProps={{ fontWeight: "bold" }}
+                  sx={{
+                    color: theme.palette.grey[700],
+                  }}
+                >
+                  {lessonData?.title}
+                </TextMaxLine>
+              </Box>
+            </Tooltip>
             <ButtonMenu
               usingIconButton
               icon={

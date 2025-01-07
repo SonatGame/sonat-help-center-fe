@@ -16,6 +16,7 @@ import {
   Box,
   Card,
   Stack,
+  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -28,7 +29,7 @@ export interface ICourseCardProps {
 }
 
 export default function CourseCard({ courseData }: ICourseCardProps) {
-  const { team, _id, thumbnail, KSA, title, learnersCount, totalLessons } =
+  const { team, _id, coverImage, KSA, title, learnersCount, totalLessons } =
     courseData;
   const theme = useTheme();
   const router = useRouter();
@@ -85,8 +86,8 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
         }}
       >
         <Image
-          src={thumbnail}
-          alt="course-thumbnail"
+          src={coverImage}
+          alt="course-coverImage"
           width={600}
           height={157}
           style={{ objectFit: "cover" }}
@@ -111,17 +112,27 @@ export default function CourseCard({ courseData }: ICourseCardProps) {
           </Stack>
         </Tag>
       </Stack>
-      <TextMaxLine
-        TypographyProps={{
-          variant: "h6",
-        }}
-        sx={{
-          mt: 1.5,
-        }}
+      <Tooltip placement="top" title={title}>
+        <Box>
+          <TextMaxLine
+            TypographyProps={{
+              variant: "h6",
+            }}
+            sx={{
+              mt: 1.5,
+            }}
+          >
+            {title}
+          </TextMaxLine>
+        </Box>
+      </Tooltip>
+
+      <Stack
+        direction="row"
+        alignItems="end"
+        gap={0.5}
+        sx={{ mt: 1.5, flexGrow: 1 }}
       >
-        {title}
-      </TextMaxLine>
-      <Stack direction="row" alignItems="center" gap={0.5} sx={{ mt: 1.5 }}>
         {learnersCount !== 0 ? (
           <>
             <AvatarGroup
