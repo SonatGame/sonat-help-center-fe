@@ -26,7 +26,7 @@ export default function useDocumentSection() {
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       setSearchText(inputValue);
-    }, 200);
+    }, 350);
     return () => clearTimeout(delayDebounce);
   }, [inputValue]);
 

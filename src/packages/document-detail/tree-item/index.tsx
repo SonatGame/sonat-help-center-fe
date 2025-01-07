@@ -1,11 +1,19 @@
 import ButtonMenu from "@/components/button-menu";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModal";
+import CancelIcon from "@/lib/common/icon/Cancel";
+import TickIcon from "@/lib/common/icon/TickIcon";
 import { FileIcon, FolderIcon } from "@/lib/constants/icons";
 import { Resource, ResourseType } from "@/lib/types/document";
 import { Add, MoreVert } from "@mui/icons-material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { Button, Stack, TextField, Typography, useTheme } from "@mui/material";
-import { useEffect, useState } from "react";
+import {
+  CircularProgress,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 import { useDocumentDetailContext } from "../context";
 
 export default function TreeItem({ resource }: { resource: Resource }) {
@@ -61,6 +69,11 @@ export default function TreeItem({ resource }: { resource: Resource }) {
         alignItems="center"
         gap={1}
         onClick={(e) => e.stopPropagation()}
+        sx={{
+          "& .MuiInputBase-root": {
+            border: "none",
+          },
+        }}
       >
         <TextField
           size="small"
@@ -68,23 +81,25 @@ export default function TreeItem({ resource }: { resource: Resource }) {
           value={title}
           autoComplete="off"
           sx={{ flexGrow: 1 }}
+          onKeyDown={(e) => {
+            e.stopPropagation();
+          }}
+          variant="standard"
         />
-        <Button
-          variant="outlined"
-          size="small"
-          sx={{ textWrap: "nowrap" }}
-          onClick={handleCancelRename}
-        >
-          Hủy bỏ
-        </Button>
-        <LoadingButton
-          variant="contained"
-          size="small"
+        <IconButton onClick={handleCancelRename} size="small">
+          <CancelIcon sx={{ width: "16px", height: "16px" }} />
+        </IconButton>
+        <IconButton
           onClick={handleRename}
-          loading={loadingRename}
+          size="small"
+          disabled={loadingRename}
         >
-          Lưu
-        </LoadingButton>
+          {loadingRename ? (
+            <CircularProgress size={18} />
+          ) : (
+            <TickIcon sx={{ width: "16px", height: "16px" }} />
+          )}
+        </IconButton>
       </Stack>
     );
 

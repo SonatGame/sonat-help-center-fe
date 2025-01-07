@@ -109,7 +109,6 @@ const CourseDetailProvider = ({ children }: ContextProps) => {
       revalidateOnFocus: false,
     }
   );
-  console.log(isLoading);
   const handleChangeTab = (newValue: string) => {
     router.push(`${AppRoutes.COURSE}${courseId}?tab=${newValue}`);
   };
